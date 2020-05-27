@@ -9,7 +9,7 @@ Zorg dat je in de root van het proj bent (a.k.a. Magazijn_assessment).
 Run dan.
 
 ```` 
-npm install
+npm ci
 ````
 
 Voordat je dan gaat programmeren:
