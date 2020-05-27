@@ -1,17 +1,25 @@
+"use strict";
+
 export default class Screen {
 
     // #broeken = ["blauwe broek", "groene broek", "paarse broek"];
     // #sweaters = ["blauwe sweater", "groene sweater", "paarse sweater"];
+    #items = ["blauwe sweater", "groene sweater", "paarse sweater"];
+    #name;
 
     constructor(name) {
-        this.name = name;
-        this.items = ["blauwe sweater", "groene sweater", "paarse sweater"];
-        // this.retrieveItems();
-        // this.createDropDownMenu();
+        this.#name = name;
+        this.retrieveItems();
+        this.createDropDownMenu();
+        console.log("Screen cons run");
     }
 
     get screenName(){
-        return this.name;
+        return this.#name;
+    }
+
+    get items(){
+        return this.#items;
     }
 
     createDropDownMenu() {
@@ -21,8 +29,8 @@ export default class Screen {
             choice_menu.innerHTML = '';
         }
 
-        if (this.items != null) {
-            this.items.forEach(
+        if (this.#items != null) {
+            this.#items.forEach(
                 element => {
                     let button = this.getDraggableButton();
                     button.className = 'btn btn-secondary dragButton';
