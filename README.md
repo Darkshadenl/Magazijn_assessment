@@ -35,3 +35,13 @@ Uiteindelijk moet we dit meer in een mvc structuur gooien maar is niet required
 volgens mij. 
 
 Blijkbaar is Parcel gemakkelijker dan Webpack maar school naait ons.
+
+----------------------------
+
+Voor later:
+
+Installeren van npm packages doen met 
+
+````
+npm install --save-dev [plugin]
+````
