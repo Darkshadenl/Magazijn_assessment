@@ -2,11 +2,15 @@ import Screen from "./screen";
 
 export default class Magazijn {
 
+    #items;
+    #current;
+
     constructor() {
         this.SetupRegions();
-        this._items = [new Screen('Kleding'), new Screen('Tierlantijn'), new Screen('Decoratie')];
-        this._current = this._items[0];
-        console.log('test');
+        // this._items = [new Screen('Kleding'), new Screen('Tierlantijn'), new Screen('Decoratie')];
+        this.#items = [new Screen('Kleding'), new Screen('Tierlantijn'), new Screen('Decoratie')];
+        // this._current = this._items[0];
+        this.#current = this._items[0];
     }
 
     SetupRegions() {

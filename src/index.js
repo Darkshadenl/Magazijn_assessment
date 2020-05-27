@@ -13,8 +13,8 @@ window.onload = () => {
 class Index {
 
     constructor() {
-        this.prepareStorage();
         this.magazijn = new Magazijn();
+        this.prepareStorage();
     }
 
     prepareStorage() {
@@ -31,4 +31,3 @@ function run() {
     let main = new Index();
 }
 
-run();

@@ -2,7 +2,6 @@ var path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-
 module.exports = {
     module: {
         // rules bevat de loaders die worden gebruikt, en waar ze naar zoeken.
@@ -29,7 +28,7 @@ module.exports = {
                     loader: "babel-loader",
                     options: {
                         presets: ['@babel/preset-env'],
-                        plugins: []
+                        plugins: ['@babel/plugin-proposal-class-properties']
                     }
                 }
             },
