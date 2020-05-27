@@ -3,8 +3,8 @@
 import './css/main.scss';
 import './css/bootstrap.css';
 
-import Magazijn from "./magazijn";
 // import DragDrop from "./DragDrop";
+import Magazijn from "./model/magazijn";
 
 window.onload = () => {
     document.getElementById('kleding_id').onclick = changeScreen;
@@ -12,27 +12,17 @@ window.onload = () => {
     document.getElementById('decoratie_id').onclick = changeScreen;
 };
 
-class Index {
+export default class Index {
 
-    #magazijn;
-    #anders;
+    #magazijn = new Magazijn();
 
     constructor() {
-        this.#magazijn = new Magazijn();
-        this.#anders = 12;
         this.prepareStorage();
+        // this.getMagazijn = this.getMagazijn.bind(this);   BINDING
     }
 
-    get magazijn(){
+    get getMagazijn(){
         return this.#magazijn;
-    }
-
-    set magazijn(mag){
-        this.#magazijn = mag;
-    }
-
-    get anders(){
-        return this.#anders;
     }
 
     prepareStorage() {
@@ -47,19 +37,33 @@ class Index {
 }
 
 const index = new Index();
-index.magazijn = new Magazijn();
-console.log(index.magazijn);
-console.log(index.anders);
 
-
-function changeScreen(){
-
+function changeScreen(e){
+    let clicked = e.target.innerText;
     let newProduct = document.getElementById('new_products_button');
     let choice_menu = document.getElementById('dropdownMenuButton');
 
-    newProduct.innerText = `Nieuwe ${index.magazijn.current.screenName} menu`;
-    choice_menu.innerText = index.magazijn.current.screenName;
+    let mag = index.getMagazijn;
 
-    index.magazijn.current.createDropDownMenu();
+    switch (e.target.innerText) {
+        case "Regio 1: Kleding":
+            mag.setCurrentScreen = 0;
+            break;
+        case "Regio 2: Tierlantijn":
+            mag.setCurrentScreen= 1;
+            break;
+        case "Regio 3: Decoratie":
+            mag.setCurrentScreen= 2;
+            break;
+    }
+
+    let cur_screen = index.getMagazijn.getCurrentScreen;
+
+    newProduct.innerText = `Nieuwe ${cur_screen.getName} menu`;
+    choice_menu.innerText = cur_screen.getName;
+
+    console.log(cur_screen);
+
+    cur_screen.createDropDownMenu();
 }
 

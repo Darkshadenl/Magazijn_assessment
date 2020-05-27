@@ -2,23 +2,20 @@
 
 export default class Screen {
 
-    // #broeken = ["blauwe broek", "groene broek", "paarse broek"];
-    // #sweaters = ["blauwe sweater", "groene sweater", "paarse sweater"];
-    #items = ["blauwe sweater", "groene sweater", "paarse sweater"];
+    #items = [];
     #name;
 
     constructor(name) {
         this.#name = name;
         this.retrieveItems();
         this.createDropDownMenu();
-        console.log("Screen cons run");
     }
 
-    get screenName(){
+    get getName(){
         return this.#name;
     }
 
-    get items(){
+    get getItems(){
         return this.#items;
     }
 
@@ -43,13 +40,18 @@ export default class Screen {
     }
 
     retrieveItems(){
-        let retrieved = () => {
-            return JSON.parse(localStorage.getItem('items'));
-        };
+        let retrieved = JSON.parse(localStorage.getItem('items'));
+        let myItems;
 
-        // console.log(retrieved('Kleding'));
+        for (let [key, value] of Object.entries(retrieved)) {
+            if (key.toString() === this.getName.toString()) {
+                myItems = value;
+            }
+        }
 
-        // return items;
+        for (let [key] of Object.entries(myItems)) {
+            this.#items.push(key);
+        }
     }
 
     getDraggableButton(){
