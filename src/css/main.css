@@ -20,6 +20,7 @@
   grid-template-columns: 50px 50px 50px;
   padding: 10px;
 }
+
 .grid-item {
   border: 1px solid rgba(0, 0, 0, 0.8);
   height: 30px;
@@ -28,3 +29,5 @@
   text-align: center;
   background-color: lightcyan;
 }
+
+/*# sourceMappingURL=main.css.map */

@@ -3,6 +3,16 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
+    devServer: {
+        overlay: {
+            warnings: true,
+            errors: true
+        },
+        stats: {
+            colors: true
+        }
+    },
+    devtool: "source-map",
     module: {
         // rules bevat de loaders die worden gebruikt, en waar ze naar zoeken.
         // Zoeken automatisch in je hele proj (of src. Geen idee).

@@ -3,12 +3,19 @@ import Magazijn from "../model/Magazijn";
 
 export default class Magazijn_Controller {
 
-    #magazijn_view = new Magazijn_View();
     #magazijn_model = new Magazijn();
+    #magazijn_view = new Magazijn_View(this);
 
     constructor() {
-        let items_current = this.#magazijn_model.getCurrentScreen.getItems;
-        this.#magazijn_view.createDropDownMenu(items_current);
+
+    }
+
+    get getCurrentScreen() {
+        return this.#magazijn_model.getCurrentScreen;
+    }
+
+    setCurrentScreen(int) {
+        this.#magazijn_model.setCurrentScreen = int;
     }
 
 }
