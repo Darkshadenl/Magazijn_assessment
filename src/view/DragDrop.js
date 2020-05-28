@@ -67,12 +67,10 @@ export default class DragDrop {
         let button = this.getDraggableButton();
         button.innerText = e.dataTransfer.getData('Text');
 
-        let test = e.target.parentNode;
-
-        if (e.target.parentNode === 'made_choices'){
+        if (e.target.parentNode.className === 'grid-container made_choices'){
             button.className = 'dragButtonV2';
             e.target.style.background = '#E0FFFF';
-            e.target().appendChild(button);
+            e.target.appendChild(button);
         } else if (e.target.id === 'choice_menu'){
             button.className = 'btn btn-secondary dragButton';
             e.target.style.background = '#A52A2A';

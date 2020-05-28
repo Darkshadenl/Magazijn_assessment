@@ -5,11 +5,9 @@
 }
 
 .dragButtonV2 {
-  width: 170px;
-  height: 70px;
+  width: 30px;
+  height: 30px;
   font-size: 10px;
-  margin-bottom: 50px;
-  margin-right: 50px;
 }
 
 #choice_menu {
