@@ -14,7 +14,7 @@ module.exports = {
         publicPath: "/"
     },
     devServer: {
-        contentBase: "dist/view/",
+        contentBase: "dist/",
         overlay: {
             warnings: true,
             errors: true
