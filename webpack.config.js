@@ -1,9 +1,20 @@
-var path = require('path');
+const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
+    entry: {
+        main: "./src/index.js",
+    },
+    mode: "development",
+    output: {
+        filename: "[name]-bundle.js",
+        path: path.resolve(__dirname, './dist/'),
+        publicPath: "/"
+    },
     devServer: {
+        contentBase: "dist/view/",
         overlay: {
             warnings: true,
             errors: true
@@ -26,10 +37,13 @@ module.exports = {
                 ]
             },
             {
+                type: 'javascript/auto',
                 test: /\.(png|svg|jpg|gif)$/,
-                use: [
-                    'file-loader'
-                ]
+                // exclude: /node_modules/,
+                use: [{
+                    loader: 'file-loader',
+                    // options: {name: '[name].[ext]'},
+                }]
             },
             {
                 test: /\.js$/,
@@ -47,7 +61,7 @@ module.exports = {
                 use: [
                     {
                         loader: "html-loader",
-                        options: { minimize: true }
+                        options: {minimize: true}
                     }
                 ]
             }
@@ -57,14 +71,19 @@ module.exports = {
     // Zorgt bijv. voor minimaliseren van code.
     // Plugins moeten als const ingeladen worden bovenaan doc.
     plugins: [
+        new CopyPlugin({
+            patterns: [
+                {from: './src/resources/', to: './resources'},
+            ]
+        }),
         new HtmlWebPackPlugin({
             title: "Magazijn App",
-            template: "./src/index.html",
-            filename: "index.html"
+            template: "./src/view/Index.html",
+            filename: "./Index.html"
         }),
         new MiniCssExtractPlugin({
             filename: "[name].css",
             chunkFilename: "[id].css"
-        })
+        }),
     ]
 };

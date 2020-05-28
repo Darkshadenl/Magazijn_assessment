@@ -2,6 +2,7 @@
 
 import './css/main.scss';
 import './css/bootstrap.css';
+import './resources/defaultData';
 
 import Main_Controller from "./controller/Main_Controller";
 

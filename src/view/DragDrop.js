@@ -4,9 +4,6 @@ export default class DragDrop {
     #button_text = '';
     #succesful_drop = false;
 
-    constructor() {
-        this.#prepareLists();
-    }
 
     getDraggableButton(){
         let button = document.createElement('button');
@@ -18,7 +15,7 @@ export default class DragDrop {
         return button;
     }
 
-    #prepareLists() {
+    prepareLists() {
         let container_lists = document.querySelectorAll('.list');
 
         container_lists.forEach(list => {

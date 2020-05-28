@@ -16,12 +16,12 @@ export default class Magazijn_Controller {
         return this.#magazijn_model.getCurrentScreen;
     }
 
-    setCurrentScreen(int) {
-        this.#magazijn_model.setCurrentScreen = int;
+    setCurrentScreen(num) {
+        this.#magazijn_model.setCurrentScreen = num;
     }
 
     defaultData() {
-        fetch('./src/resources/defaultData.json')
+        fetch('../resources/defaultData.json')
             .then((response) => {
                 return response.json();
             }).then((data) => {

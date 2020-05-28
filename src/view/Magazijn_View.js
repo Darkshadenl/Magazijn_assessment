@@ -8,10 +8,12 @@ export default class Magazijn_View {
 
     constructor(controller) {
         this.#mag_controller = controller;
+        this.#dragDrop = new DragDrop();
         this.#prepareMainMenu();
         this.#createDropTargets();
-        this.#dragDrop = new DragDrop();
+        this.#dragDrop.prepareLists()
         this.#createDropDownMenu();
+        this.#configureWizardButton();
     }
 
     #createDropTargets() {
@@ -91,6 +93,13 @@ export default class Magazijn_View {
                 }
             );
         }
+    }
+
+    #configureWizardButton() {
+        let wizardButton = document.getElementById('new_products_button');
+
+        wizardButton.setAttribute('href', './view/CreationWizard.html');
+
     }
 }
 
