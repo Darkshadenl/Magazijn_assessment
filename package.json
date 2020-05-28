@@ -1,0 +1,38 @@
+{
+  "name": "magazijn_assessment",
+  "version": "1.0.0",
+  "description": "Javascript assessment v2 ",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "webpack",
+    "dev": "webpack-dev-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Darkshadenl/Magazijn_assessment.git"
+  },
+  "author": "Quinten Meijboom",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Darkshadenl/Magazijn_assessment/issues"
+  },
+  "homepage": "https://github.com/Darkshadenl/Magazijn_assessment#readme",
+  "devDependencies": {
+    "@babel/core": "^7.10.0",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-private-methods": "^7.8.3",
+    "@babel/preset-env": "^7.10.0",
+    "babel-loader": "^8.1.0",
+    "css-loader": "^3.5.3",
+    "file-loader": "^6.0.0",
+    "html-loader": "^1.1.0",
+    "html-webpack-plugin": "^4.3.0",
+    "mini-css-extract-plugin": "^0.9.0",
+    "node-sass": "^4.14.1",
+    "sass-loader": "^8.0.2",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
