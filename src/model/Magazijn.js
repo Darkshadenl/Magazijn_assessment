@@ -1,6 +1,6 @@
 "use strict";
 
-import Screen from "./screen";
+import Screen from "./Screen";
 
 export default class Magazijn {
 
