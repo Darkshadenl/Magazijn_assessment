@@ -9,14 +9,23 @@ Zorg dat je in de root van het proj bent (a.k.a. Magazijn_assessment).
 Run dan.
 
 ```` 
-npm ci
+npm install
 ````
 
 Voordat je dan gaat programmeren:
 
 ````
+npm run build
+````
+En dan
+````
 npm run dev
 ````
+om de development server te starten.
+
+Npm run build hoeft opzich maar 1x uitgevoerd te worden.
+Als je tegen problemen aanloopt kan je gewoon build nogmaals uitvoeren.
+Hiervoor moet je wel eerst de npm run dev stoppen.
 
 Voor de rest moet je weten dat je niet met je handen 
 aan de dist folder en zijn bestanden mag komen.
