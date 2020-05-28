@@ -3,11 +3,13 @@ import Magazijn from "../model/Magazijn";
 
 export default class Magazijn_Controller {
 
-    #magazijn_model = new Magazijn();
-    #magazijn_view = new Magazijn_View(this);
+    #magazijn_model;
+    #magazijn_view;
 
     constructor() {
-
+        this.defaultData();
+        this.#magazijn_model = new Magazijn();
+        this.#magazijn_view = new Magazijn_View(this);
     }
 
     get getCurrentScreen() {
@@ -16,6 +18,15 @@ export default class Magazijn_Controller {
 
     setCurrentScreen(int) {
         this.#magazijn_model.setCurrentScreen = int;
+    }
+
+    defaultData() {
+        fetch('./src/resources/defaultData.json')
+            .then((response) => {
+                return response.json();
+            }).then((data) => {
+            localStorage.setItem("items", JSON.stringify(data));
+        });
     }
 
 }
