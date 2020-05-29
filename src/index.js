@@ -6,9 +6,13 @@ import './resources/defaultData';
 
 import Main_Controller from "./controller/Main_Controller";
 
-export default class Index {
+class Index {
 
-    #mainController = new Main_Controller();
+    #mainController;
+
+    constructor() {
+        this.#mainController = new Main_Controller();
+    }
 
 }
 

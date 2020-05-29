@@ -1,8 +1,13 @@
-import Magazijn_Controller from "./Magazijn_Controller";
+import Magazijn_Controller from "./Magazijn_Controller.js";
 
 export default class Main_Controller {
 
-    #magazijnController = new Magazijn_Controller();
-    // en andere controllers
+    #magazijnController;
+    // #crudController;
+
+    constructor() {
+        this.#magazijnController = new Magazijn_Controller();
+        // this.#crudController = new Crud_Controller();
+    }
 
 }

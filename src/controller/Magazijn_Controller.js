@@ -1,14 +1,14 @@
-import Magazijn_View from "../view/Magazijn_View";
-import Magazijn from "../model/Magazijn";
+import Magazijn_View from "../view/Magazijn_View.js";
+import Magazijn_Model from "../model/Magazijn_Model.js";
 
-export default class Magazijn_Controller {
+export default class Magazijn_Controller{
 
     #magazijn_model;
     #magazijn_view;
 
     constructor() {
         this.defaultData();
-        this.#magazijn_model = new Magazijn();
+        this.#magazijn_model = new Magazijn_Model();
         this.#magazijn_view = new Magazijn_View(this);
     }
 
@@ -18,6 +18,10 @@ export default class Magazijn_Controller {
 
     setCurrentScreen(num) {
         this.#magazijn_model.setCurrentScreen = num;
+    }
+
+    updateModel(position){
+        this.#magazijn_model.updatePosition = position;
     }
 
     defaultData() {

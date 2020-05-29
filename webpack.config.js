@@ -23,7 +23,6 @@ module.exports = {
             colors: true
         }
     },
-    devtool: "source-map",
     module: {
         // rules bevat de loaders die worden gebruikt, en waar ze naar zoeken.
         // Zoeken automatisch in je hele proj (of src. Geen idee).

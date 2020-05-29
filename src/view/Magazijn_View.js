@@ -1,6 +1,5 @@
 import DragDrop from "./DragDrop";
 
-
 export default class Magazijn_View {
 
     #mag_controller;
@@ -8,12 +7,13 @@ export default class Magazijn_View {
 
     constructor(controller) {
         this.#mag_controller = controller;
-        this.#dragDrop = new DragDrop();
+        this.#dragDrop = new DragDrop(controller);
         this.#prepareMainMenu();
         this.#createDropTargets();
-        this.#dragDrop.prepareLists()
-        this.#createDropDownMenu();
+        this.#dragDrop.prepareLists();
+        this.#createDropdownMenu();
         this.#configureWizardButton();
+
     }
 
     #createDropTargets() {
@@ -27,12 +27,18 @@ export default class Magazijn_View {
         for (let i = 0; i < 15; i++) {
             let trow = document.createElement('tr');
             trow.className = 'grid-container made_choices';
+            trow.id = i.toString();
 
             for (let i = 0; i < 15; i++) {
-                let theader = document.createElement('td');
-                theader.className = 'list droptarget grid-item';
-                theader.id = i.toString();
-                trow.appendChild(theader);
+                let gridcell = document.createElement('td');
+                gridcell.className = 'list droptarget grid-item';
+                gridcell.id = i.toString();
+
+                gridcell.addEventListener('click', (e) => {
+                    console.log(e.target);
+                });
+
+                trow.appendChild(gridcell);
             }
             drop_targets.appendChild(trow);
         }
@@ -71,11 +77,11 @@ export default class Magazijn_View {
         newProduct.innerHTML = `Nieuwe ${cur_screen.getName} wizard`;
         choice_menu.innerHTML = cur_screen.getName;
 
-        this.#createDropDownMenu();
+        this.#createDraggablesMenu();
     }
 
-    #createDropDownMenu() {
-        let items = this.#mag_controller.getCurrentScreen.getItems;
+    #createDraggablesMenu(key) {
+        let items = this.#mag_controller.getCurrentScreen.getSpecificItems(key);
         let choice_menu = document.querySelector('.choice_menu');
 
         if (choice_menu.hasChildNodes()) {
@@ -83,16 +89,51 @@ export default class Magazijn_View {
         }
 
         if (items != null) {
-            items.forEach(
-                element => {
-                    let button = this.#dragDrop.getDraggableButton();
-                    button.className = 'btn btn-secondary dragButton';
-                    let buttonText = document.createTextNode(element);
-                    button.appendChild(buttonText);
-                    choice_menu.appendChild(button);
-                }
-            );
+            items.forEach(e => {
+                let button = this.#dragDrop.getDraggableButton();
+                button.className = 'btn btn-secondary dragButton';
+                let buttonText = document.createTextNode(e.Naam.toString());
+                button.appendChild(buttonText);
+                choice_menu.appendChild(button);
+            });
         }
+    }
+
+    #createDropdownMenu() {
+        let items = this.#mag_controller.getCurrentScreen.getItems;
+        let dropDownButton = document.getElementById('dropdownMenuButton');
+        let dropDown = document.getElementById('dropdown');
+
+        if (items != null) {
+            for (let [key] of Object.entries(items)) {
+                let button = this.#getDropDownLi();
+                let buttonText = document.createTextNode(key.toString());
+                button.appendChild(buttonText);
+                button.addEventListener('click', (ev) => {
+                    this.#createDraggablesMenu(key);
+                });
+                dropDown.appendChild(button);
+            }
+        }
+
+        dropDownButton.addEventListener('click', (e) => {
+            dropDown.childNodes.forEach(x => {
+                if (x.id === 'dropDownButton') {
+                    if (x.style.display === "none") {
+                        x.style.display = "block";
+                    } else {
+                        x.style.display = "none";
+                    }
+                }
+            })
+        });
+    }
+
+    #getDropDownLi() {
+        let a = document.createElement('li');
+        a.id = 'dropDownButton';
+        a.className = 'btn btn-secondary';
+        return a;
     }
 
     #configureWizardButton() {
