@@ -8,9 +8,11 @@ export default class Magazijn_View {
     constructor(controller) {
         this.#mag_controller = controller;
         this.#dragDrop = new DragDrop(controller);
-        this.#prepareMainMenu();
         this.#createDropTargets();
-        this.#dragDrop.prepareLists();
+        setTimeout(() => {
+            this.#dragDrop.prepareLists();
+        }, 1000);
+        this.#prepareMainMenu();
         this.#createDropdownMenu();
         this.#configureWizardButton();
 

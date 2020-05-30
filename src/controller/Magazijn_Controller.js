@@ -24,6 +24,10 @@ export default class Magazijn_Controller{
         return this.#magazijn_model.getCurrentScreen.updatePositions(position, del);;
     }
 
+    isPosTaken(posC, posR){
+        return this.#magazijn_model.getCurrentScreen.checkForPos(posC, posR);
+    }
+
     defaultData() {
         fetch('../resources/defaultData.json')
             .then((response) => {
