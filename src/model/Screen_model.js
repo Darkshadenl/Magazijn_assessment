@@ -21,27 +21,34 @@ export default class Screen_model {
         return this.#items[key];
     }
 
-    set updatePositions(position) {
-        console.log(`Given pos: ${position.value} Row: ${position.row}  Col: ${position.col}
-        Old col: ${position.old_row}  Old row: ${position.old_col}`);
-
-        if (position){
+    updatePositions(position, del) {
+        if (del === false || del === undefined){
             if (position.value !== ''){
-
                 this.#positions.push(position);
             } else {
-                console.log('true');
                 for (let i = 0; i < this.#positions.length; i++) {
                     if (this.#positions[i].row === position.old_row && this.#positions[i].col === position.old_col) {
                         this.#positions[i].row = position.row;
                         this.#positions[i].col = position.col;
+                        this.#positions[i].old_row = position.old_row;
+                        this.#positions[i].old_col = position.old_col;
                     }
                 }
             }
         }
-
+        if (del === true){
+            console.log('true');
+            let bc;
+            for (let i = 0; i < this.#positions.length; i++) {
+                if (this.#positions[i].row === position.old_row && this.#positions[i].col === position.old_col) {
+                    console.log('true in for loop');
+                    bc = this.#positions[i].value.toString();
+                    this.#positions.splice(i, 1);
+                }
+            }
+            return bc;
+        }
         console.log(this.#positions);
-        console.log(this.#positions.length);
     }
 
     #retrieveItems() {

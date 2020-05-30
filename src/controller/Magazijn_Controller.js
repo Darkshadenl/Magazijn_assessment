@@ -20,8 +20,8 @@ export default class Magazijn_Controller{
         this.#magazijn_model.setCurrentScreen = num;
     }
 
-    updateModel(position){
-        this.#magazijn_model.updatePosition = position;
+    updateModel(position, del){
+        return this.#magazijn_model.getCurrentScreen.updatePositions(position, del);;
     }
 
     defaultData() {

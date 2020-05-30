@@ -22,9 +22,7 @@
 .grid-item {
   height: 50px;
   width: 50px;
-  text-align: left;
   margin: 40px;
-  background-color: lightcyan;
   border: 1px solid rgba(0, 0, 0, 0.8);
 }
 

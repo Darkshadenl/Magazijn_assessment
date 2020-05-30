@@ -13,10 +13,6 @@ export default class Magazijn_Model {
         this.#currentScreen = this.#items[int];
     }
 
-    set updatePosition(position){
-        this.getCurrentScreen.updatePositions = position;
-    }
-
     get getCurrentScreen() {
         return this.#currentScreen;
     }

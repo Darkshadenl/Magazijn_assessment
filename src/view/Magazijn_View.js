@@ -33,6 +33,8 @@ export default class Magazijn_View {
                 let gridcell = document.createElement('td');
                 gridcell.className = 'list droptarget grid-item';
                 gridcell.id = i.toString();
+                gridcell.style.background = '#E0FFFF';
+                gridcell.style.background.repeat(0);
 
                 gridcell.addEventListener('click', (e) => {
                     console.log(e.target);
