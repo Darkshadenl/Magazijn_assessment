@@ -94,9 +94,19 @@ export default class Screen_model {
                 this.#items = value;
             }
         }
+    }
+
+    storeNewItem() {
+
+        let formData = {};
+        let itemName = "TODO";
+
+        //iterate over every input field, and save its name and data
 
 
+        var formJSON = JSON.stringify(formData);
 
+        localStorage.setItem(itemName, formJSON);
     }
 
 }
