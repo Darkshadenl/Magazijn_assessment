@@ -25,7 +25,15 @@ export default class Magazijn_Controller{
     }
 
     isPosTaken(posC, posR){
-        return this.#magazijn_model.getCurrentScreen.checkForPos(posC, posR);
+        return this.#magazijn_model.getCurrentScreen.isPosTaken(posC, posR);
+    }
+
+    updateLocalStorage(){
+        return this.#magazijn_model.getCurrentScreen.savePosToLocalStorage();
+    }
+
+    retrieveLocalStorage(){
+        return this.#magazijn_model.getCurrentScreen.retrievePositionsFromLocalStorage();
     }
 
     defaultData() {

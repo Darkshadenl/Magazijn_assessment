@@ -36,9 +36,9 @@ export default class DragDrop {
             setTimeout(() => {
                 e.target.style.display = 'none';
             }, 0);
+            this.#textToBeTransfered = e.target.innerText;
         } else if (e.target.parentNode.className === 'grid-container made_choices') {
-
-            console.log('in made choices start');
+            console.log('Start is in made choices ');
             // note original pos in grid
             if (!this.#controller.isPosTaken(e.target.id, e.target.parentNode.id)){
                 console.log('Pos is not taken');
@@ -46,11 +46,18 @@ export default class DragDrop {
                 this.#original_pos.push(e.target.parentNode.id, e.target.id);
                 this.#backupColor = e.target.style.backgroundColor;
                 e.target.style.backgroundColor = '#E0FFFF';
-                this.#textToBeTransfered = e.target.innerText;
+                // this.#textToBeTransfered = e.target.innerText;
             } else {
-                e.target.removeEventListener('dragstart');
-                e.target.removeEventListener('dragend');
+                console.log('Position is taken');
+                this.#original_pos.pop();
+                this.#original_pos.push(e.target.parentNode.id, e.target.id);
 
+                try {
+                    e.target.removeEventListener('dragstart');
+                    e.target.removeEventListener('dragend');
+                } catch (e) {
+                    console.log(e);
+                }
             }
         }
         this.#original_container = e.target.parentNode
@@ -99,6 +106,7 @@ export default class DragDrop {
             button.innerText = this.#createPosition(true);
             this.#succesful_drop = true;
         } else {
+            console.log('dragDrop laatste else statement.');
             this.#succesful_drop = false;
         }
     }
@@ -122,7 +130,7 @@ export default class DragDrop {
             }
         } else {
             if (this.#original_container.id === 'choice_menu') {
-                orig_c.firstChild.remove();
+                // orig_c.firstChild.remove();
                 console.log('Succesful drop in grid. Removing button from choiceMenu.')
             } else {
                 e.target.style.backgroundColor = this.#oldPositionAfterDragColor; //
@@ -194,6 +202,9 @@ export default class DragDrop {
 
     dragEnter(e) {
         e.preventDefault();
+
+        console.log(`Drag Started Correctly: ${this.#dragStartedCorrectly}`);
+        console.log(`Target id: ${this.#pos_mouseC = e.target.id}`);
 
         if (this.#dragStartedCorrectly) {
             console.log('Run dragEnter');

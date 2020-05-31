@@ -6,7 +6,9 @@ export default class Magazijn_Model {
     #currentScreen = this.#items[0];
 
     constructor() {
-
+        this.#items.forEach(e => {
+            e.retrievePositionsFromLocalStorage();
+        });
     }
 
     setCurrentScreen(int) {

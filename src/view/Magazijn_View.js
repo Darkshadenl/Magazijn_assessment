@@ -56,29 +56,7 @@ export default class Magazijn_View {
             }
             drop_targets.appendChild(trow);
         }
-
-        // this.prepareLists();
     }
-
-                                //TODO
-    // #prepareLists() {
-    //     let container_lists = document.querySelectorAll('.list');
-    //
-    //     container_lists.forEach(list => {
-    //         list.addEventListener('dragover', (e) => {
-    //             this.#dragDrop.dragOver(e)
-    //         });
-    //         list.addEventListener('dragenter', (e) => {
-    //             this.#dragDrop.dragEnter(e)
-    //         });
-    //         list.addEventListener('dragleave', (e) => {
-    //             this.#dragDrop.dragLeave(e)
-    //         });
-    //         list.addEventListener('drop', (e) => {
-    //             this.#dragDrop.dragDrop(e);
-    //         });
-    //     });
-    // }
 
     #prepareMainMenu() {
         let elements = [];
@@ -89,13 +67,13 @@ export default class Magazijn_View {
             e.addEventListener('click', (e) => {
                 this.changeScreen(e);
             })
-        })
-        this.#createDropdownMenu();
+        });
     }
 
     changeScreen(e) {
         let newProduct = document.getElementById('new_products_button');
         let menuButton = document.getElementById('dropdownMenuButton');
+        document.getElementById('new_products_button').style.display = 'block';
         this.#createGrid();
         switch (e.target.innerText) {
             case "Regio 1: Kleding":
@@ -128,21 +106,26 @@ export default class Magazijn_View {
         // find current positions, add these.
         let table = document.getElementById('made_choices_table');
 
-        positions.forEach(e => {
-            let col = e.col;
-            let row = e.row;
+        try {
+            positions.forEach(e => {
+                let col = e.col;
+                let row = e.row;
 
-            for (let i = 0; i < table.childNodes.length; i++){
-                if (table.childNodes[i].id === row) {
-                    let row_children = table.childNodes[i].childNodes;
-                    row_children.forEach(e => {
-                        if (e.id === col) {
-                            e.style.backgroundColor = '#12ff00';
-                        }
-                    })
+                for (let i = 0; i < table.childNodes.length; i++){
+                    if (table.childNodes[i].id === row) {
+                        let row_children = table.childNodes[i].childNodes;
+                        row_children.forEach(e => {
+                            if (e.id === col) {
+                                e.style.backgroundColor = '#12ff00';
+                            }
+                        })
+                    }
                 }
-            }
-        });
+            });
+        } catch (e) {
+            console.log('No positions found');
+        }
+
     }
 
     #createDraggablesMenu(key) {
@@ -152,6 +135,19 @@ export default class Magazijn_View {
         if (choice_menu.hasChildNodes()) {
             choice_menu.innerHTML = '';
         }
+
+        choice_menu.addEventListener('dragover', (e) => {
+            this.#dragDrop.dragOver(e)
+        });
+        choice_menu.addEventListener('dragenter', (e) => {
+            this.#dragDrop.dragEnter(e)
+        });
+        choice_menu.addEventListener('dragleave', (e) => {
+            this.#dragDrop.dragLeave(e)
+        });
+        choice_menu.addEventListener('drop', (e) => {
+            this.#dragDrop.dragDrop(e);
+        });
 
         if (items != null) {
             items.forEach(e => {
@@ -168,6 +164,8 @@ export default class Magazijn_View {
         let items = this.#mag_controller.getCurrentScreen.getItems;
         let dropDownButton = document.getElementById('dropdownMenuButton');
         let dropDown = document.getElementById('dropdown');
+
+        dropDownButton.style.display = 'block';
 
         if (dropDown.hasChildNodes()){
             while (dropDown.firstChild) {
@@ -210,6 +208,10 @@ export default class Magazijn_View {
 
     #configureWizardButton() {
         let wizardButton = document.getElementById('new_products_button');
+
+        wizardButton.addEventListener('click', ev => {
+            this.#mag_controller.updateLocalStorage();
+        });
 
         wizardButton.setAttribute('href', './view/CreationWizard.html');
 
