@@ -9,9 +9,6 @@ export default class Magazijn_View {
         this.#mag_controller = controller;
         this.#dragDrop = new DragDrop(controller);
         this.#createGrid();
-        setTimeout(() => {
-            this.#dragDrop.prepareLists();
-        }, 1000);
         this.#prepareMainMenu();
         this.#configureWizardButton();
     }
@@ -42,11 +39,46 @@ export default class Magazijn_View {
                     console.log(e.target);
                 });
 
+                gridcell.addEventListener('dragover', (e) => {
+                    this.#dragDrop.dragOver(e)
+                });
+                gridcell.addEventListener('dragenter', (e) => {
+                    this.#dragDrop.dragEnter(e)
+                });
+                gridcell.addEventListener('dragleave', (e) => {
+                    this.#dragDrop.dragLeave(e)
+                });
+                gridcell.addEventListener('drop', (e) => {
+                    this.#dragDrop.dragDrop(e);
+                });
+
                 trow.appendChild(gridcell);
             }
             drop_targets.appendChild(trow);
         }
+
+        // this.prepareLists();
     }
+
+                                //TODO
+    // #prepareLists() {
+    //     let container_lists = document.querySelectorAll('.list');
+    //
+    //     container_lists.forEach(list => {
+    //         list.addEventListener('dragover', (e) => {
+    //             this.#dragDrop.dragOver(e)
+    //         });
+    //         list.addEventListener('dragenter', (e) => {
+    //             this.#dragDrop.dragEnter(e)
+    //         });
+    //         list.addEventListener('dragleave', (e) => {
+    //             this.#dragDrop.dragLeave(e)
+    //         });
+    //         list.addEventListener('drop', (e) => {
+    //             this.#dragDrop.dragDrop(e);
+    //         });
+    //     });
+    // }
 
     #prepareMainMenu() {
         let elements = [];
@@ -124,7 +156,6 @@ export default class Magazijn_View {
         if (items != null) {
             items.forEach(e => {
                 let button = this.#dragDrop.getDraggableButton();
-                console.log('button created')
                 button.className = 'btn btn-secondary dragButton';
                 let buttonText = document.createTextNode(e.Naam.toString());
                 button.appendChild(buttonText);

@@ -57,7 +57,7 @@ export default class DragDrop {
         console.log(`Orignal container: ${this.#original_container.id}`);
     }
 
-    #dragDrop(e) {
+    dragDrop(e) {
         e.preventDefault();
         console.log('Run dragDrop');
 
@@ -79,7 +79,7 @@ export default class DragDrop {
                     this.#dragStart(e);
                 });
                 e.target.addEventListener('drop', (e) => {
-                    this.#dragDrop(e);
+                    this.dragDrop(e);
                 });
                 e.target.addEventListener('dragend', (e) => {
                     this.#dragEnd(e);
@@ -163,11 +163,24 @@ export default class DragDrop {
     getDraggableButton() {
         let button = document.createElement('button');
         button.setAttribute('draggable', 'True');
+
         button.addEventListener('dragstart', (e) => {
             this.#dragStart(e)
         });
         button.addEventListener('dragend', (e) => {
             this.#dragEnd(e)
+        });
+        button.addEventListener('dragover', (e) => {
+            this.dragOver(e)
+        });
+        button.addEventListener('dragenter', (e) => {
+            this.dragEnter(e)
+        });
+        button.addEventListener('dragleave', (e) => {
+            this.dragLeave(e)
+        });
+        button.addEventListener('drop', (e) => {
+            this.dragDrop(e);
         });
 
         button.id = 'dragButton';
@@ -175,11 +188,11 @@ export default class DragDrop {
         return button;
     }
 
-    #dragOver(e) {
+    dragOver(e) {
         e.preventDefault();
     }
 
-    #dragEnter(e) {
+    dragEnter(e) {
         e.preventDefault();
 
         if (this.#dragStartedCorrectly) {
@@ -207,7 +220,7 @@ export default class DragDrop {
 
     }
 
-    #dragLeave(e) {
+    dragLeave(e) {
         console.log('Run dragLeave');
         if (e.target.id === 'choice_menu') {
             e.target.style.backgroundColor = '';
@@ -223,22 +236,22 @@ export default class DragDrop {
         }
     }
 
-    prepareLists() {
-        let container_lists = document.querySelectorAll('.list');
-
-        container_lists.forEach(list => {
-            list.addEventListener('dragover', (e) => {
-                this.#dragOver(e)
-            });
-            list.addEventListener('dragenter', (e) => {
-                this.#dragEnter(e)
-            });
-            list.addEventListener('dragleave', (e) => {
-                this.#dragLeave(e)
-            });
-            list.addEventListener('drop', (e) => {
-                this.#dragDrop(e);
-            });
-        });
-    }
+    // prepareLists() {
+    //     let container_lists = document.querySelectorAll('.list');
+    //
+    //     container_lists.forEach(list => {
+    //         list.addEventListener('dragover', (e) => {
+    //             this.dragOver(e)
+    //         });
+    //         list.addEventListener('dragenter', (e) => {
+    //             this.dragEnter(e)
+    //         });
+    //         list.addEventListener('dragleave', (e) => {
+    //             this.dragLeave(e)
+    //         });
+    //         list.addEventListener('drop', (e) => {
+    //             this.dragDrop(e);
+    //         });
+    //     });
+    // }
 }
