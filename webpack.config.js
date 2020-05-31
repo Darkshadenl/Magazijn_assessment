@@ -14,7 +14,8 @@ module.exports = {
         publicPath: "/"
     },
     devServer: {
-        contentBase: "dist/",
+        contentBase: "./dist/",
+        index: "Index.html",
         overlay: {
             warnings: true,
             errors: true

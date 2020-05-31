@@ -8,17 +8,15 @@ export default class Magazijn_View {
     constructor(controller) {
         this.#mag_controller = controller;
         this.#dragDrop = new DragDrop(controller);
-        this.#createDropTargets();
+        this.#createGrid();
         setTimeout(() => {
             this.#dragDrop.prepareLists();
         }, 1000);
         this.#prepareMainMenu();
-        this.#createDropdownMenu();
         this.#configureWizardButton();
-
     }
 
-    #createDropTargets() {
+    #createGrid() {
         let drop_targets = document.getElementById('made_choices_table');
 
         // remove elements from previous screen
@@ -30,6 +28,7 @@ export default class Magazijn_View {
             let trow = document.createElement('tr');
             trow.className = 'grid-container made_choices';
             trow.id = i.toString();
+            trow.setAttribute('draggable', 'false');
 
             for (let i = 0; i < 15; i++) {
                 let gridcell = document.createElement('td');
@@ -37,6 +36,7 @@ export default class Magazijn_View {
                 gridcell.id = i.toString();
                 gridcell.style.background = '#E0FFFF';
                 gridcell.style.background.repeat(0);
+                gridcell.setAttribute('draggable', 'false');
 
                 gridcell.addEventListener('click', (e) => {
                     console.log(e.target);
@@ -58,30 +58,59 @@ export default class Magazijn_View {
                 this.changeScreen(e);
             })
         })
+        this.#createDropdownMenu();
     }
 
     changeScreen(e) {
         let newProduct = document.getElementById('new_products_button');
-        let choice_menu = document.getElementById('dropdownMenuButton');
-
+        let menuButton = document.getElementById('dropdownMenuButton');
+        this.#createGrid();
         switch (e.target.innerText) {
             case "Regio 1: Kleding":
-                this.#mag_controller.setCurrentScreen(0);
+                this.#loadPositions(this.#mag_controller.setCurrentScreen(0));
                 break;
             case "Regio 2: Tierlantijn":
-                this.#mag_controller.setCurrentScreen(1);
+                this.#loadPositions(this.#mag_controller.setCurrentScreen(1));
                 break;
             case "Regio 3: Decoratie":
-                this.#mag_controller.setCurrentScreen(2);
+                this.#loadPositions(this.#mag_controller.setCurrentScreen(2));
                 break;
         }
 
         let cur_screen = this.#mag_controller.getCurrentScreen;
 
         newProduct.innerHTML = `Nieuwe ${cur_screen.getName} wizard`;
-        choice_menu.innerHTML = cur_screen.getName;
+        menuButton.innerHTML = cur_screen.getName;
 
-        this.#createDraggablesMenu();
+        let choice_menu = document.querySelector('.choice_menu');
+
+        if (choice_menu.hasChildNodes()){
+            while (choice_menu.firstChild) {
+                choice_menu.removeChild(choice_menu.lastChild);
+            }
+        }
+        this.#createDropdownMenu();
+    }
+
+    #loadPositions(positions){
+        // find current positions, add these.
+        let table = document.getElementById('made_choices_table');
+
+        positions.forEach(e => {
+            let col = e.col;
+            let row = e.row;
+
+            for (let i = 0; i < table.childNodes.length; i++){
+                if (table.childNodes[i].id === row) {
+                    let row_children = table.childNodes[i].childNodes;
+                    row_children.forEach(e => {
+                        if (e.id === col) {
+                            e.style.backgroundColor = '#12ff00';
+                        }
+                    })
+                }
+            }
+        });
     }
 
     #createDraggablesMenu(key) {
@@ -107,6 +136,12 @@ export default class Magazijn_View {
         let items = this.#mag_controller.getCurrentScreen.getItems;
         let dropDownButton = document.getElementById('dropdownMenuButton');
         let dropDown = document.getElementById('dropdown');
+
+        if (dropDown.hasChildNodes()){
+            while (dropDown.firstChild) {
+                dropDown.removeChild(dropDown.lastChild);
+            }
+        }
 
         if (items != null) {
             for (let [key] of Object.entries(items)) {

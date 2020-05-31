@@ -12,6 +12,8 @@ export default class DragDrop {
     #pos_mouseR;
     #backupColor;
 
+    #dragStartedCorrectly = false;
+
     #beingDraggedColor = '#6E2D18';
     #dragOverGridColor = '#12ff00';
     #gridCellInUseColor = '#A52A2A';
@@ -24,6 +26,7 @@ export default class DragDrop {
 
     #dragStart(e) {
         console.log('run dragStart');
+        this.#dragStartedCorrectly = true;
         e.target.backgroundColor = 'black';
         this.#original_element = e.target;
 
@@ -34,16 +37,20 @@ export default class DragDrop {
                 e.target.style.display = 'none';
             }, 0);
         } else if (e.target.parentNode.className === 'grid-container made_choices') {
+
+            console.log('in made choices start');
             // note original pos in grid
             if (!this.#controller.isPosTaken(e.target.id, e.target.parentNode.id)){
+                console.log('Pos is not taken');
                 this.#original_pos.pop();
                 this.#original_pos.push(e.target.parentNode.id, e.target.id);
                 this.#backupColor = e.target.style.backgroundColor;
                 e.target.style.backgroundColor = '#E0FFFF';
                 this.#textToBeTransfered = e.target.innerText;
             } else {
-                // e.target.removeEventListener('dragstart');
-                // e.target.removeEventListener('dragend');
+                e.target.removeEventListener('dragstart');
+                e.target.removeEventListener('dragend');
+
             }
         }
         this.#original_container = e.target.parentNode
@@ -98,7 +105,7 @@ export default class DragDrop {
 
     #dragEnd(e) {
         let orig_c = document.getElementById(this.#original_container.id);
-
+        this.#dragStartedCorrectly = false;
         console.log('run dragEnd');
         console.log(this.#succesful_drop);
 
@@ -174,21 +181,29 @@ export default class DragDrop {
     #dragEnter(e) {
         e.preventDefault();
 
-        console.log('Run dragEnter');
-        this.#pos_mouseC = e.target.id;
-        this.#pos_mouseR = e.target.parentNode.id;
-        this.#pos_mouse = this.#pos_mouseC + this.#pos_mouseR;
-        this.#originalPosCR = this.#original_pos[1] + this.#original_pos[0];
+        if (this.#dragStartedCorrectly) {
+            console.log('Run dragEnter');
+            this.#pos_mouseC = e.target.id;
+            this.#pos_mouseR = e.target.parentNode.id;
+            this.#pos_mouse = this.#pos_mouseC + this.#pos_mouseR;
+            this.#originalPosCR = this.#original_pos[1] + this.#original_pos[0];
 
-        if (e.target.id === 'choice_menu') {
-            e.target.style.backgroundColor = '#ff7663';
-        } else if (e.target.parentNode.className === 'grid-container made_choices') {
-            if (this.#pos_mouse !== this.#originalPosCR) {
-                if (e.target.draggable !== true) {
-                    e.target.style.backgroundColor = '#12ff00';
+            if (e.target.id === 'choice_menu') {
+                e.target.style.backgroundColor = '#ff7663';
+            } else if (e.target.parentNode.className === 'grid-container made_choices') {
+                if (this.#pos_mouse !== this.#originalPosCR) {
+                    if (e.target.draggable !== true) {
+                        e.target.style.backgroundColor = '#12ff00';
+                    }
                 }
             }
+        } else {
+            e.onmousedown(e => {
+                e.onmouseup;
+            })
         }
+
+
     }
 
     #dragLeave(e) {
@@ -209,8 +224,6 @@ export default class DragDrop {
 
     prepareLists() {
         let container_lists = document.querySelectorAll('.list');
-
-        console.log(container_lists);
 
         container_lists.forEach(list => {
             list.addEventListener('dragover', (e) => {

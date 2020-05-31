@@ -17,6 +17,10 @@ export default class Screen_model {
         return this.#items;
     }
 
+    get getPositions(){
+        return this.#positions;
+    }
+
     getSpecificItems(key) {
         return this.#items[key];
     }
@@ -67,8 +71,6 @@ export default class Screen_model {
         }
         console.log(this.#positions);
     }
-
-
 
     #retrieveItems() {
         let retrieved = JSON.parse(localStorage.getItem('items'));

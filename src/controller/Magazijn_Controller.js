@@ -17,7 +17,7 @@ export default class Magazijn_Controller{
     }
 
     setCurrentScreen(num) {
-        this.#magazijn_model.setCurrentScreen = num;
+        return this.#magazijn_model.setCurrentScreen(num);
     }
 
     updateModel(position, del){

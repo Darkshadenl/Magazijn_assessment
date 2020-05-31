@@ -9,8 +9,9 @@ export default class Magazijn_Model {
 
     }
 
-    set setCurrentScreen(int) {
+    setCurrentScreen(int) {
         this.#currentScreen = this.#items[int];
+        return this.#currentScreen.getPositions;
     }
 
     get getCurrentScreen() {
