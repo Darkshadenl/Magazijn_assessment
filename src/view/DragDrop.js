@@ -36,28 +36,35 @@ export default class DragDrop {
             setTimeout(() => {
                 e.target.style.display = 'none';
             }, 0);
+            this.#textToBeTransfered = e.target.innerText;
         } else if (e.target.parentNode.className === 'grid-container made_choices') {
-
-            console.log('in made choices start');
+            console.log('Start is in made choices ');
             // note original pos in grid
             if (!this.#controller.isPosTaken(e.target.id, e.target.parentNode.id)){
                 console.log('Pos is not taken');
                 this.#original_pos.pop();
                 this.#original_pos.push(e.target.parentNode.id, e.target.id);
                 this.#backupColor = e.target.style.backgroundColor;
-                e.target.style.backgroundColor = '#E0FFFF';
-                this.#textToBeTransfered = e.target.innerText;
+                e.target.style.backgroundColor = this.#oldPositionAfterDragColor;
+                // this.#textToBeTransfered = e.target.innerText;
             } else {
-                e.target.removeEventListener('dragstart');
-                e.target.removeEventListener('dragend');
+                console.log('Position is taken');
+                this.#original_pos.pop();
+                this.#original_pos.push(e.target.parentNode.id, e.target.id);
 
+                try {
+                    e.target.removeEventListener('dragstart');
+                    e.target.removeEventListener('dragend');
+                } catch (e) {
+                    console.log(e);
+                }
             }
         }
         this.#original_container = e.target.parentNode
         console.log(`Orignal container: ${this.#original_container.id}`);
     }
 
-    #dragDrop(e) {
+    dragDrop(e) {
         e.preventDefault();
         console.log('Run dragDrop');
 
@@ -79,16 +86,16 @@ export default class DragDrop {
                     this.#dragStart(e);
                 });
                 e.target.addEventListener('drop', (e) => {
-                    this.#dragDrop(e);
+                    this.dragDrop(e);
                 });
                 e.target.addEventListener('dragend', (e) => {
                     this.#dragEnd(e);
                 });
+                e.target.style.backgroundColor = this.#gridCellInUseColor;
 
                 // repair old position
                 // remove eventlistener from original pos if original pos grid dropzone.
                 this.#original_element.setAttribute('draggable', 'False');
-
                 this.#succesful_drop = true;
             }
         } else if (e.target.id === 'choice_menu') {
@@ -96,9 +103,15 @@ export default class DragDrop {
             button.className = 'btn btn-secondary dragButton';
             e.target.style.backgroundColor = '';
             e.target.appendChild(button);
-            button.innerText = this.#createPosition(true);
+
+            if (this.#original_element.parentNode.id === 'choice_menu'){
+                button.innerText = this.#textToBeTransfered;
+            } else {
+                button.innerText = this.#createPosition(true);
+            }
             this.#succesful_drop = true;
         } else {
+            console.log('dragDrop laatste else statement.');
             this.#succesful_drop = false;
         }
     }
@@ -122,7 +135,7 @@ export default class DragDrop {
             }
         } else {
             if (this.#original_container.id === 'choice_menu') {
-                orig_c.firstChild.remove();
+                // orig_c.firstChild.remove();
                 console.log('Succesful drop in grid. Removing button from choiceMenu.')
             } else {
                 e.target.style.backgroundColor = this.#oldPositionAfterDragColor; //
@@ -163,11 +176,24 @@ export default class DragDrop {
     getDraggableButton() {
         let button = document.createElement('button');
         button.setAttribute('draggable', 'True');
+
         button.addEventListener('dragstart', (e) => {
             this.#dragStart(e)
         });
         button.addEventListener('dragend', (e) => {
             this.#dragEnd(e)
+        });
+        button.addEventListener('dragover', (e) => {
+            this.dragOver(e)
+        });
+        button.addEventListener('dragenter', (e) => {
+            this.dragEnter(e)
+        });
+        button.addEventListener('dragleave', (e) => {
+            this.dragLeave(e)
+        });
+        button.addEventListener('drop', (e) => {
+            this.dragDrop(e);
         });
 
         button.id = 'dragButton';
@@ -175,12 +201,15 @@ export default class DragDrop {
         return button;
     }
 
-    #dragOver(e) {
+    dragOver(e) {
         e.preventDefault();
     }
 
-    #dragEnter(e) {
+    dragEnter(e) {
         e.preventDefault();
+
+        console.log(`Drag Started Correctly: ${this.#dragStartedCorrectly}`);
+        console.log(`Target id: ${this.#pos_mouseC = e.target.id}`);
 
         if (this.#dragStartedCorrectly) {
             console.log('Run dragEnter');
@@ -190,11 +219,11 @@ export default class DragDrop {
             this.#originalPosCR = this.#original_pos[1] + this.#original_pos[0];
 
             if (e.target.id === 'choice_menu') {
-                e.target.style.backgroundColor = '#ff7663';
+                e.target.style.backgroundColor = this.#choiceMenuEnterColor;
             } else if (e.target.parentNode.className === 'grid-container made_choices') {
                 if (this.#pos_mouse !== this.#originalPosCR) {
                     if (e.target.draggable !== true) {
-                        e.target.style.backgroundColor = '#12ff00';
+                        e.target.style.backgroundColor = this.#dragOverGridColor;
                     }
                 }
             }
@@ -207,7 +236,7 @@ export default class DragDrop {
 
     }
 
-    #dragLeave(e) {
+    dragLeave(e) {
         console.log('Run dragLeave');
         if (e.target.id === 'choice_menu') {
             e.target.style.backgroundColor = '';
@@ -217,28 +246,28 @@ export default class DragDrop {
                 console.log('Draggable is false');
                 if (this.#pos_mouse !== this.#originalPosCR) {
                     console.log('Not Original pos');
-                    e.target.style.backgroundColor = '#E0FFFF';
+                    e.target.style.backgroundColor = this.#oldPositionAfterDragColor;
                 }
             }
         }
     }
 
-    prepareLists() {
-        let container_lists = document.querySelectorAll('.list');
-
-        container_lists.forEach(list => {
-            list.addEventListener('dragover', (e) => {
-                this.#dragOver(e)
-            });
-            list.addEventListener('dragenter', (e) => {
-                this.#dragEnter(e)
-            });
-            list.addEventListener('dragleave', (e) => {
-                this.#dragLeave(e)
-            });
-            list.addEventListener('drop', (e) => {
-                this.#dragDrop(e);
-            });
-        });
-    }
+    // prepareLists() {
+    //     let container_lists = document.querySelectorAll('.list');
+    //
+    //     container_lists.forEach(list => {
+    //         list.addEventListener('dragover', (e) => {
+    //             this.dragOver(e)
+    //         });
+    //         list.addEventListener('dragenter', (e) => {
+    //             this.dragEnter(e)
+    //         });
+    //         list.addEventListener('dragleave', (e) => {
+    //             this.dragLeave(e)
+    //         });
+    //         list.addEventListener('drop', (e) => {
+    //             this.dragDrop(e);
+    //         });
+    //     });
+    // }
 }

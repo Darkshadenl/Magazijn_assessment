@@ -9,6 +9,7 @@ export default class Screen_model {
     constructor(name) {
         this.#name = name;
         this.#retrieveItems();
+        this.retrievePositionsFromLocalStorage();
     }
 
     get getName() {
@@ -28,7 +29,11 @@ export default class Screen_model {
         return this.#items[key];
     }
 
-    checkForPos(posC, posR){
+    isPosTaken(posC, posR){
+        if (!this.#positions) {
+            this.#positions = [];
+        }
+
         for (let i = 0; i < this.#positions.length; i++) {
             if (this.#positions[i].row === posR) {
                 if (this.#positions[i].col === posC) {
@@ -37,6 +42,7 @@ export default class Screen_model {
                 }
             }
         }
+
         return false;
     }
 
@@ -44,7 +50,9 @@ export default class Screen_model {
         if (del === false || del === undefined){
             if (position.value !== "" || position.value !== undefined || true){
                 console.log("New item. Make first position log.");
+
                 this.#positions.push(position);
+
                 console.log('Removing from available items.')
 
                 for (let i = 0; i < this.#items[this.#selectedItem].length; i++) {
@@ -96,18 +104,13 @@ export default class Screen_model {
         }
     }
 
-    storeNewItem() {
+    retrievePositionsFromLocalStorage() {
+        this.#positions = JSON.parse(localStorage.getItem(this.#name));
 
-        let formData = {};
-        let itemName = "TODO";
-
-        //iterate over every input field, and save its name and data
-
-
-        var formJSON = JSON.stringify(formData);
-
-        localStorage.setItem(itemName, formJSON);
     }
 
+    savePosToLocalStorage(){
+        localStorage.setItem(this.#name, JSON.stringify(this.#positions));
+    }
 }
 
