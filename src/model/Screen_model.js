@@ -22,6 +22,9 @@ export default class Screen_model {
     }
 
     getSpecificItems(key) {
+
+        // TODO: only return non used items.
+
         return this.#items[key];
     }
 
