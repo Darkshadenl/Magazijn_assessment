@@ -1,6 +1,8 @@
 export default class Screen_model {
 
+    #items_details;
     #items;
+    #selectedItem;
     #name;
     #positions = [];
 
@@ -22,9 +24,7 @@ export default class Screen_model {
     }
 
     getSpecificItems(key) {
-
-        // TODO: only return non used items.
-
+        this.#selectedItem = key;
         return this.#items[key];
     }
 
@@ -41,11 +41,21 @@ export default class Screen_model {
     }
 
     updatePositions(position, del) {
-        console.log(`Del is: ${del}`);
-        if (del === undefined || del === false){
-            if (position.value !== "" || position.value !== undefined || position.value !== null){
+        if (del === false || del === undefined){
+            if (position.value !== "" || position.value !== undefined || true){
                 console.log("New item. Make first position log.");
                 this.#positions.push(position);
+                console.log('Removing from available items.')
+
+                for (let i = 0; i < this.#items[this.#selectedItem].length; i++) {
+                    let item = this.#items[this.#selectedItem];
+
+                    if (item !== undefined) {
+                        delete item[i];
+                        item.splice(i, 1);
+                        break;
+                    }
+                }
                 return `Row: ${position.row} Col: ${position.col}`;
             } else {
                 for (let i = 0; i < this.#positions.length; i++) {
@@ -61,7 +71,7 @@ export default class Screen_model {
             }
         }
         if (del === true){
-            console.log('deleting');
+            console.log('Deleting...');
             let bc;
             for (let i = 0; i < this.#positions.length; i++) {
                 if (this.#positions[i].row === position.old_row && this.#positions[i].col === position.old_col) {
@@ -77,13 +87,16 @@ export default class Screen_model {
 
     #retrieveItems() {
         let retrieved = JSON.parse(localStorage.getItem('items'));
-        let myItems;
 
         for (let [key, value] of Object.entries(retrieved)) {
             if (key.toString() === this.getName.toString()) {
+                this.#items_details = value;
                 this.#items = value;
             }
         }
+
+
+
     }
 
 }

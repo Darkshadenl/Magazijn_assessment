@@ -70,7 +70,7 @@ export default class DragDrop {
                 // non-faulty drop. Place on pos.
                 console.log('Position available. Place on position.');
                 // log data
-                console.log(`Position logged: ${this.#createPosition(this.#textToBeTransfered, e.target.parentNode.id, e.target.id)}`);
+                console.log(`Position logged: ${this.#createPosition(false, this.#textToBeTransfered, e.target.parentNode.id, e.target.id)}`);
 
                 // prepare new position
                 console.log('Setting new pos draggable to True');
@@ -96,7 +96,7 @@ export default class DragDrop {
             button.className = 'btn btn-secondary dragButton';
             e.target.style.backgroundColor = '';
             e.target.appendChild(button);
-            button.innerText = this.#createPosition(null, null, null, true);
+            button.innerText = this.#createPosition(true);
             this.#succesful_drop = true;
         } else {
             this.#succesful_drop = false;
@@ -134,7 +134,7 @@ export default class DragDrop {
         }
     }
 
-    #createPosition(val, row, col, del) {
+    #createPosition(del, val, row, col) {
         let old_row;
         let old_col;
 
@@ -169,6 +169,7 @@ export default class DragDrop {
         button.addEventListener('dragend', (e) => {
             this.#dragEnd(e)
         });
+
         button.id = 'dragButton';
 
         return button;
