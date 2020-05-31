@@ -45,7 +45,7 @@ export default class DragDrop {
                 this.#original_pos.pop();
                 this.#original_pos.push(e.target.parentNode.id, e.target.id);
                 this.#backupColor = e.target.style.backgroundColor;
-                e.target.style.backgroundColor = '#E0FFFF';
+                e.target.style.backgroundColor = this.#oldPositionAfterDragColor;
                 // this.#textToBeTransfered = e.target.innerText;
             } else {
                 console.log('Position is taken');
@@ -91,11 +91,11 @@ export default class DragDrop {
                 e.target.addEventListener('dragend', (e) => {
                     this.#dragEnd(e);
                 });
+                e.target.style.backgroundColor = this.#gridCellInUseColor;
 
                 // repair old position
                 // remove eventlistener from original pos if original pos grid dropzone.
                 this.#original_element.setAttribute('draggable', 'False');
-
                 this.#succesful_drop = true;
             }
         } else if (e.target.id === 'choice_menu') {
@@ -103,7 +103,12 @@ export default class DragDrop {
             button.className = 'btn btn-secondary dragButton';
             e.target.style.backgroundColor = '';
             e.target.appendChild(button);
-            button.innerText = this.#createPosition(true);
+
+            if (this.#original_element.parentNode.id === 'choice_menu'){
+                button.innerText = this.#textToBeTransfered;
+            } else {
+                button.innerText = this.#createPosition(true);
+            }
             this.#succesful_drop = true;
         } else {
             console.log('dragDrop laatste else statement.');
@@ -214,11 +219,11 @@ export default class DragDrop {
             this.#originalPosCR = this.#original_pos[1] + this.#original_pos[0];
 
             if (e.target.id === 'choice_menu') {
-                e.target.style.backgroundColor = '#ff7663';
+                e.target.style.backgroundColor = this.#choiceMenuEnterColor;
             } else if (e.target.parentNode.className === 'grid-container made_choices') {
                 if (this.#pos_mouse !== this.#originalPosCR) {
                     if (e.target.draggable !== true) {
-                        e.target.style.backgroundColor = '#12ff00';
+                        e.target.style.backgroundColor = this.#dragOverGridColor;
                     }
                 }
             }
@@ -241,7 +246,7 @@ export default class DragDrop {
                 console.log('Draggable is false');
                 if (this.#pos_mouse !== this.#originalPosCR) {
                     console.log('Not Original pos');
-                    e.target.style.backgroundColor = '#E0FFFF';
+                    e.target.style.backgroundColor = this.#oldPositionAfterDragColor;
                 }
             }
         }
