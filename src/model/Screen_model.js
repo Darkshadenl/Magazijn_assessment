@@ -46,26 +46,20 @@ export default class Screen_model {
         return false;
     }
 
-    updatePositions(position, del) {
+    updatePositions(position, del, menu) {
         if (del === false || del === undefined) {
             if (position.value !== "" || position.value !== undefined || true) {
                 console.log("New item. Make first position log.");
-
                 this.#positions.push(position);
-
                 console.log('Removing from available items.');
-
                 for (let i = 0; i < this.#items[this.#selectedItem].length; i++) {
                     let item = this.#items[this.#selectedItem];
-
                     if (item !== undefined) {
                         delete item[i];
                         item.splice(i, 1);
                         break;
                     }
                 }
-                console.log(this.#items);
-                console.log(this.#items_details);
 
                 return `Row: ${position.row} Col: ${position.col}`;
             } else {
@@ -90,12 +84,27 @@ export default class Screen_model {
                         bc = this.#positions[i].value.toString();
                         this.#positions.splice(i, 1);
                         console.log('Position deleted.');
+                        return bc;
                     }
                 }
-                return bc;
             } catch (e) {
                 console.log('Probably nothing went wrong.');
             }
+        }
+    }
+
+    makeItemAvailable(menu, valueOfItem){
+        console.log('Making items available...');
+
+        try{
+            let recovered = this.#items_details[menu];
+            for (let i = 0; i < recovered.length; i++) {
+                if (recovered[i].Naam.toString() === valueOfItem) {
+                    this.#items[menu].push(recovered[i]);
+                }
+            }
+        } catch (e) {
+            console.log('Something probs went wrong');
         }
     }
 
@@ -116,22 +125,30 @@ export default class Screen_model {
 
     }
 
-    giveMeMenu(value, active) {
-        if (value === undefined) {
-            console.log('Undefined value')
+    isMyMenu(nameOfButton, activeMenu) {
+        if (nameOfButton === undefined) {
+            console.log('Undefined nameOfButton')
         } else {
+            let menu_items = this.#items_details[activeMenu];
+            for (let i = 0; i < menu_items.length; i++) {
+                if (menu_items[i].Naam.toString() === nameOfButton) {
+                    return [true, activeMenu];
+                }
+            }
+            // current menu is not my menu. Find my menu please
+            for (let menu in this.#items_details) {
+                if (menu !== activeMenu) {
+                    let menuOpts = this.#items_details[menu];
 
-            // console.log(active);
-            // let activeMenuItems = this.#items[active];
-            // console.log(activeMenuItems);
-
-            // for (let i = 0; i < this.#items_details.length; i++) {
-            //     console.log(this.#items_details[i]);
-            //     if (this.#items_details[i].toString() === active) {
-            //         console.log(true);
-            //     }
-            // }
-
+                    for (let [key, value] of Object.entries(menuOpts)) {
+                        if (value['Naam'] === nameOfButton) {
+                            return [false, menu];
+                        }
+                    }
+                }
+            }
+            console.log('O NOOOO RETURNING FALSE');
+            return false;
         }
     }
 

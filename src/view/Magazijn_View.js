@@ -139,6 +139,8 @@ export default class Magazijn_View {
         let items = this.#mag_controller.getCurrentScreen.getSpecificItems(key);
         let choice_menu = document.querySelector('.choice_menu');
 
+        console.log(items);
+
         if (choice_menu.hasChildNodes()) {
             choice_menu.innerHTML = '';
         }

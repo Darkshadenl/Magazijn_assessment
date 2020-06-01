@@ -20,8 +20,8 @@ export default class Magazijn_Controller{
         return this.#magazijn_model.setCurrentScreen(num);
     }
 
-    updateModel(position, del){
-        return this.#magazijn_model.getCurrentScreen.updatePositions(position, del);;
+    updateModel(position, del, menu){
+        return this.#magazijn_model.getCurrentScreen.updatePositions(position, del, menu);;
     }
 
     isPosTaken(posC, posR){
@@ -36,8 +36,8 @@ export default class Magazijn_Controller{
         return this.#magazijn_model.getCurrentScreen.retrievePositionsFromLocalStorage();
     }
 
-    giveMeMenu(value, active){
-        return this.#magazijn_model.getCurrentScreen.giveMeMenu(value, active);
+    isMyMenu(value, active){
+        return this.#magazijn_model.getCurrentScreen.isMyMenu(value, active);
     }
 
     defaultData() {

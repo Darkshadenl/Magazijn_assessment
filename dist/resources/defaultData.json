@@ -3,6 +3,7 @@
         "Broeken": [
             {
                 "Naam": "Coole broek",
+                "type": "broeken",
                 "beschrijving": "Een coole broek van een mooie stof",
                 "inkoopprijs": 10,
                 "minimale voorraad": 5,
@@ -14,6 +15,7 @@
             },
             {
                 "Naam": "Bitch broek",
+                "type": "broeken",
                 "beschrijving": "Een Bitch broek van een mooie stof",
                 "inkoopprijs": 120,
                 "minimale voorraad": 1,
@@ -27,6 +29,7 @@
         "Sweaters": [
             {
                 "Naam": "Coole Sweater",
+                "type": "Sweaters",
                 "beschrijving": "Een coole Sweater van een mooie stof",
                 "inkoopprijs": 10,
                 "minimale voorraad": 5,
@@ -40,6 +43,7 @@
         "Jurkjes": [
             {
                 "Naam": "Coole Jurk",
+                "type": "Jurkjes",
                 "beschrijving": "Een coole Jurk van een mooie stof",
                 "inkoopprijs": 10,
                 "minimale voorraad": 5,
@@ -53,6 +57,7 @@
         "Mutsen": [
             {
                 "Naam": "Coole Muts",
+                "type": "Mutsen",
                 "beschrijving": "Een coole Muts van een mooie stof",
                 "inkoopprijs": 10,
                 "minimale voorraad": 5,
@@ -66,6 +71,7 @@
         "Sportschoenen": [
             {
                 "Naam": "Coole sportschoen",
+                "type": "Sportschoenen",
                 "beschrijving": "Een coole sportschoen van een mooie stof",
                 "inkoopprijs": 10,
                 "minimale voorraad": 5,
@@ -81,6 +87,7 @@
         "Lampen": [
             {
                 "Naam": "Mooie lamp",
+                "type": "Lampen",
                 "beschrijving": "Een Mooie lamp",
                 "inkoopprijs": 10,
                 "minimale voorraad": 5,
@@ -94,6 +101,7 @@
         "Tafels": [
             {
                 "Naam": "Coole Tafel",
+                "type": "Tafels",
                 "beschrijving": "Een Coole Tafel",
                 "inkoopprijs": 10,
                 "minimale voorraad": 5,
@@ -109,6 +117,7 @@
         "Heksen": [
             {
                 "Naam": "Hermelien",
+                "type": "Heksen",
                 "beschrijving": "Nu hermelien bij jou tuis",
                 "inkoopprijs": 10,
                 "minimale voorraad": 5,
@@ -122,6 +131,7 @@
         "Paaseieren": [
             {
                 "Naam": "Groen ei",
+                "type": "Paaseieren",
                 "beschrijving": "Paasei",
                 "inkoopprijs": 10,
                 "minimale voorraad": 5,
@@ -133,6 +143,7 @@
             },
             {
                 "Naam": "Zwart ei",
+                "type": "Paaseieren",
                 "beschrijving": "Paasei",
                 "inkoopprijs": 10,
                 "minimale voorraad": 5,

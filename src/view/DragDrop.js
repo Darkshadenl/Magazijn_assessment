@@ -25,12 +25,10 @@ export default class DragDrop {
     }
 
     dragStart(e) {
-        console.log('run dragStart');
+        // console.log('run dragStart');
         this.#dragStartedCorrectly = true;
         e.target.backgroundColor = 'black';
         this.#original_element = e.target;
-
-        console.log(e.target);
 
         // make button dissapear when moving
         if (e.target.parentNode.id === 'choice_menu') {
@@ -39,7 +37,6 @@ export default class DragDrop {
             }, 0);
             this.#textToBeTransfered = e.target.innerText;
         } else if (e.target.parentNode.className === 'grid-container made_choices') {
-            console.log('Start is in made choices ');
             // note original pos in grid
             if (!this.#controller.isPosTaken(e.target.id, e.target.parentNode.id)){
                 console.log('Pos is not taken');
@@ -49,41 +46,38 @@ export default class DragDrop {
                 e.target.style.backgroundColor = this.oldPositionAfterDragColor;
                 // this.#textToBeTransfered = e.target.innerText;
             } else {
-                console.log('Position is taken');
                 this.#original_pos.pop();
                 this.#original_pos.push(e.target.parentNode.id, e.target.id);
 
-                try {
-                    e.target.removeEventListener('dragstart', this.dragStart(e));
-                    e.target.removeEventListener('dragend', this.dragEnd(e));
-                } catch (e) {
-                    console.log(e);
-                }
+                // try {
+                //     e.target.removeEventListener('dragstart', this.dragStart(e));
+                //     e.target.removeEventListener('dragend', this.dragEnd(e));
+                // } catch (e) {
+                //     console.log(e);
+                // }
             }
         }
         this.#original_container = e.target.parentNode;
-        console.log(`Orignal container: ${this.#original_container.id}`);
+        // console.log(`Orignal container: ${this.#original_container.id}`);
     }
 
     dragDrop(e) {
         e.preventDefault();
-        console.log('Run dragDrop');
+        // console.log('Run dragDrop');
 
         if (!this.#succesful_drop) {
+            // console.log('Succesful drop');
             if (this.#dragStartedCorrectly) {
+                // console.log('Drag started correctly');
                 if (e.target.parentNode.className === 'grid-container made_choices') {
                     if (this.#controller.isPosTaken(this.#pos_mouseC, this.#pos_mouseR)) {
-                        // faulty drop. Reset to original pos.
-                        // this.#original_container.style.backgroundColor = this.#backupColor;
-                        console.log('Position is taken. Do nothing.');
+                        // console.log('Position is taken. Do nothing.');
                     } else {
-                        // non-faulty drop. Place on pos.
-                        console.log('Position available. Place on position.');
-                        // log data
-                        console.log(`Position logged: ${this.#createPosition(false, this.#textToBeTransfered, e.target.parentNode.id, e.target.id)}`);
+                        // console.log('Position available. Place on position.');
+                        console.log(`Position logged: ${this.#createPosition(false, undefined, this.#textToBeTransfered, e.target.parentNode.id, e.target.id)}`);
 
                         // prepare new position
-                        console.log('Setting new pos draggable to True');
+                        // console.log('Setting new pos draggable to True');
                         e.target.setAttribute('draggable', 'True');
                         e.target.addEventListener('dragstart', (e) => {
                             this.dragStart(e);
@@ -102,46 +96,42 @@ export default class DragDrop {
                         this.#succesful_drop = true;
                     }
                 } else if (e.target.id === 'choice_menu') {
-                    console.log('Placing on choiceMenu');
                     let button = this.getDraggableButton();
                     button.className = 'btn btn-secondary dragButton';
 
                     // Check current active menu
                     let menu = document.getElementById('dropdown');
-                    let activated = '';
-
+                    let activatedMenu = '';
                     menu.childNodes.forEach(element => {
                         if (element.classList.contains('active')) {
-                            activated = element.textContent;
+                            activatedMenu = element.textContent;
                         }
                     });
 
-                    // Check to which menu target belongs
-                    // use original positions to find name of button.
-                    let nameOfButton = this.#createPosition(true);
-                    let whatisMyMenu = this.#controller.giveMeMenu(nameOfButton, activated);
+                    // Use original positions to find name of button.
+                    let nameOfButton = this.#createPosition(true, activatedMenu);
+                    // Check if target belongs to currently selected menu
+                    let isThisMyMenu = this.#controller.isMyMenu(nameOfButton, activatedMenu);
+                    console.log(isThisMyMenu);
 
-                    // als het huidige menu hoort bij het item, voeg dan de button weer toe.
-                    // als het huidige menu er niet bij hoort, voeg hem dan alleen maar toe aan screenmodel items.
-
-
-                    // If activated target not where belongs, add to model, not to view.
-
-
-                    e.target.style.backgroundColor = '';
-                    e.target.appendChild(button);
-                    console.log('Button for choice menu');
-
-                    if (this.#original_element.parentNode.id === 'choice_menu'){
-                        button.innerText = this.#textToBeTransfered;
-                    } else {
-                        let innertext = this.#createPosition(true);
-                        if (innertext !== undefined) {
-                            button.innerText = innertext;
-                        } else {
+                    if (isThisMyMenu[0]) {
+                        e.target.appendChild(button);
+                        this.#controller.getCurrentScreen.makeItemAvailable(activatedMenu, nameOfButton);
+                        if (this.#original_element.parentNode.id === 'choice_menu'){
                             button.innerText = this.#textToBeTransfered;
+                        } else {
+                            if (nameOfButton !== undefined) {
+                                button.innerText = nameOfButton;
+                            } else {
+                                button.innerText = this.#textToBeTransfered;
+                            }
                         }
+                    } else {
+                        this.#controller.getCurrentScreen.makeItemAvailable(isThisMyMenu[1], nameOfButton);
+                        // make menu button flicker maybe
                     }
+                    console.log('Item should be available');
+                    e.target.style.backgroundColor = '';
                     this.#succesful_drop = true;
                 } else {
                     console.log('dragDrop laatste else statement.');
@@ -154,7 +144,7 @@ export default class DragDrop {
     dragEnd(e) {
         let orig_c = document.getElementById(this.#original_container.id);
         this.#dragStartedCorrectly = false;
-        console.log('run dragEnd');
+        // console.log('run dragEnd');
         console.log(this.#succesful_drop);
 
         if (!this.#succesful_drop) {
@@ -183,7 +173,7 @@ export default class DragDrop {
         this.#dragStartedCorrectly = false;
     }
 
-    #createPosition(del, val, row, col) {
+    #createPosition(del, menu, val, row, col) {
         let old_row;
         let old_col;
 
@@ -199,24 +189,19 @@ export default class DragDrop {
             this.#original_pos.pop();
         }
 
-        console.log(`Sending update to model with    Value: ${val}  Row: ${row}  Col:${col}   Old-row: ${old_row}  Old-coll ${old_col}`);
+        console.log(`Sending update to model with del: ${del} menu: ${menu}  Value: ${val}  Row: ${row}  Col:${col}   Old-row: ${old_row}  Old-coll ${old_col}`);
         let deleted_pos_value = this.#controller.updateModel({
             value: val,
             row: row,
             col: col,
             old_row: old_row,
             old_col: old_col
-        }, del);
+        }, del, menu);
 
-        if (del) {
-            this.#clearGridPosition();
-        }
-
+        // if (del) {
+        //     this.#clearGridPosition();
+        // }
         return deleted_pos_value;
-    }
-
-    #clearGridPosition(){
-        // TODO: Clear old grid positions
     }
 
     dragOver(e) {
@@ -226,11 +211,8 @@ export default class DragDrop {
     dragEnter(e) {
         e.preventDefault();
 
-        console.log(e.target);
-        console.log(`Target id: ${this.#pos_mouseC = e.target.id}`);
-
         if (this.#dragStartedCorrectly) {
-            console.log('Run dragEnter');
+            // console.log('Run dragEnter');
             this.#pos_mouseC = e.target.id;
             this.#pos_mouseR = e.target.parentNode.id;
             this.#pos_mouse = this.#pos_mouseC + this.#pos_mouseR;
@@ -253,15 +235,15 @@ export default class DragDrop {
     }
 
     dragLeave(e) {
-        console.log('Run dragLeave');
+        // console.log('Run dragLeave');
         if (e.target.id === 'choice_menu') {
             e.target.style.backgroundColor = '';
         } else if (e.target.parentNode.className === 'grid-container made_choices') {
-            console.log('Pos is grid.');
+            // console.log('Pos is grid.');
             if (e.target.draggable !== true) {
-                console.log('Draggable is false');
+                // console.log('Draggable is false');
                 if (this.#pos_mouse !== this.#originalPosCR) {
-                    console.log('Not Original pos');
+                    // console.log('Not Original pos');
                     e.target.style.backgroundColor = this.oldPositionAfterDragColor;
                 }
             }
