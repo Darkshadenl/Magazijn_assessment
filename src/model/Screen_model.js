@@ -21,6 +21,7 @@ export default class Screen_model {
     }
 
     get getPositions() {
+        console.log('Get position ran!');
         return this.#positions;
     }
 
@@ -30,47 +31,56 @@ export default class Screen_model {
     }
 
     isPosTaken(posC, posR) {
-        if (!this.#positions) {
+        if (!this.getPositions) {
             this.#positions = [];
         }
+        let local_positions = this.getPositions;
 
-        for (let i = 0; i < this.#positions.length; i++) {
-            if (this.#positions[i].row === posR) {
-                if (this.#positions[i].col === posC) {
+        for (let i = 0; i < local_positions.length; i++) {
+            if (local_positions[i].row === posR) {
+                if (local_positions[i].col === posC) {
                     console.log("Position found");
                     return true;
                 }
             }
         }
-
         return false;
     }
 
-    updatePositions(position, del, menu) {
+    updatePositions(position, del) {
+        console.log('updatePositions ran');
+        let local_positions = this.getPositions;
         if (del === false || del === undefined) {
-            if (position.value !== "" || position.value !== undefined || true) {
-                console.log("New item. Make first position log.");
-                this.#positions.push(position);
-                console.log('Removing from available items.');
-                for (let i = 0; i < this.#items[this.#selectedItem].length; i++) {
-                    let item = this.#items[this.#selectedItem];
-                    if (item !== undefined) {
-                        delete item[i];
-                        item.splice(i, 1);
-                        break;
+            console.log('Not here');
+            if (position.value !== undefined) {
+                console.log('Maybe here?');                         // && and || don't seem to work
+                    if (position.value !== "") {
+                        console.log("New item. Make first position log.");
+                        local_positions.push(position);
+                        console.log('Removing from available items.');
+                        for (let i = 0; i < this.getItems[this.#selectedItem].length; i++) {
+                            let item = this.getItems[this.#selectedItem];
+                            if (item !== undefined) {
+                                delete item[i];
+                                item.splice(i, 1);
+                                break;
+                            }
+                        }
+                        return `Row: ${position.row} Col: ${position.col}`;
                     }
-                }
-
-                return `Row: ${position.row} Col: ${position.col}`;
             } else {
-                for (let i = 0; i < this.#positions.length; i++) {
-                    if (this.#positions[i].row === position.old_row && this.#positions[i].col === position.old_col) {
-                        this.#positions[i].row = position.row;
-                        this.#positions[i].col = position.col;
-                        this.#positions[i].old_row = position.old_row;
-                        this.#positions[i].old_col = position.old_col;
+                console.log('Here!');
+                console.log(local_positions);
+                for (let i = 0; i < local_positions.length; i++) {
+                    if (local_positions[i].row === position.old_row && local_positions[i].col === position.old_col) {
+                        local_positions[i].row = position.row;
+                        local_positions[i].col = position.col;
+                        local_positions[i].old_row = position.old_row;
+                        local_positions[i].old_col = position.old_col;
                         console.log("Position updated.");
-                        return `Row: ${this.#positions[i].row}  Col: ${this.#positions[i].col}`;
+                        console.log(local_positions);
+                        console.log(this.#positions);
+                        return `Row: ${local_positions[i].row}  Col: ${local_positions[i].col}`;
                     }
                 }
             }
@@ -79,10 +89,10 @@ export default class Screen_model {
             console.log('Deleting...');
             let bc;
             try {
-                for (let i = 0; i < this.#positions.length; i++) {
-                    if (this.#positions[i].row === position.old_row && this.#positions[i].col === position.old_col) {
-                        bc = this.#positions[i].value.toString();
-                        this.#positions.splice(i, 1);
+                for (let i = 0; i < local_positions.length; i++) {
+                    if (local_positions[i].row === position.old_row && local_positions[i].col === position.old_col) {
+                        bc = local_positions[i].value.toString();
+                        local_positions.splice(i, 1);
                         console.log('Position deleted.');
                         return bc;
                     }
@@ -94,8 +104,7 @@ export default class Screen_model {
     }
 
     makeItemAvailable(menu, valueOfItem){
-        console.log('Making items available...');
-
+        console.log('makeItemAvailable ran');
         try{
             let recovered = this.#items_details[menu];
             for (let i = 0; i < recovered.length; i++) {
@@ -109,6 +118,7 @@ export default class Screen_model {
     }
 
     #retrieveItems() {
+        console.log('retrieveitems ran');
         let retrieved = JSON.parse(localStorage.getItem('items'));
         let retrieved2 = JSON.parse(localStorage.getItem('items'));
 
@@ -126,6 +136,7 @@ export default class Screen_model {
     }
 
     isMyMenu(nameOfButton, activeMenu) {
+        console.log('ismymenu ran');
         if (nameOfButton === undefined) {
             console.log('Undefined nameOfButton')
         } else {

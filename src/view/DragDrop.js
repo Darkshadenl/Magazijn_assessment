@@ -5,6 +5,7 @@ export default class DragDrop {
     #original_element;
     #textToBeTransfered = '';
     #succesful_drop = false;
+    #dragDropSuccess = false;
     #original_pos = [];
     #pos_mouse;
     #originalPosCR;
@@ -25,7 +26,7 @@ export default class DragDrop {
     }
 
     dragStart(e) {
-        // console.log('run dragStart');
+        console.log('run dragStart');
         this.#dragStartedCorrectly = true;
         e.target.backgroundColor = 'black';
         this.#original_element = e.target;
@@ -48,6 +49,7 @@ export default class DragDrop {
             } else {
                 this.#original_pos.pop();
                 this.#original_pos.push(e.target.parentNode.id, e.target.id);
+                console.log(this.#original_pos);
 
                 // try {
                 //     e.target.removeEventListener('dragstart', this.dragStart(e));
@@ -63,18 +65,17 @@ export default class DragDrop {
 
     dragDrop(e) {
         e.preventDefault();
-        // console.log('Run dragDrop');
-
-        if (!this.#succesful_drop) {
-            // console.log('Succesful drop');
+        if (!this.#dragDropSuccess) {
+            console.log('Run dragDrop');
             if (this.#dragStartedCorrectly) {
-                // console.log('Drag started correctly');
                 if (e.target.parentNode.className === 'grid-container made_choices') {
                     if (this.#controller.isPosTaken(this.#pos_mouseC, this.#pos_mouseR)) {
-                        // console.log('Position is taken. Do nothing.');
+                        console.log('Position is taken. Do nothing.');
+                        this.#succesful_drop = false;
+                        this.#dragDropSuccess = true;
                     } else {
                         // console.log('Position available. Place on position.');
-                        console.log(`Position logged: ${this.#createPosition(false, undefined, this.#textToBeTransfered, e.target.parentNode.id, e.target.id)}`);
+                        console.log(`Position logged: ${this.#createPosition(false, this.#textToBeTransfered, e.target.parentNode.id, e.target.id)}`);
 
                         // prepare new position
                         // console.log('Setting new pos draggable to True');
@@ -94,6 +95,8 @@ export default class DragDrop {
                         // remove eventlistener from original pos if original pos grid dropzone.
                         this.#original_element.setAttribute('draggable', 'False');
                         this.#succesful_drop = true;
+                        this.#dragDropSuccess = true;
+                        console.log(this.#succesful_drop);
                     }
                 } else if (e.target.id === 'choice_menu') {
                     let button = this.getDraggableButton();
@@ -112,7 +115,6 @@ export default class DragDrop {
                     let nameOfButton = this.#createPosition(true, activatedMenu);
                     // Check if target belongs to currently selected menu
                     let isThisMyMenu = this.#controller.isMyMenu(nameOfButton, activatedMenu);
-                    console.log(isThisMyMenu);
 
                     if (isThisMyMenu[0]) {
                         e.target.appendChild(button);
@@ -133,9 +135,13 @@ export default class DragDrop {
                     console.log('Item should be available');
                     e.target.style.backgroundColor = '';
                     this.#succesful_drop = true;
+                    this.#dragDropSuccess = true;
+                    console.log(this.#succesful_drop);
                 } else {
                     console.log('dragDrop laatste else statement.');
                     this.#succesful_drop = false;
+                    this.#dragDropSuccess = true;
+                    console.log(this.#succesful_drop);
                 }
             }
         }
@@ -144,13 +150,14 @@ export default class DragDrop {
     dragEnd(e) {
         let orig_c = document.getElementById(this.#original_container.id);
         this.#dragStartedCorrectly = false;
-        // console.log('run dragEnd');
-        console.log(this.#succesful_drop);
+        console.log('run dragEnd');
+        console.log(this.#original_container.parentNode.id);
 
         if (!this.#succesful_drop) {
-            if (this.#original_container.parentNode.id === 'made_choices') {
+            if (this.#original_container.parentNode.id === 'made_choices_table') {
                 // this.#original_container.style.background = this.#dropzoneColor;
-                console.log("Non Succesful drop. Resetting to Grid (not yet).");
+                console.log("Non Succesful drop. Reinforcing old position.");
+                this.#createPosition(false, undefined, this.#original_pos[0], this.#original_pos[1]);
             } else if (this.#original_container.id === 'choice_menu') {
                 let button = this.getDraggableButton();
                 button.innerText = this.#textToBeTransfered;
@@ -168,12 +175,13 @@ export default class DragDrop {
                 console.log(`Succesful drop in grid.`);
             }
             // e.target.style.opacity = "";
-            this.#succesful_drop = false;   // reset van de boolean
         }
+        this.#succesful_drop = false;   // reset van de boolean
         this.#dragStartedCorrectly = false;
+        this.#dragDropSuccess = false;
     }
 
-    #createPosition(del, menu, val, row, col) {
+    #createPosition(del, val, row, col) {
         let old_row;
         let old_col;
 
@@ -189,15 +197,15 @@ export default class DragDrop {
             this.#original_pos.pop();
         }
 
-        console.log(`Sending update to model with del: ${del} menu: ${menu}  Value: ${val}  Row: ${row}  Col:${col}   Old-row: ${old_row}  Old-coll ${old_col}`);
+        console.log(`Sending update to model with del: ${del} Value: ${val}  Row: ${row}  Col:${col}   Old-row: ${old_row}  Old-col: ${old_col}`);
         let deleted_pos_value = this.#controller.updateModel({
             value: val,
             row: row,
             col: col,
             old_row: old_row,
             old_col: old_col
-        }, del, menu);
-
+        }, del);
+        console.log(deleted_pos_value);
         // if (del) {
         //     this.#clearGridPosition();
         // }
@@ -235,17 +243,14 @@ export default class DragDrop {
     }
 
     dragLeave(e) {
-        // console.log('Run dragLeave');
         if (e.target.id === 'choice_menu') {
             e.target.style.backgroundColor = '';
         } else if (e.target.parentNode.className === 'grid-container made_choices') {
-            // console.log('Pos is grid.');
             if (e.target.draggable !== true) {
-                // console.log('Draggable is false');
-                if (this.#pos_mouse !== this.#originalPosCR) {
+                // if (this.#pos_mouse !== this.#originalPosCR) {
                     // console.log('Not Original pos');
                     e.target.style.backgroundColor = this.oldPositionAfterDragColor;
-                }
+                // }
             }
         }
     }

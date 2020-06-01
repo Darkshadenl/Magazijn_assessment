@@ -21,7 +21,7 @@ export default class Magazijn_Controller{
     }
 
     updateModel(position, del, menu){
-        return this.#magazijn_model.getCurrentScreen.updatePositions(position, del, menu);;
+        return this.#magazijn_model.getCurrentScreen.updatePositions(position, del);;
     }
 
     isPosTaken(posC, posR){
