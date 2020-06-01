@@ -20,7 +20,7 @@ export default class Screen_model {
         return this.#items;
     }
 
-    get getPositions(){
+    get getPositions() {
         return this.#positions;
     }
 
@@ -29,7 +29,7 @@ export default class Screen_model {
         return this.#items[key];
     }
 
-    isPosTaken(posC, posR){
+    isPosTaken(posC, posR) {
         if (!this.#positions) {
             this.#positions = [];
         }
@@ -47,13 +47,13 @@ export default class Screen_model {
     }
 
     updatePositions(position, del) {
-        if (del === false || del === undefined){
-            if (position.value !== "" || position.value !== undefined || true){
+        if (del === false || del === undefined) {
+            if (position.value !== "" || position.value !== undefined || true) {
                 console.log("New item. Make first position log.");
 
                 this.#positions.push(position);
 
-                console.log('Removing from available items.')
+                console.log('Removing from available items.');
 
                 for (let i = 0; i < this.#items[this.#selectedItem].length; i++) {
                     let item = this.#items[this.#selectedItem];
@@ -64,6 +64,9 @@ export default class Screen_model {
                         break;
                     }
                 }
+                console.log(this.#items);
+                console.log(this.#items_details);
+
                 return `Row: ${position.row} Col: ${position.col}`;
             } else {
                 for (let i = 0; i < this.#positions.length; i++) {
@@ -78,29 +81,57 @@ export default class Screen_model {
                 }
             }
         }
-        if (del === true){
+        if (del === true) {
             console.log('Deleting...');
             let bc;
-            for (let i = 0; i < this.#positions.length; i++) {
-                if (this.#positions[i].row === position.old_row && this.#positions[i].col === position.old_col) {
-                    bc = this.#positions[i].value.toString();
-                    this.#positions.splice(i, 1);
-                    console.log('Position deleted.');
+            try {
+                for (let i = 0; i < this.#positions.length; i++) {
+                    if (this.#positions[i].row === position.old_row && this.#positions[i].col === position.old_col) {
+                        bc = this.#positions[i].value.toString();
+                        this.#positions.splice(i, 1);
+                        console.log('Position deleted.');
+                    }
                 }
+                return bc;
+            } catch (e) {
+                console.log('Probably nothing went wrong.');
             }
-            return bc;
         }
-        console.log(this.#positions);
     }
 
     #retrieveItems() {
         let retrieved = JSON.parse(localStorage.getItem('items'));
+        let retrieved2 = JSON.parse(localStorage.getItem('items'));
 
         for (let [key, value] of Object.entries(retrieved)) {
             if (key.toString() === this.getName.toString()) {
-                this.#items_details = value;
                 this.#items = value;
             }
+        }
+        for (let [key, value] of Object.entries(retrieved2)) {
+            if (key.toString() === this.getName.toString()) {
+                this.#items_details = value;
+            }
+        }
+
+    }
+
+    giveMeMenu(value, active) {
+        if (value === undefined) {
+            console.log('Undefined value')
+        } else {
+
+            // console.log(active);
+            // let activeMenuItems = this.#items[active];
+            // console.log(activeMenuItems);
+
+            // for (let i = 0; i < this.#items_details.length; i++) {
+            //     console.log(this.#items_details[i]);
+            //     if (this.#items_details[i].toString() === active) {
+            //         console.log(true);
+            //     }
+            // }
+
         }
     }
 
@@ -108,7 +139,7 @@ export default class Screen_model {
         this.#positions = JSON.parse(localStorage.getItem(this.#name));
     }
 
-    savePosToLocalStorage(){
+    savePosToLocalStorage() {
         localStorage.setItem(this.#name, JSON.stringify(this.#positions));
     }
 }

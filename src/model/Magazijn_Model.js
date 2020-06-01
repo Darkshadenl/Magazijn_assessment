@@ -24,4 +24,6 @@ export default class Magazijn_Model {
         return this.#items;
     }
 
+
+
 }

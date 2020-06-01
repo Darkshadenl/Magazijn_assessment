@@ -36,6 +36,10 @@ export default class Magazijn_Controller{
         return this.#magazijn_model.getCurrentScreen.retrievePositionsFromLocalStorage();
     }
 
+    giveMeMenu(value, active){
+        return this.#magazijn_model.getCurrentScreen.giveMeMenu(value, active);
+    }
+
     defaultData() {
         fetch('../resources/defaultData.json')
             .then((response) => {

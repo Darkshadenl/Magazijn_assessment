@@ -30,6 +30,10 @@
   background-color: #954e51;
 }
 
+.active {
+  background-color: black;
+}
+
 #dropdown {
   list-style: none;
   padding-left: 0;
