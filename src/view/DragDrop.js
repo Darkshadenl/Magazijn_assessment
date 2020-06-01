@@ -54,8 +54,8 @@ export default class DragDrop {
                 this.#original_pos.push(e.target.parentNode.id, e.target.id);
 
                 try {
-                    e.target.removeEventListener('dragstart');
-                    e.target.removeEventListener('dragend');
+                    e.target.removeEventListener('dragstart', this.dragStart(e));
+                    e.target.removeEventListener('dragend', this.dragEnd(e));
                 } catch (e) {
                     console.log(e);
                 }
@@ -246,9 +246,9 @@ export default class DragDrop {
                 }
             }
         } else {
-            e.onmousedown(e => {
-                e.onmouseup;
-            })
+            // e.onmousedown(e => {
+            //     e.onmouseup;
+            // })
         }
     }
 
