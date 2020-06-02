@@ -11,6 +11,7 @@ export default class Magazijn_View {
         this.#createGrid();
         this.#prepareMainMenu();
         this.#configureWizardButton();
+        this.#configureWeatherButton();
     }
 
     #createGrid() {
@@ -102,6 +103,20 @@ export default class Magazijn_View {
             }
         }
         this.#createDropdownMenu();
+    }
+
+    #configureWeatherButton() {
+        let weather_button = document.getElementById('weather_button');
+
+        weather_button.addEventListener('click', (ev => {
+            let city = document.getElementById('weather_city');
+            let weather = this.#mag_controller.setupWeather(city);
+            this.#DoSomethingWithWeather(weather);
+        }));
+    }
+
+    #DoSomethingWithWeather(){
+
     }
 
     #loadPositions(positions) {
@@ -250,8 +265,8 @@ export default class Magazijn_View {
             this.#mag_controller.updateLocalStorage();
         });
 
-
     }
+
 }
 
 

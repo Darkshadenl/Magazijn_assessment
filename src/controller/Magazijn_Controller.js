@@ -5,11 +5,13 @@ export default class Magazijn_Controller{
 
     #magazijn_model;
     #magazijn_view;
+    #weatherController;
 
-    constructor() {
+    constructor(weatherController) {
         this.defaultData();
         this.#magazijn_model = new Magazijn_Model();
         this.#magazijn_view = new Magazijn_View(this);
+        this.#weatherController = weatherController;
     }
 
     get getCurrentScreen() {
@@ -38,6 +40,12 @@ export default class Magazijn_Controller{
 
     isMyMenu(value, active){
         return this.#magazijn_model.getCurrentScreen.isMyMenu(value, active);
+    }
+
+    setupWeather(city){
+        console.log('Hierzo');
+        let weather = this.#weatherController.getWeatherByCity(city);
+        return this.#magazijn_model.weatherModel.parseWeatherData(weather);
     }
 
     defaultData() {

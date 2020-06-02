@@ -48,16 +48,11 @@ export default class Screen_model {
     }
 
     updatePositions(position, del) {
-        console.log('updatePositions ran');
         let local_positions = this.getPositions;
         if (del === false || del === undefined) {
-            console.log('Not here');
             if (position.value !== undefined) {
-                console.log('Maybe here?');                         // && and || don't seem to work
                 if (position.value !== "") {
-                    console.log("New item. Make first position log.");
                     local_positions.push(position);
-                    console.log('Removing from available items.');
                     for (let i = 0; i < this.getItems[this.#selectedItem].length; i++) {
                         let item = this.getItems[this.#selectedItem];
                         if (item !== undefined) {
@@ -69,31 +64,24 @@ export default class Screen_model {
                     return `Row: ${position.row} Col: ${position.col}`;
                 }
             } else {
-                console.log('Here!');
-                console.log(local_positions);
                 for (let i = 0; i < local_positions.length; i++) {
                     if (local_positions[i].row === position.old_row && local_positions[i].col === position.old_col) {
                         local_positions[i].row = position.row;
                         local_positions[i].col = position.col;
                         local_positions[i].old_row = position.old_row;
                         local_positions[i].old_col = position.old_col;
-                        console.log("Position updated.");
-                        console.log(local_positions);
-                        console.log(this.#positions);
                         return `Row: ${local_positions[i].row}  Col: ${local_positions[i].col}`;
                     }
                 }
             }
         }
         if (del === true) {
-            console.log('Deleting...');
             let bc;
             try {
                 for (let i = 0; i < local_positions.length; i++) {
                     if (local_positions[i].row === position.old_row && local_positions[i].col === position.old_col) {
                         bc = local_positions[i].value.toString();
                         local_positions.splice(i, 1);
-                        console.log('Position deleted.');
                         return bc;
                     }
                 }
@@ -104,7 +92,6 @@ export default class Screen_model {
     }
 
     makeItemAvailable(menu, valueOfItem) {
-        console.log('makeItemAvailable ran');
         try {
             let recovered = this.#items_details[menu];
             for (let i = 0; i < recovered.length; i++) {
@@ -120,20 +107,22 @@ export default class Screen_model {
     makeItemsUnavailable(positions) {
         let items = this.getItems;
 
-        for (let typeItem in items) {
-            items[typeItem].forEach((item, index) => {
-                positions.forEach(position => {
-                    if (item['Naam'] === position['value']) {
-                        console.log('Removing...')
-                        items[typeItem].splice(index, 1);
-                    }
+        try{
+            for (let typeItem in items) {
+                items[typeItem].forEach((item, index) => {
+                    positions.forEach(position => {
+                        if (item['Naam'] === position['value']) {
+                            items[typeItem].splice(index, 1);
+                        }
+                    });
                 });
-            });
+            }
+        } catch (e) {
+            console.log('No items available.');
         }
     }
 
     #retrieveItems() {
-        console.log('retrieveitems ran');
         let retrieved = JSON.parse(localStorage.getItem('items'));
         let retrieved2 = JSON.parse(localStorage.getItem('items'));
 
@@ -151,7 +140,6 @@ export default class Screen_model {
     }
 
     isMyMenu(nameOfButton, activeMenu) {
-        console.log('ismymenu ran');
         if (nameOfButton === undefined) {
             console.log('Undefined nameOfButton')
         } else {
@@ -183,7 +171,6 @@ export default class Screen_model {
         // remove items from menu's
         this.makeItemsUnavailable(retrievedPositions);
         this.#positions = retrievedPositions;
-        console.log(retrievedPositions);
     }
 
     savePosToLocalStorage() {
