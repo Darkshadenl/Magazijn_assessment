@@ -54,20 +54,20 @@ export default class Screen_model {
             console.log('Not here');
             if (position.value !== undefined) {
                 console.log('Maybe here?');                         // && and || don't seem to work
-                    if (position.value !== "") {
-                        console.log("New item. Make first position log.");
-                        local_positions.push(position);
-                        console.log('Removing from available items.');
-                        for (let i = 0; i < this.getItems[this.#selectedItem].length; i++) {
-                            let item = this.getItems[this.#selectedItem];
-                            if (item !== undefined) {
-                                delete item[i];
-                                item.splice(i, 1);
-                                break;
-                            }
+                if (position.value !== "") {
+                    console.log("New item. Make first position log.");
+                    local_positions.push(position);
+                    console.log('Removing from available items.');
+                    for (let i = 0; i < this.getItems[this.#selectedItem].length; i++) {
+                        let item = this.getItems[this.#selectedItem];
+                        if (item !== undefined) {
+                            delete item[i];
+                            item.splice(i, 1);
+                            break;
                         }
-                        return `Row: ${position.row} Col: ${position.col}`;
                     }
+                    return `Row: ${position.row} Col: ${position.col}`;
+                }
             } else {
                 console.log('Here!');
                 console.log(local_positions);
@@ -103,9 +103,9 @@ export default class Screen_model {
         }
     }
 
-    makeItemAvailable(menu, valueOfItem){
+    makeItemAvailable(menu, valueOfItem) {
         console.log('makeItemAvailable ran');
-        try{
+        try {
             let recovered = this.#items_details[menu];
             for (let i = 0; i < recovered.length; i++) {
                 if (recovered[i].Naam.toString() === valueOfItem) {
@@ -114,6 +114,21 @@ export default class Screen_model {
             }
         } catch (e) {
             console.log('Something probs went wrong');
+        }
+    }
+
+    makeItemsUnavailable(positions) {
+        let items = this.getItems;
+
+        for (let typeItem in items) {
+            items[typeItem].forEach((item, index) => {
+                positions.forEach(position => {
+                    if (item['Naam'] === position['value']) {
+                        console.log('Removing...')
+                        items[typeItem].splice(index, 1);
+                    }
+                });
+            });
         }
     }
 
@@ -164,7 +179,11 @@ export default class Screen_model {
     }
 
     retrievePositionsFromLocalStorage() {
-        this.#positions = JSON.parse(localStorage.getItem(this.#name));
+        let retrievedPositions = JSON.parse(localStorage.getItem(this.#name));
+        // remove items from menu's
+        this.makeItemsUnavailable(retrievedPositions);
+        this.#positions = retrievedPositions;
+        console.log(retrievedPositions);
     }
 
     savePosToLocalStorage() {

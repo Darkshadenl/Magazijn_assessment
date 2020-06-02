@@ -235,11 +235,13 @@ export default class DragDrop {
                     }
                 }
             }
-        } else {
-            // e.onmousedown(e => {
-            //     e.onmouseup;
-            // })
         }
+        // else {
+        //
+        //     // e.onmousedown(e =>
+        //     //     e.onmouseup;
+        //     // })
+        // }
     }
 
     dragLeave(e) {

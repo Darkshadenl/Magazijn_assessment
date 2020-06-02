@@ -71,6 +71,7 @@ export default class Magazijn_View {
     }
 
     changeScreen(e) {
+        this.#mag_controller.updateLocalStorage();  // save positions
         let newProduct = document.getElementById('new_products_button');
         let menuButton = document.getElementById('dropdownMenuButton');
         document.getElementById('new_products_button').style.display = 'block';
