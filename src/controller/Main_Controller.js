@@ -7,6 +7,7 @@ export default class Main_Controller {
 
     #magazijnController;
     #wizardController;
+    #weatherController;
 
     constructor() {
         this.#magazijnController = new Magazijn_Controller(this.#weatherController, this);
