@@ -6,12 +6,18 @@ export default class Magazijn_Controller{
     #magazijn_model;
     #magazijn_view;
     #weatherController;
+    #main_controller;
 
-    constructor(weatherController) {
+    constructor(weatherController, mainController) {
         this.defaultData();
         this.#magazijn_model = new Magazijn_Model();
         this.#magazijn_view = new Magazijn_View(this);
         this.#weatherController = weatherController;
+        this.#main_controller = mainController;
+    }
+
+    get getMainController() {
+        return this.#main_controller;
     }
 
     get getCurrentScreen() {
@@ -57,4 +63,11 @@ export default class Magazijn_Controller{
         });
     }
 
+    showView(screenName) {
+        this.#magazijn_view.showScreen(screenName);
+    }
+
+    // hideView() {
+    //     this.#magazijn_view.hideScreen();
+    // }
 }

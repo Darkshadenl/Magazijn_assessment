@@ -9,8 +9,8 @@ export default class Magazijn_View {
         this.#mag_controller = controller;
         this.#dragDrop = new DragDrop(controller);
         this.#createGrid();
-        this.#prepareMainMenu();
-        this.#configureWizardButton();
+        this.#prepareMainMenu();    <
+        this.#configureWizardButton(); //wordt dit aangeroepen elke keer als je van magazijn wisselt?
         this.#configureWeatherButton();
     }
 
@@ -263,7 +263,18 @@ export default class Magazijn_View {
 
         wizardButton.addEventListener('click', ev => {
             this.#mag_controller.updateLocalStorage();
+            let screenName = this.#mag_controller.getCurrentScreen.getName;
+            this.#mag_controller.getMainController.switchToWizard(screenName);
         });
+    }
+
+    // hideScreen() {
+    //     document.getElementById('magazijn').style.display = 'none';
+    // }
+
+
+    showScreen(screenName) {
+
 
     }
 
