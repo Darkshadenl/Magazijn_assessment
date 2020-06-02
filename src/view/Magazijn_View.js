@@ -9,7 +9,7 @@ export default class Magazijn_View {
         this.#mag_controller = controller;
         this.#dragDrop = new DragDrop(controller);
         this.#createGrid();
-        this.#prepareMainMenu();    <
+        this.#prepareMainMenu();
         this.#configureWizardButton(); //wordt dit aangeroepen elke keer als je van magazijn wisselt?
         this.#configureWeatherButton();
     }
