@@ -23,7 +23,7 @@ export default class Main_Controller {
 
     switchToWizard(screenName)
     {
-        //this.#magazijnController.hideView();
+        this.#magazijnController.hideView();
         this.#wizardController.showView(screenName);
     }
 

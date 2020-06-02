@@ -268,9 +268,9 @@ export default class Magazijn_View {
         });
     }
 
-    // hideScreen() {
-    //     document.getElementById('magazijn').style.display = 'none';
-    // }
+    hideScreen() {
+        document.getElementById('magazijn').style.display = 'none';
+    }
 
 
     showScreen(screenName) {

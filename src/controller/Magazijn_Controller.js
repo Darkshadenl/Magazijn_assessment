@@ -67,7 +67,7 @@ export default class Magazijn_Controller{
         this.#magazijn_view.showScreen(screenName);
     }
 
-    // hideView() {
-    //     this.#magazijn_view.hideScreen();
-    // }
+    hideView() {
+        this.#magazijn_view.hideScreen();
+    }
 }
