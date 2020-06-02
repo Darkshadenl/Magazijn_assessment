@@ -9,8 +9,9 @@ export default class Magazijn_View {
         this.#mag_controller = controller;
         this.#dragDrop = new DragDrop(controller);
         this.#createGrid();
-        this.#prepareMainMenu();
-        this.#configureWizardButton();
+        this.#prepareMainMenu();    <
+        this.#configureWizardButton(); //wordt dit aangeroepen elke keer als je van magazijn wisselt?
+        this.#configureWeatherButton();
     }
 
     #createGrid() {
@@ -31,7 +32,7 @@ export default class Magazijn_View {
                 let gridcell = document.createElement('td');
                 gridcell.className = 'list droptarget grid-item';
                 gridcell.id = i.toString();
-                gridcell.style.background = '#E0FFFF';
+                gridcell.style.background = this.#dragDrop.oldPositionAfterDragColor;
                 gridcell.style.background.repeat(0);
                 gridcell.setAttribute('draggable', 'false');
 
@@ -71,9 +72,11 @@ export default class Magazijn_View {
     }
 
     changeScreen(e) {
+        this.#mag_controller.updateLocalStorage();  // save positions
         let newProduct = document.getElementById('new_products_button');
         let menuButton = document.getElementById('dropdownMenuButton');
         document.getElementById('new_products_button').style.display = 'block';
+
         this.#createGrid();
         switch (e.target.innerText) {
             case "Regio 1: Kleding":
@@ -94,7 +97,7 @@ export default class Magazijn_View {
 
         let choice_menu = document.querySelector('.choice_menu');
 
-        if (choice_menu.hasChildNodes()){
+        if (choice_menu.hasChildNodes()) {
             while (choice_menu.firstChild) {
                 choice_menu.removeChild(choice_menu.lastChild);
             }
@@ -102,7 +105,21 @@ export default class Magazijn_View {
         this.#createDropdownMenu();
     }
 
-    #loadPositions(positions){
+    #configureWeatherButton() {
+        let weather_button = document.getElementById('weather_button');
+
+        weather_button.addEventListener('click', (ev => {
+            let city = document.getElementById('weather_city');
+            let weather = this.#mag_controller.setupWeather(city);
+            this.#DoSomethingWithWeather(weather);
+        }));
+    }
+
+    #DoSomethingWithWeather(){
+
+    }
+
+    #loadPositions(positions) {
         // find current positions, add these.
         let table = document.getElementById('made_choices_table');
 
@@ -111,12 +128,19 @@ export default class Magazijn_View {
                 let col = e.col;
                 let row = e.row;
 
-                for (let i = 0; i < table.childNodes.length; i++){
+                for (let i = 0; i < table.childNodes.length; i++) {
                     if (table.childNodes[i].id === row) {
                         let row_children = table.childNodes[i].childNodes;
                         row_children.forEach(e => {
                             if (e.id === col) {
-                                e.style.backgroundColor = '#12ff00';
+                                e.style.backgroundColor = this.#dragDrop.gridCellInUseColor;
+                                e.addEventListener('dragstart', e => {
+                                    this.#dragDrop.dragStart(e);
+                                });
+                                e.addEventListener('dragend', e => {
+                                    this.#dragDrop.dragEnd(e);
+                                });
+                                e.setAttribute('draggable', 'true');
                             }
                         })
                     }
@@ -125,12 +149,13 @@ export default class Magazijn_View {
         } catch (e) {
             console.log('No positions found');
         }
-
     }
 
     #createDraggablesMenu(key) {
         let items = this.#mag_controller.getCurrentScreen.getSpecificItems(key);
         let choice_menu = document.querySelector('.choice_menu');
+
+        console.log(items);
 
         if (choice_menu.hasChildNodes()) {
             choice_menu.innerHTML = '';
@@ -167,23 +192,40 @@ export default class Magazijn_View {
 
         dropDownButton.style.display = 'block';
 
-        if (dropDown.hasChildNodes()){
+        if (dropDown.hasChildNodes()) {
             while (dropDown.firstChild) {
                 dropDown.removeChild(dropDown.lastChild);
             }
         }
 
+        let foundKey = false;
         if (items != null) {
             for (let [key] of Object.entries(items)) {
+                if (!foundKey) {
+                    this.#createDraggablesMenu(key);
+                    foundKey = true;
+                }
+
                 let button = this.#getDropDownLi();
                 let buttonText = document.createTextNode(key.toString());
                 button.appendChild(buttonText);
                 button.addEventListener('click', (ev) => {
-                    console.log('button created');
+                    this.#activeButtons(ev);
                     this.#createDraggablesMenu(key);
                 });
+
                 dropDown.appendChild(button);
             }
+        }
+
+        let activated = false;
+        while (!activated){
+            dropDown.childNodes.forEach(c => {
+                if (!activated) {
+                    c.classList.add('active');
+                    activated = true;
+                }
+            });
         }
 
         dropDownButton.addEventListener('click', (e) => {
@@ -199,6 +241,16 @@ export default class Magazijn_View {
         });
     }
 
+    #activeButtons(e) {
+        let dropdown_list = document.getElementById('dropdown');
+        dropdown_list.childNodes.forEach(c => {
+            if (c.classList.contains('active')) {
+                c.classList.remove('active');
+            }
+        });
+        e.target.classList.add('active');
+    }
+
     #getDropDownLi() {
         let a = document.createElement('li');
         a.id = 'dropDownButton';
@@ -211,11 +263,21 @@ export default class Magazijn_View {
 
         wizardButton.addEventListener('click', ev => {
             this.#mag_controller.updateLocalStorage();
+            let screenName = this.#mag_controller.getCurrentScreen.getName;
+            this.#mag_controller.getMainController.switchToWizard(screenName);
         });
+    }
 
-        wizardButton.setAttribute('href', './view/CreationWizard.html');
+    // hideScreen() {
+    //     document.getElementById('magazijn').style.display = 'none';
+    // }
+
+
+    showScreen(screenName) {
+
 
     }
+
 }
 
 

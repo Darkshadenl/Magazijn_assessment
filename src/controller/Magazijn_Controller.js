@@ -5,11 +5,19 @@ export default class Magazijn_Controller{
 
     #magazijn_model;
     #magazijn_view;
+    #weatherController;
+    #main_controller;
 
-    constructor() {
+    constructor(weatherController, mainController) {
         this.defaultData();
         this.#magazijn_model = new Magazijn_Model();
         this.#magazijn_view = new Magazijn_View(this);
+        this.#weatherController = weatherController;
+        this.#main_controller = mainController;
+    }
+
+    get getMainController() {
+        return this.#main_controller;
     }
 
     get getCurrentScreen() {
@@ -20,7 +28,7 @@ export default class Magazijn_Controller{
         return this.#magazijn_model.setCurrentScreen(num);
     }
 
-    updateModel(position, del){
+    updateModel(position, del, menu){
         return this.#magazijn_model.getCurrentScreen.updatePositions(position, del);;
     }
 
@@ -36,6 +44,16 @@ export default class Magazijn_Controller{
         return this.#magazijn_model.getCurrentScreen.retrievePositionsFromLocalStorage();
     }
 
+    isMyMenu(value, active){
+        return this.#magazijn_model.getCurrentScreen.isMyMenu(value, active);
+    }
+
+    setupWeather(city){
+        console.log('Hierzo');
+        let weather = this.#weatherController.getWeatherByCity(city);
+        return this.#magazijn_model.weatherModel.parseWeatherData(weather);
+    }
+
     defaultData() {
         fetch('../resources/defaultData.json')
             .then((response) => {
@@ -45,4 +63,11 @@ export default class Magazijn_Controller{
         });
     }
 
+    showView(screenName) {
+        this.#magazijn_view.showScreen(screenName);
+    }
+
+    // hideView() {
+    //     this.#magazijn_view.hideScreen();
+    // }
 }

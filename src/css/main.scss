@@ -21,13 +21,6 @@
   //height: 100%;
 }
 
-//.grid-container .made_choices td > p {
-//  width: 50px;
-//  height: 50px;
-//  margin: 0;
-//  padding: 0;
-//}
-
 .grid-item {
   height: 50px;
   width: 50px;
@@ -36,6 +29,10 @@
 }
 
 .dropdown button:hover {background-color: #954e51;}
+
+.active {
+  background-color: black;
+}
 
 #dropdown {
   list-style: none;
@@ -46,6 +43,11 @@
   list-style: none;
   margin-top: 1px;
   width: 150px;
+}
+
+#new_products_button{
+  display: none;
+  margin-bottom: 10px;
 }
 
 
