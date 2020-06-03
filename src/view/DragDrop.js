@@ -12,6 +12,7 @@ export default class DragDrop {
     #pos_mouseC;
     #pos_mouseR;
     #backupColor;
+    #displayingPopup = false;
 
     #dragStartedCorrectly = false;
 
@@ -49,8 +50,6 @@ export default class DragDrop {
             } else {
                 this.#original_pos.pop();
                 this.#original_pos.push(e.target.parentNode.id, e.target.id);
-                console.log(this.#original_pos);
-
                 // try {
                 //     e.target.removeEventListener('dragstart', this.dragStart(e));
                 //     e.target.removeEventListener('dragend', this.dragEnd(e));
@@ -74,11 +73,8 @@ export default class DragDrop {
                         this.#succesful_drop = false;
                         this.#dragDropSuccess = true;
                     } else {
-                        // console.log('Position available. Place on position.');
                         console.log(`Position logged: ${this.#createPosition(false, this.#textToBeTransfered, e.target.parentNode.id, e.target.id)}`);
 
-                        // prepare new position
-                        // console.log('Setting new pos draggable to True');
                         e.target.setAttribute('draggable', 'True');
                         e.target.addEventListener('dragstart', (e) => {
                             this.dragStart(e);
@@ -89,10 +85,11 @@ export default class DragDrop {
                         e.target.addEventListener('dragend', (e) => {
                             this.dragEnd(e);
                         });
+                        e.target.addEventListener('click', (e) => {
+                            this.popupScreen(undefined, e.target.parentNode.id, e.target.id);
+                        });
                         e.target.style.backgroundColor = this.gridCellInUseColor;
 
-                        // repair old position
-                        // remove eventlistener from original pos if original pos grid dropzone.
                         this.#original_element.setAttribute('draggable', 'False');
                         this.#succesful_drop = true;
                         this.#dragDropSuccess = true;
@@ -132,7 +129,6 @@ export default class DragDrop {
                         this.#controller.getCurrentScreen.makeItemAvailable(isThisMyMenu[1], nameOfButton);
                         // make menu button flicker maybe
                     }
-                    console.log('Item should be available');
                     e.target.style.backgroundColor = '';
                     this.#succesful_drop = true;
                     this.#dragDropSuccess = true;
@@ -170,7 +166,7 @@ export default class DragDrop {
                 // orig_c.firstChild.remove();
                 console.log('Succesful drop in grid. Removing button from choiceMenu.')
             } else {
-                e.target.style.backgroundColor = this.oldPositionAfterDragColor; //
+                e.target.style.backgroundColor = this.oldPositionAfterDragColor;
                 // this.#original_element.style.backgroundColor = '#E0FFFF';
                 console.log(`Succesful drop in grid.`);
             }
@@ -206,9 +202,6 @@ export default class DragDrop {
             old_col: old_col
         }, del);
         console.log(deleted_pos_value);
-        // if (del) {
-        //     this.#clearGridPosition();
-        // }
         return deleted_pos_value;
     }
 
@@ -283,6 +276,52 @@ export default class DragDrop {
         // button.id = 'dragButton';
 
         return button;
+    }
+
+    popupScreen(value, row, col){
+        let containdiv = document.querySelector('.popup');
+        let data;
+
+        if (value === undefined) {
+            data = this.#controller.getCurrentScreen.getDataOfPosition(undefined, row, col);
+        } else {
+            data = this.#controller.getCurrentScreen.getDataOfPosition(value);
+        }
+
+        if (this.#displayingPopup === false) {
+            this.#displayingPopup = true;
+            containdiv.style.display = 'flex';
+            let form = document.querySelector('.item_form');
+            console.log(data);
+
+            for (let label in data) {
+                let div = document.createElement('div');
+                div.className = 'form-group';
+
+                let input = document.createElement('input');
+                input.disabled = true;
+                input.id = label;
+                input.setAttribute('value', data[label]);
+                input.setAttribute('class', 'form-control');
+
+                let lab = document.createElement('label');
+                lab.setAttribute('for', label);
+                lab.innerText = label.charAt(0).toUpperCase() + label.slice(1);
+
+                div.appendChild(lab);
+                div.appendChild(input);
+                form.appendChild(div);
+            }
+        }
+
+        document.querySelector('.closeButton').addEventListener('click', e => {
+            this.#displayingPopup = false;
+            containdiv.style.display = 'none';
+            let div = document.getElementById('formpje');
+            while (div.firstChild) {
+                div.removeChild(div.lastChild);
+            }
+        });
     }
 
 }

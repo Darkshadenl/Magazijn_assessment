@@ -50,4 +50,27 @@
   margin-bottom: 10px;
 }
 
+.popup {
+  position: absolute;
+  background-color: white;
+  left: 30em;
+  top: 10em;
+  width: 40em;
+  height: 40em;
+  z-index: 3;
+  display: none;
+}
+
+.closeButton{
+  position: absolute;
+  left: 35em;
+  top: 36em;
+}
+
+.item_form {
+  position: absolute;
+  left: 3em;
+  top: 1em;
+}
+
 

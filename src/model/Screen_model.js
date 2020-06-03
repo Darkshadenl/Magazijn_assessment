@@ -25,6 +25,24 @@ export default class Screen_model {
         return this.#positions;
     }
 
+    getDataOfPosition(value, row, col) {
+        let data = [];
+
+        if (value !== undefined) {
+            for (let categorie in this.#items_details) {
+                this.#items_details[categorie].forEach(item => {
+                    if (item['Naam'] === value) {
+                        data = item;
+                    }
+                })
+            }
+        } else {
+
+        }
+
+        return data;
+    }
+
     getSpecificItems(key) {
         this.#selectedItem = key;
         return this.#items[key];
@@ -107,7 +125,7 @@ export default class Screen_model {
     makeItemsUnavailable(positions) {
         let items = this.getItems;
 
-        try{
+        try {
             for (let typeItem in items) {
                 items[typeItem].forEach((item, index) => {
                     positions.forEach(position => {
@@ -143,9 +161,11 @@ export default class Screen_model {
         if (nameOfButton === undefined) {
             console.log('Undefined nameOfButton')
         } else {
+            // is current menu my menu
             let menu_items = this.#items_details[activeMenu];
             for (let i = 0; i < menu_items.length; i++) {
                 if (menu_items[i].Naam.toString() === nameOfButton) {
+                    // current menu is my menu
                     return [true, activeMenu];
                 }
             }

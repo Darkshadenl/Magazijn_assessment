@@ -124,29 +124,33 @@ export default class Magazijn_View {
         let table = document.getElementById('made_choices_table');
 
         try {
-            positions.forEach(e => {
-                let col = e.col;
-                let row = e.row;
+            positions.forEach(p => {
+                let col = p.col;
+                let row = p.row;
 
                 for (let i = 0; i < table.childNodes.length; i++) {
                     if (table.childNodes[i].id === row) {
                         let row_children = table.childNodes[i].childNodes;
-                        row_children.forEach(e => {
-                            if (e.id === col) {
-                                e.style.backgroundColor = this.#dragDrop.gridCellInUseColor;
-                                e.addEventListener('dragstart', e => {
+                        row_children.forEach(r => {
+                            if (r.id === col) {
+                                r.style.backgroundColor = this.#dragDrop.gridCellInUseColor;
+                                r.addEventListener('dragstart', e => {
                                     this.#dragDrop.dragStart(e);
                                 });
-                                e.addEventListener('dragend', e => {
+                                r.addEventListener('dragend', e => {
                                     this.#dragDrop.dragEnd(e);
                                 });
-                                e.setAttribute('draggable', 'true');
+                                r.addEventListener('click', e => {
+                                    console.log(this);
+                                    this.#dragDrop.popupScreen(p.value);
+                                });
+                                r.setAttribute('draggable', 'true');
                             }
                         })
                     }
                 }
             });
-        } catch (e) {
+        } catch (error) {
             console.log('No positions found');
         }
     }
@@ -154,8 +158,6 @@ export default class Magazijn_View {
     #createDraggablesMenu(key) {
         let items = this.#mag_controller.getCurrentScreen.getSpecificItems(key);
         let choice_menu = document.querySelector('.choice_menu');
-
-        console.log(items);
 
         if (choice_menu.hasChildNodes()) {
             choice_menu.innerHTML = '';
