@@ -21,26 +21,35 @@ export default class Screen_model {
     }
 
     get getPositions() {
-        console.log('Get position ran!');
         return this.#positions;
     }
 
     getDataOfPosition(value, row, col) {
         let data = [];
+        this.#retrieveItems();
 
-        if (value !== undefined) {
-            for (let categorie in this.#items_details) {
-                this.#items_details[categorie].forEach(item => {
-                    if (item['Naam'] === value) {
-                        data = item;
-                    }
-                })
-            }
-        } else {
-
+        if (value == undefined) {
+            value = this.#findValueOfPosition(row, col);
         }
 
+        for (let categorie in this.#items_details) {
+            this.#items_details[categorie].forEach(item => {
+                if (item['Naam'] === value) {
+                    data = item;
+                }
+            })
+        }
         return data;
+    }
+
+    #findValueOfPosition(row, col) {
+        let val = '';
+        this.#positions.forEach(item => {
+            if (item['row'] == row && item['col'] == col) {
+                val = item['value'];
+            }
+        });
+        return val;
     }
 
     getSpecificItems(key) {
@@ -68,16 +77,14 @@ export default class Screen_model {
     updatePositions(position, del) {
         let local_positions = this.getPositions;
         if (del === false || del === undefined) {
-            if (position.value !== undefined) {
-                if (position.value !== "") {
-                    local_positions.push(position);
-                    for (let i = 0; i < this.getItems[this.#selectedItem].length; i++) {
-                        let item = this.getItems[this.#selectedItem];
-                        if (item !== undefined) {
-                            delete item[i];
-                            item.splice(i, 1);
-                            break;
-                        }
+            if (position.value != undefined && position.value != "") {
+                local_positions.push(position);
+                for (let i = 0; i < this.getItems[this.#selectedItem].length; i++) {
+                    let item = this.getItems[this.#selectedItem];
+                    if (item !== undefined) {
+                        delete item[i];
+                        item.splice(i, 1);
+                        break;
                     }
                     return `Row: ${position.row} Col: ${position.col}`;
                 }

@@ -141,7 +141,6 @@ export default class Magazijn_View {
                                     this.#dragDrop.dragEnd(e);
                                 });
                                 r.addEventListener('click', e => {
-                                    console.log(this);
                                     this.#dragDrop.popupScreen(p.value);
                                 });
                                 r.setAttribute('draggable', 'true');

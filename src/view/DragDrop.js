@@ -13,7 +13,6 @@ export default class DragDrop {
     #pos_mouseR;
     #backupColor;
     #displayingPopup = false;
-
     #dragStartedCorrectly = false;
 
     #beingDraggedColor = '#6E2D18';
@@ -32,40 +31,29 @@ export default class DragDrop {
         e.target.backgroundColor = 'black';
         this.#original_element = e.target;
 
-        // make button dissapear when moving
         if (e.target.parentNode.id === 'choice_menu') {
             setTimeout(() => {
                 e.target.style.display = 'none';
             }, 0);
             this.#textToBeTransfered = e.target.innerText;
         } else if (e.target.parentNode.className === 'grid-container made_choices') {
-            // note original pos in grid
-            if (!this.#controller.isPosTaken(e.target.id, e.target.parentNode.id)){
+            if (!this.#controller.isPosTaken(e.target.id, e.target.parentNode.id)) {
                 console.log('Pos is not taken');
                 this.#original_pos.pop();
                 this.#original_pos.push(e.target.parentNode.id, e.target.id);
                 this.#backupColor = e.target.style.backgroundColor;
                 e.target.style.backgroundColor = this.oldPositionAfterDragColor;
-                // this.#textToBeTransfered = e.target.innerText;
             } else {
                 this.#original_pos.pop();
                 this.#original_pos.push(e.target.parentNode.id, e.target.id);
-                // try {
-                //     e.target.removeEventListener('dragstart', this.dragStart(e));
-                //     e.target.removeEventListener('dragend', this.dragEnd(e));
-                // } catch (e) {
-                //     console.log(e);
-                // }
             }
         }
         this.#original_container = e.target.parentNode;
-        // console.log(`Orignal container: ${this.#original_container.id}`);
     }
 
     dragDrop(e) {
         e.preventDefault();
         if (!this.#dragDropSuccess) {
-            console.log('Run dragDrop');
             if (this.#dragStartedCorrectly) {
                 if (e.target.parentNode.className === 'grid-container made_choices') {
                     if (this.#controller.isPosTaken(this.#pos_mouseC, this.#pos_mouseR)) {
@@ -73,7 +61,7 @@ export default class DragDrop {
                         this.#succesful_drop = false;
                         this.#dragDropSuccess = true;
                     } else {
-                        console.log(`Position logged: ${this.#createPosition(false, this.#textToBeTransfered, e.target.parentNode.id, e.target.id)}`);
+                        this.#createPosition(false, this.#textToBeTransfered, e.target.parentNode.id, e.target.id);
 
                         e.target.setAttribute('draggable', 'True');
                         e.target.addEventListener('dragstart', (e) => {
@@ -93,7 +81,6 @@ export default class DragDrop {
                         this.#original_element.setAttribute('draggable', 'False');
                         this.#succesful_drop = true;
                         this.#dragDropSuccess = true;
-                        console.log(this.#succesful_drop);
                     }
                 } else if (e.target.id === 'choice_menu') {
                     let button = this.getDraggableButton();
@@ -116,7 +103,7 @@ export default class DragDrop {
                     if (isThisMyMenu[0]) {
                         e.target.appendChild(button);
                         this.#controller.getCurrentScreen.makeItemAvailable(activatedMenu, nameOfButton);
-                        if (this.#original_element.parentNode.id === 'choice_menu'){
+                        if (this.#original_element.parentNode.id === 'choice_menu') {
                             button.innerText = this.#textToBeTransfered;
                         } else {
                             if (nameOfButton !== undefined) {
@@ -146,29 +133,23 @@ export default class DragDrop {
     dragEnd(e) {
         let orig_c = document.getElementById(this.#original_container.id);
         this.#dragStartedCorrectly = false;
-        console.log('run dragEnd');
         console.log(this.#original_container.parentNode.id);
 
         if (!this.#succesful_drop) {
             if (this.#original_container.parentNode.id === 'made_choices_table') {
-                // this.#original_container.style.background = this.#dropzoneColor;
-                console.log("Non Succesful drop. Reinforcing old position.");
                 this.#createPosition(false, undefined, this.#original_pos[0], this.#original_pos[1]);
             } else if (this.#original_container.id === 'choice_menu') {
                 let button = this.getDraggableButton();
                 button.innerText = this.#textToBeTransfered;
                 button.className = 'btn btn-secondary dragButton';
                 orig_c.appendChild(button);
-                console.log("Non Succesful drop. Resetting to choice_menu.");
             }
         } else {
             if (this.#original_container.id === 'choice_menu') {
-                // orig_c.firstChild.remove();
-                console.log('Succesful drop in grid. Removing button from choiceMenu.')
+                // console.log('Succesful drop in grid. Removing button from choiceMenu.')
             } else {
                 e.target.style.backgroundColor = this.oldPositionAfterDragColor;
-                // this.#original_element.style.backgroundColor = '#E0FFFF';
-                console.log(`Succesful drop in grid.`);
+                // console.log(`Succesful drop in grid.`);
             }
             // e.target.style.opacity = "";
         }
@@ -184,16 +165,16 @@ export default class DragDrop {
         if (this.#original_pos[0] === undefined && this.#original_pos[1] === undefined) {
             old_row = -1;
             old_col = -1;
-            console.log('No Original Positions. Setting old values to -1.')
+            // console.log('No Original Positions. Setting old values to -1.')
         } else {
             old_row = this.#original_pos[0];
             old_col = this.#original_pos[1];
-            console.log('Old Positions found. Setting up old position values for later use.');
+            // console.log('Old Positions found. Setting up old position values for later use.');
             this.#original_pos.pop();
             this.#original_pos.pop();
         }
 
-        console.log(`Sending update to model with del: ${del} Value: ${val}  Row: ${row}  Col:${col}   Old-row: ${old_row}  Old-col: ${old_col}`);
+        // console.log(`Sending update to model with del: ${del} Value: ${val}  Row: ${row}  Col:${col}   Old-row: ${old_row}  Old-col: ${old_col}`);
         let deleted_pos_value = this.#controller.updateModel({
             value: val,
             row: row,
@@ -201,7 +182,6 @@ export default class DragDrop {
             old_row: old_row,
             old_col: old_col
         }, del);
-        console.log(deleted_pos_value);
         return deleted_pos_value;
     }
 
@@ -243,8 +223,8 @@ export default class DragDrop {
         } else if (e.target.parentNode.className === 'grid-container made_choices') {
             if (e.target.draggable !== true) {
                 // if (this.#pos_mouse !== this.#originalPosCR) {
-                    // console.log('Not Original pos');
-                    e.target.style.backgroundColor = this.oldPositionAfterDragColor;
+                // console.log('Not Original pos');
+                e.target.style.backgroundColor = this.oldPositionAfterDragColor;
                 // }
             }
         }
@@ -278,7 +258,7 @@ export default class DragDrop {
         return button;
     }
 
-    popupScreen(value, row, col){
+    popupScreen(value, row, col) {
         let containdiv = document.querySelector('.popup');
         let data;
 
@@ -291,10 +271,51 @@ export default class DragDrop {
         if (this.#displayingPopup === false) {
             this.#displayingPopup = true;
             containdiv.style.display = 'flex';
-            let form = document.querySelector('.item_form');
-            console.log(data);
+            this.#buildPopupScreen(containdiv, data);
 
-            for (let label in data) {
+        }
+    }
+
+    #buildPopupScreen(containdiv, data) {
+        let photoDiv = document.createElement('div');
+        photoDiv.className = 'photo';
+        let newDetails = document.createElement('div');
+        newDetails.className = 'newDetails';
+
+        let details = document.createElement('div');
+        details.className = 'details';
+        let form = document.createElement('form');
+        form.className = 'item_form';
+        form.id = 'formpje';
+        let close_button = document.createElement('button');
+        close_button.className = "closeButton btn btn-primary";
+        close_button.innerText = 'Sluit';
+        let new_comment_button = document.createElement('button');
+        new_comment_button.className = 'newComment btn btn-primary';
+        new_comment_button.innerText = 'Nieuwe opmerking';
+        let comment_div = document.createElement('div');
+        comment_div.className = 'comments';
+
+        containdiv.appendChild(photoDiv);
+        containdiv.appendChild(newDetails);
+
+        details.appendChild(form);
+        details.appendChild(new_comment_button);
+        details.appendChild(comment_div);
+
+        containdiv.appendChild(details);
+        containdiv.appendChild(close_button);
+
+        new_comment_button.addEventListener('click', e => {
+            this.#newCommentFunc(e);
+        });
+
+        close_button.addEventListener('click', e => {
+            this.#exitButtonFunc(e, containdiv, data);
+        });
+
+        for (let label in data) {
+            if (label != 'reacties') {
                 let div = document.createElement('div');
                 div.className = 'form-group';
 
@@ -311,17 +332,84 @@ export default class DragDrop {
                 div.appendChild(lab);
                 div.appendChild(input);
                 form.appendChild(div);
+            } else if (label == 'reacties') {
+                console.log('REACTIES');
+            }
+        }
+    }
+
+    #newCommentFunc(e) {
+        let div = document.createElement('div');
+        let deletebtn = document.createElement('button');
+        let comments = document.querySelector('.comments');
+        let inputComment = document.createElement('input');
+        inputComment.className = 'comment';
+        div.className = 'row commententry';
+        deletebtn.className = 'btn btn-outline-danger delbutton';
+        deletebtn.innerText = 'Delete';
+
+        div.appendChild(inputComment);
+        div.appendChild(deletebtn);
+        comments.appendChild(div);
+
+        deletebtn.addEventListener('click', d => {
+            let parent = d.target.parentNode;
+            while (parent.firstChild) {
+                parent.removeChild(parent.lastChild);
+            }
+        });
+    }
+
+    #exitButtonFunc(e, containdiv, data) {
+        this.#displayingPopup = false;
+        containdiv.style.display = 'none';
+        let popup = document.querySelector('.popup');
+        let comments = document.querySelector('.comments');
+
+        // save comments to local storage... Looping is hell.
+        // first loop through html, then localstorage...
+        if (comments !== null) {
+            for (let i = 0; i < comments.children.length; i++) {
+                let neededElements = comments.children[i].children;
+                for (let j = 0; j < neededElements.length; j++) {
+                    if (neededElements[0].value !== "") {
+                        // save text to localstorage
+                        let current_region = this.#controller.getCurrentScreen.getName;
+                        let currentMenu = document.querySelector('.active').innerHTML;
+                        let items = JSON.parse(localStorage.getItem('items'));
+                        let itemName = data.Naam;
+                        let comment = neededElements[0].value;
+
+                        for (let label in items) {
+                            if (label == current_region) {
+                                let menus = items[label];
+                                for (let menu in menus) {
+                                    if (menu == currentMenu) {
+                                        let actualItems = menus[menu];
+                                        let comments = null;
+                                        for (let i = 0; i < actualItems.length; i++) {
+                                            if (actualItems[i].Naam == itemName) {
+                                                if (actualItems[i].reacties == null) {
+                                                    actualItems[i].reacties = [comment];
+                                                } else {
+                                                    actualItems[i].reacties.push(comment);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        localStorage.setItem('items', JSON.stringify(items));
+                    }
+                }
             }
         }
 
-        document.querySelector('.closeButton').addEventListener('click', e => {
-            this.#displayingPopup = false;
-            containdiv.style.display = 'none';
-            let div = document.getElementById('formpje');
-            while (div.firstChild) {
-                div.removeChild(div.lastChild);
-            }
-        });
+        // close popup
+        while (popup.firstChild) {
+            popup.removeChild(popup.lastChild);
+        }
     }
 
 }
