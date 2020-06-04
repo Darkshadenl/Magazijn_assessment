@@ -8,8 +8,6 @@ export default class Screen_model {
 
     constructor(name) {
         this.#name = name;
-        this.#retrieveItems();
-        this.retrievePositionsFromLocalStorage();
     }
 
     get getName() {
@@ -17,7 +15,12 @@ export default class Screen_model {
     }
 
     get getItems() {
-        return this.#items;
+        try {
+            return this.#items;
+        } catch (e) {
+            console.log('No items');
+            return null;
+        }
     }
 
     get getPositions() {
@@ -26,7 +29,7 @@ export default class Screen_model {
 
     getDataOfPosition(value, row, col) {
         let data = [];
-        this.#retrieveItems();
+        this.retrieveItemsFromLocalStorage();
 
         if (value == undefined) {
             value = this.#findValueOfPosition(row, col);
@@ -147,20 +150,28 @@ export default class Screen_model {
         }
     }
 
-    #retrieveItems() {
-        let retrieved = JSON.parse(localStorage.getItem('items'));
-        let retrieved2 = JSON.parse(localStorage.getItem('items'));
+    retrieveItemsFromLocalStorage() {
 
-        for (let [key, value] of Object.entries(retrieved)) {
-            if (key.toString() === this.getName.toString()) {
-                this.#items = value;
+        try {
+            let retrieved = JSON.parse(localStorage.getItem('items'));
+            let retrieved2 = JSON.parse(localStorage.getItem('items'));
+
+            for (let [key, value] of Object.entries(retrieved)) {
+                if (key.toString() === this.getName.toString()) {
+                    this.#items = value;
+                }
             }
-        }
-        for (let [key, value] of Object.entries(retrieved2)) {
-            if (key.toString() === this.getName.toString()) {
-                this.#items_details = value;
+            for (let [key, value] of Object.entries(retrieved2)) {
+                if (key.toString() === this.getName.toString()) {
+                    this.#items_details = value;
+                }
             }
+            return true;
+        } catch (e) {
+            console.log('No local storage available');
+            return false;
         }
+
 
     }
 
@@ -201,7 +212,11 @@ export default class Screen_model {
     }
 
     savePosToLocalStorage() {
-        localStorage.setItem(this.#name, JSON.stringify(this.#positions));
+        try {
+            localStorage.setItem(this.#name, JSON.stringify(this.#positions));
+        } catch (e) {
+            console.log('No positions to save, or no local storage to save to.');
+        }
     }
 
     deleteComment(comment, itemName, soort){

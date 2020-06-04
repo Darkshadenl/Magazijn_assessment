@@ -115,7 +115,7 @@ export default class Magazijn_View {
         }));
     }
 
-    #DoSomethingWithWeather(){
+    #DoSomethingWithWeather() {
 
     }
 
@@ -219,14 +219,16 @@ export default class Magazijn_View {
             }
         }
 
-        let activated = false;
-        while (!activated){
-            dropDown.childNodes.forEach(c => {
-                if (!activated) {
-                    c.classList.add('active');
-                    activated = true;
-                }
-            });
+        if (dropDown.hasChildNodes()) {
+            let activated = false;
+            while (!activated) {
+                dropDown.childNodes.forEach(c => {
+                    if (!activated) {
+                        c.classList.add('active');
+                        activated = true;
+                    }
+                });
+            }
         }
 
         dropDownButton.addEventListener('click', (e) => {
