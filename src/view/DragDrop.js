@@ -281,7 +281,6 @@ export default class DragDrop {
         photoDiv.className = 'photo';
         let newDetails = document.createElement('div');
         newDetails.className = 'newDetails';
-
         let details = document.createElement('div');
         details.className = 'details';
         let form = document.createElement('form');
@@ -295,14 +294,11 @@ export default class DragDrop {
         new_comment_button.innerText = 'Nieuwe opmerking';
         let comment_div = document.createElement('div');
         comment_div.className = 'comments';
-
         containdiv.appendChild(photoDiv);
         containdiv.appendChild(newDetails);
-
         details.appendChild(form);
         details.appendChild(new_comment_button);
         details.appendChild(comment_div);
-
         containdiv.appendChild(details);
         containdiv.appendChild(close_button);
 
@@ -313,7 +309,7 @@ export default class DragDrop {
         close_button.addEventListener('click', e => {
             this.#exitButtonFunc(e, containdiv, data);
         });
-
+        console.log(data);
         for (let label in data) {
             if (label != 'reacties') {
                 let div = document.createElement('div');
@@ -333,7 +329,30 @@ export default class DragDrop {
                 div.appendChild(input);
                 form.appendChild(div);
             } else if (label == 'reacties') {
-                console.log('REACTIES');
+
+                let [...reactie] = data[label];
+
+                let commentSection = document.querySelector('.comments');
+
+                reactie.forEach(r => {
+                    let commentEntryDiv = document.createElement('div');
+                    commentEntryDiv.className = 'row commententry';
+                    let input = document.createElement('input');
+                    input.setAttribute('value', r);
+                    input.disabled = true;
+                    let del = document.createElement('button');
+                    del.className = 'btn btn-outline-danger delbutton';
+                    del.innerText = 'Delete';
+
+                    commentEntryDiv.appendChild(input);
+                    commentEntryDiv.appendChild(del);
+                    commentSection.appendChild(commentEntryDiv);
+
+                    del.addEventListener('click', d => {
+                        this.#clickDel(d);
+                    });
+                });
+
             }
         }
     }
@@ -353,58 +372,33 @@ export default class DragDrop {
         comments.appendChild(div);
 
         deletebtn.addEventListener('click', d => {
-            let parent = d.target.parentNode;
-            while (parent.firstChild) {
-                parent.removeChild(parent.lastChild);
-            }
+            this.#clickDel(d);
         });
+    }
+
+    #clickDel(d) {
+        this.#deleteComment(d);
+        let parent = d.target.parentNode;
+        while (parent.firstChild) {
+            parent.removeChild(parent.lastChild);
+        }
+    }
+
+    #deleteComment(d){
+        let child = d.target.parentNode.firstChild;
+        let comment = child.value;
+        let itemName = document.querySelector('#Naam');
+        let type = document.querySelector('#type');
+
+        this.#controller.deleteComments(comment, itemName.value, type.value);
     }
 
     #exitButtonFunc(e, containdiv, data) {
         this.#displayingPopup = false;
         containdiv.style.display = 'none';
         let popup = document.querySelector('.popup');
-        let comments = document.querySelector('.comments');
 
-        // save comments to local storage... Looping is hell.
-        // first loop through html, then localstorage...
-        if (comments !== null) {
-            for (let i = 0; i < comments.children.length; i++) {
-                let neededElements = comments.children[i].children;
-                for (let j = 0; j < neededElements.length; j++) {
-                    if (neededElements[0].value !== "") {
-                        // save text to localstorage
-                        let current_region = this.#controller.getCurrentScreen.getName;
-                        let currentMenu = document.querySelector('.active').innerHTML;
-                        let items = JSON.parse(localStorage.getItem('items'));
-                        let itemName = data.Naam;
-                        let comment = neededElements[0].value;
-
-                        for (let label in items) {
-                            if (label == current_region) {
-                                let menus = items[label];
-                                for (let menu in menus) {
-                                    if (menu == currentMenu) {
-                                        let actualItems = menus[menu];
-                                        let comments = null;
-                                        for (let i = 0; i < actualItems.length; i++) {
-                                            if (actualItems[i].Naam == itemName) {
-                                                if (actualItems[i].reacties == null) {
-                                                    actualItems[i].reacties = [comment];
-                                                } else {
-                                                    actualItems[i].reacties.push(comment);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        localStorage.setItem('items', JSON.stringify(items));
-                    }
-                }
-            }
-        }
+        this.#saveNewComments(data);
 
         // close popup
         while (popup.firstChild) {
@@ -412,4 +406,27 @@ export default class DragDrop {
         }
     }
 
+    #saveNewComments(data){
+        let commentsSection = document.querySelector('.comments');
+        let comment;
+        if (commentsSection !== null) {
+            for (let i = 0; i < commentsSection.children.length; i++) {
+                let neededElements = commentsSection.children[i].children;
+                console.log(neededElements);
+                for (let j = 0; j < neededElements.length; j++) {
+                    if (neededElements[0].disabled === false) {
+                        if (neededElements[0].value !== "") {
+                            comment = neededElements[0].value;
+                        }
+                    }
+                }
+            }
+        }
+        let currentMenu = document.querySelector('.active').innerHTML;
+        let itemName = data.Naam;
+        console.log(comment);
+        if (comment != null && comment != undefined) {
+            this.#controller.saveComments(currentMenu, itemName, comment);
+        }
+    }
 }

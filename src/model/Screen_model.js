@@ -203,5 +203,68 @@ export default class Screen_model {
     savePosToLocalStorage() {
         localStorage.setItem(this.#name, JSON.stringify(this.#positions));
     }
+
+    deleteComment(comment, itemName, soort){
+        let items = JSON.parse(localStorage.getItem('items'));
+        let products;
+
+        for (let category in items) {
+            if (category == this.#name) {
+                let subcat = items[category];
+                for (let sub in subcat) {
+                    if (sub == soort) {
+                        products = subcat[sub];
+                    }
+                }
+            }
+        }
+
+        let product;
+        products.forEach((p, i) => {
+            if (p.naam == itemName) {
+                product = products[i];
+            }
+        });
+
+        try {
+            let {reacties} = product;
+            reacties.forEach((e, i) => {
+                if (e == comment) {
+                    reacties[i].splice(i, 1);
+                }
+            });
+        } catch (e) {
+
+        }
+    }
+
+    saveComments(currentMenu, productName, comment){
+        let items = JSON.parse(localStorage.getItem('items'));
+
+        // find product in local storage, and check for comments.
+        // also save
+        for (let category in items) {
+            if (category == this.#name) {
+                let subcategories = items[category];
+                for (let subcategory in subcategories) {
+                    if (subcategory == currentMenu) {
+                        let products = subcategories[subcategory];
+                        let comments = null;
+                        for (let i = 0; i < products.length; i++) {
+                            if (products[i].Naam == productName) {
+                                if (products[i].reacties == null) {
+                                    products[i].reacties = [comment];
+                                } else {
+                                    products[i].reacties.push(comment);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        let new_items = JSON.stringify(items);
+        localStorage.setItem('items', new_items);
+    }
 }
 

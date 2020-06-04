@@ -3,7 +3,7 @@
         "Broeken": [
             {
                 "Naam": "Coole broek",
-                "type": "broeken",
+                "type": "Broeken",
                 "beschrijving": "Een coole broek van een mooie stof",
                 "inkoopprijs": 10,
                 "minimale voorraad": 5,
@@ -15,7 +15,7 @@
             },
             {
                 "Naam": "Bitch broek",
-                "type": "broeken",
+                "type": "Broeken",
                 "beschrijving": "Een Bitch broek van een mooie stof",
                 "inkoopprijs": 120,
                 "minimale voorraad": 1,
