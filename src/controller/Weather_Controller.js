@@ -1,5 +1,5 @@
 export default class WeatherController {
-    #apiKey = '40f6ccceae954782446b3d4bb031bb70'
+    #apiKey = '40f6ccceae954782446b3d4bb031bb70';
 
 
     getWeatherByCity(city) {
