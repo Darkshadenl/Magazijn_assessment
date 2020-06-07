@@ -109,7 +109,8 @@ export default class Magazijn_View {
         let weather_button = document.getElementById('weather_button');
 
         weather_button.addEventListener('click', (ev => {
-            let city = document.getElementById('weather_city');
+            let city = document.getElementById('weather_city').value;
+            console.log(city);
             let weather = this.#mag_controller.setupWeather(city);
             this.#DoSomethingWithWeather(weather);
         }));

@@ -10,9 +10,9 @@ export default class Main_Controller {
     #weatherController;
 
     constructor() {
+        this.#weatherController = new Weather_Controller();
         this.#magazijnController = new Magazijn_Controller(this.#weatherController, this);
         this.#wizardController = new Wizard_testnaam(this);
-        this.#weatherController = new Weather_Controller();
     }
 
     switchToMagazijn(screenName)
