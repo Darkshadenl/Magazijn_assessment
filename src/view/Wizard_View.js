@@ -46,7 +46,7 @@ export default class Wizard_View {
         let backButton = document.getElementById('wizard_back_button');
 
         backButton.addEventListener('click', ev => {
-            this.#wizardController.getMainController.switchToMagazijn('Kleding');
+            this.#wizardController.getMainController.switchToMagazijn();
         });
     }
 

@@ -273,9 +273,8 @@ export default class Magazijn_View {
     }
 
 
-    showScreen(screenName) {
-
-
+    showScreen() {
+        document.getElementById('magazijn').style.display = 'inline';
     }
 
 }
