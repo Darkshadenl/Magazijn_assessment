@@ -8,16 +8,6 @@ export default class Magazijn_Model {
     #weather_model = new Weather_Model();
 
     constructor() {
-
-    }
-
-    retrieveLocalStorage(){
-        this.#items.forEach(e => {
-            e.retrieveItemsFromLocalStorage();
-        });
-    }
-
-    retrievePosses(){
         this.#items.forEach(e => {
             e.retrievePositionsFromLocalStorage();
         });

@@ -8,6 +8,8 @@ export default class Screen_model {
 
     constructor(name) {
         this.#name = name;
+        this.#retrieveItems();
+        this.retrievePositionsFromLocalStorage();
     }
 
     get getName() {
@@ -15,44 +17,12 @@ export default class Screen_model {
     }
 
     get getItems() {
-        try {
-            return this.#items;
-        } catch (e) {
-            console.log('No items');
-            return null;
-        }
+        return this.#items;
     }
 
     get getPositions() {
+        console.log('Get position ran!');
         return this.#positions;
-    }
-
-    getDataOfPosition(value, row, col) {
-        let data = [];
-        this.retrieveItemsFromLocalStorage();
-
-        if (value == undefined) {
-            value = this.#findValueOfPosition(row, col);
-        }
-
-        for (let categorie in this.#items_details) {
-            this.#items_details[categorie].forEach(item => {
-                if (item['Naam'] === value) {
-                    data = item;
-                }
-            })
-        }
-        return data;
-    }
-
-    #findValueOfPosition(row, col) {
-        let val = '';
-        this.#positions.forEach(item => {
-            if (item['row'] == row && item['col'] == col) {
-                val = item['value'];
-            }
-        });
-        return val;
     }
 
     getSpecificItems(key) {
@@ -80,14 +50,16 @@ export default class Screen_model {
     updatePositions(position, del) {
         let local_positions = this.getPositions;
         if (del === false || del === undefined) {
-            if (position.value != undefined && position.value != "") {
-                local_positions.push(position);
-                for (let i = 0; i < this.getItems[this.#selectedItem].length; i++) {
-                    let item = this.getItems[this.#selectedItem];
-                    if (item !== undefined) {
-                        delete item[i];
-                        item.splice(i, 1);
-                        break;
+            if (position.value !== undefined) {
+                if (position.value !== "") {
+                    local_positions.push(position);
+                    for (let i = 0; i < this.getItems[this.#selectedItem].length; i++) {
+                        let item = this.getItems[this.#selectedItem];
+                        if (item !== undefined) {
+                            delete item[i];
+                            item.splice(i, 1);
+                            break;
+                        }
                     }
                     return `Row: ${position.row} Col: ${position.col}`;
                 }
@@ -135,7 +107,7 @@ export default class Screen_model {
     makeItemsUnavailable(positions) {
         let items = this.getItems;
 
-        try {
+        try{
             for (let typeItem in items) {
                 items[typeItem].forEach((item, index) => {
                     positions.forEach(position => {
@@ -150,28 +122,20 @@ export default class Screen_model {
         }
     }
 
-    retrieveItemsFromLocalStorage() {
+    #retrieveItems() {
+        let retrieved = JSON.parse(localStorage.getItem('items'));
+        let retrieved2 = JSON.parse(localStorage.getItem('items'));
 
-        try {
-            let retrieved = JSON.parse(localStorage.getItem('items'));
-            let retrieved2 = JSON.parse(localStorage.getItem('items'));
-
-            for (let [key, value] of Object.entries(retrieved)) {
-                if (key.toString() === this.getName.toString()) {
-                    this.#items = value;
-                }
+        for (let [key, value] of Object.entries(retrieved)) {
+            if (key.toString() === this.getName.toString()) {
+                this.#items = value;
             }
-            for (let [key, value] of Object.entries(retrieved2)) {
-                if (key.toString() === this.getName.toString()) {
-                    this.#items_details = value;
-                }
-            }
-            return true;
-        } catch (e) {
-            console.log('No local storage available');
-            return false;
         }
-
+        for (let [key, value] of Object.entries(retrieved2)) {
+            if (key.toString() === this.getName.toString()) {
+                this.#items_details = value;
+            }
+        }
 
     }
 
@@ -179,11 +143,9 @@ export default class Screen_model {
         if (nameOfButton === undefined) {
             console.log('Undefined nameOfButton')
         } else {
-            // is current menu my menu
             let menu_items = this.#items_details[activeMenu];
             for (let i = 0; i < menu_items.length; i++) {
                 if (menu_items[i].Naam.toString() === nameOfButton) {
-                    // current menu is my menu
                     return [true, activeMenu];
                 }
             }
@@ -212,74 +174,7 @@ export default class Screen_model {
     }
 
     savePosToLocalStorage() {
-        try {
-            localStorage.setItem(this.#name, JSON.stringify(this.#positions));
-        } catch (e) {
-            console.log('No positions to save, or no local storage to save to.');
-        }
-    }
-
-    deleteComment(comment, itemName, soort){
-        let items = JSON.parse(localStorage.getItem('items'));
-        let products;
-
-        for (let category in items) {
-            if (category == this.#name) {
-                let subcat = items[category];
-                for (let sub in subcat) {
-                    if (sub == soort) {
-                        products = subcat[sub];
-                    }
-                }
-            }
-        }
-
-        let product;
-        products.forEach((p, i) => {
-            if (p.naam == itemName) {
-                product = products[i];
-            }
-        });
-
-        try {
-            let {reacties} = product;
-            reacties.forEach((e, i) => {
-                if (e == comment) {
-                    reacties[i].splice(i, 1);
-                }
-            });
-        } catch (e) {
-
-        }
-    }
-
-    saveComments(currentMenu, productName, comment){
-        let items = JSON.parse(localStorage.getItem('items'));
-
-        // find product in local storage, and check for comments.
-        // also save
-        for (let category in items) {
-            if (category == this.#name) {
-                let subcategories = items[category];
-                for (let subcategory in subcategories) {
-                    if (subcategory == currentMenu) {
-                        let products = subcategories[subcategory];
-                        let comments = null;
-                        for (let i = 0; i < products.length; i++) {
-                            if (products[i].Naam == productName) {
-                                if (products[i].reacties == null) {
-                                    products[i].reacties = [comment];
-                                } else {
-                                    products[i].reacties.push(comment);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        let new_items = JSON.stringify(items);
-        localStorage.setItem('items', new_items);
+        localStorage.setItem(this.#name, JSON.stringify(this.#positions));
     }
 }
 
