@@ -1,13 +1,24 @@
-
+import Wizard_View from "../view/Wizard_View.js";
 
 export default class Wizard_Controller {
 
-    #magazijnController;
-    // #crudController;
+    #wizardView;
+    #mainController;
 
-    constructor() {
-        this.#magazijnController = new Magazijn_Controller();
-        // this.#crudController = new Crud_Controller();
+    constructor(mainController) {
+        this.#wizardView = new Wizard_View(this);
+        this.#mainController = mainController;
     }
 
+    get getMainController() {
+        return this.#mainController;
+    }
+
+    showView(screenName) {
+        this.#wizardView.setScreen(screenName);
+    }
+
+    hideView() {
+        this.#wizardView.hideScreen();
+    }
 }
