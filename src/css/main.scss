@@ -28,7 +28,9 @@
   border: 1px solid rgba(0, 0, 0, 0.8);
 }
 
-.dropdown button:hover {background-color: #954e51;}
+.dropdown button:hover {
+  background-color: #954e51;
+}
 
 .active {
   background-color: black;
@@ -45,9 +47,81 @@
   width: 150px;
 }
 
-#new_products_button{
+#new_products_button {
   display: none;
   margin-bottom: 10px;
+}
+
+.popup {
+  position: absolute;
+  background-color: white;
+  left: 35em;
+  top: 10em;
+  width: 40em;
+  height: 40em;
+  display: none;
+  overflow: scroll;
+}
+
+.closeButton {
+  position: absolute;
+  left: 35em;
+  top: 50em;
+}
+
+.item_form {
+  position: absolute;
+  left: 3em;
+  top: 1em;
+}
+
+.comments {
+  position: absolute;
+  left: 16em;
+  top: 4em;
+  padding-left: 2em;
+  padding-top: 10px;
+  //height: 25em;
+}
+
+.newComment{
+  height: 2em;
+  width: 15em;
+  position: absolute;
+  margin-top: 1em;
+  left: 18em;
+}
+
+.comment {
+  margin-top: 5px;
+  height: 2em;
+}
+
+.delbutton {
+  width: 5em;
+  height: 2em;
+  margin-top: 5px;
+}
+
+.commententry{
+  width: 20em;
+}
+
+.details{
+  position: absolute;
+  top: 15em;
+}
+
+.form-group{
+  width: 10em;
+}
+
+.newDetails{
+
+}
+
+.photo{
+
 }
 
 
