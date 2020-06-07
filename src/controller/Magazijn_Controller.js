@@ -51,7 +51,7 @@ export default class Magazijn_Controller{
     setupWeather(city){
         console.log('Hierzo');
         let weather = this.#weatherController.getWeatherByCity(city);
-        console.log(weather);
+        alert(weather);
         return this.#magazijn_model.weatherModel.parseWeatherData(weather);
     }
 
