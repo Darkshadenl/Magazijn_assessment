@@ -1,6 +1,6 @@
 export default class WeatherController {
     #apiKey = '40f6ccceae954782446b3d4bb031bb70';
-    #apiUrl = 'api.openweathermap.org/data/2.5/weather?q=';
+    #apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=';
 
 
     /*getWeatherByCity(city) {
