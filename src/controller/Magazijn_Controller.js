@@ -13,12 +13,14 @@ export default class Magazijn_Controller {
         this.#magazijn_view = new Magazijn_View(this);
         this.#weatherController = weatherController;
 
+        this.defaultData();
         let gotStorage = this.#magazijn_model.retrieveLocalStorage();
+
 
         if (gotStorage) {
             this.#magazijn_model.retrievePosses();
         } else {
-            this.#actualDefaultData();
+            // this.#actualDefaultData();
         }
 
     }
@@ -66,22 +68,22 @@ export default class Magazijn_Controller {
         return this.#magazijn_model.weatherModel.parseWeatherData(weather);
     }
 
-    // defaultData() {
-    //     fetch('../resources/defaultData.json')
-    //         .then((response) => {
-    //             return response.json();
-    //         }).then((data) => {
-    //         localStorage.setItem("items", JSON.stringify(data));
-    //     });
-    // }
-
-    #actualDefaultData() {
-        fetch('../resources/cleanDefaults.json')
+    defaultData() {
+        fetch('../resources/defaultData.json')
             .then((response) => {
                 return response.json();
             }).then((data) => {
             localStorage.setItem("items", JSON.stringify(data));
         });
     }
+
+    // #actualDefaultData() {
+    //     fetch('../resources/cleanDefaults.json')
+    //         .then((response) => {
+    //             return response.json();
+    //         }).then((data) => {
+    //         localStorage.setItem("items", JSON.stringify(data));
+    //     });
+    // }
 
 }
