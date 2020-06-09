@@ -26,7 +26,6 @@ export default class DragDrop {
     }
 
     dragStart(e) {
-        console.log('run dragStart');
         this.#dragStartedCorrectly = true;
         e.target.backgroundColor = 'black';
         this.#original_element = e.target;
@@ -57,7 +56,6 @@ export default class DragDrop {
             if (this.#dragStartedCorrectly) {
                 if (e.target.parentNode.className === 'grid-container made_choices') {
                     if (this.#controller.isPosTaken(this.#pos_mouseC, this.#pos_mouseR)) {
-                        console.log('Position is taken. Do nothing.');
                         this.#succesful_drop = false;
                         this.#dragDropSuccess = true;
                     } else {
@@ -119,12 +117,9 @@ export default class DragDrop {
                     e.target.style.backgroundColor = '';
                     this.#succesful_drop = true;
                     this.#dragDropSuccess = true;
-                    console.log(this.#succesful_drop);
                 } else {
-                    console.log('dragDrop laatste else statement.');
                     this.#succesful_drop = false;
                     this.#dragDropSuccess = true;
-                    console.log(this.#succesful_drop);
                 }
             }
         }

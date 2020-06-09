@@ -8,6 +8,7 @@
                 "inkoopprijs": 10,
                 "minimale voorraad": 5,
                 "huidige voorraad": 2,
+                "maat": 30,
                 "kleuren": [
                     "groen",
                     "blauw"
@@ -20,6 +21,7 @@
                 "inkoopprijs": 120,
                 "minimale voorraad": 1,
                 "huidige voorraad": 3,
+                "maat": 30,
                 "kleuren": [
                     "groen",
                     "blauw"
@@ -34,6 +36,7 @@
                 "inkoopprijs": 10,
                 "minimale voorraad": 5,
                 "huidige voorraad": 2,
+                "maat": 30,
                 "kleuren": [
                     "groen",
                     "blauw"
@@ -48,6 +51,7 @@
                 "inkoopprijs": 10,
                 "minimale voorraad": 5,
                 "huidige voorraad": 2,
+                "maat": 30,
                 "kleuren": [
                     "groen",
                     "blauw"
@@ -62,6 +66,7 @@
                 "inkoopprijs": 10,
                 "minimale voorraad": 5,
                 "huidige voorraad": 2,
+                "maat": 30,
                 "kleuren": [
                     "groen",
                     "blauw"
@@ -76,6 +81,7 @@
                 "inkoopprijs": 10,
                 "minimale voorraad": 5,
                 "huidige voorraad": 2,
+                "maat": 30,
                 "kleuren": [
                     "groen",
                     "blauw"
@@ -92,6 +98,7 @@
                 "inkoopprijs": 10,
                 "minimale voorraad": 5,
                 "huidige voorraad": 2,
+                "Gewicht": 10,
                 "kleuren": [
                     "groen",
                     "blauw"
@@ -106,6 +113,7 @@
                 "inkoopprijs": 10,
                 "minimale voorraad": 5,
                 "huidige voorraad": 2,
+                "Gewicht": 10,
                 "kleuren": [
                     "groen",
                     "blauw"
@@ -122,6 +130,8 @@
                 "inkoopprijs": 10,
                 "minimale voorraad": 5,
                 "huidige voorraad": 2,
+                "Grootte (in Cm)": 10,
+                "Hoeveelheid": 1,
                 "kleuren": [
                     "groen",
                     "blauw"
@@ -136,6 +146,8 @@
                 "inkoopprijs": 10,
                 "minimale voorraad": 5,
                 "huidige voorraad": 2,
+                "Grootte (in Cm)": 4,
+                "Hoeveelheid": 2,
                 "kleuren": [
                     "groen",
                     "blauw"
@@ -148,6 +160,8 @@
                 "inkoopprijs": 10,
                 "minimale voorraad": 5,
                 "huidige voorraad": 2,
+                "Grootte (in Cm)": 4,
+                "Hoeveelheid": 2,
                 "kleuren": [
                     "groen",
                     "blauw"
