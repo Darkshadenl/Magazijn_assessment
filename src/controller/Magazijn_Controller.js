@@ -67,12 +67,11 @@ export default class Magazijn_Controller {
         return this.#magazijn_model.getCurrentScreen.isMyMenu(value, active);
     }
 
-    setupWeather(city) {
-        console.log('Hierzo');
+    setupWeather(city){
         let weather = this.#weatherController.getWeatherByCity(city);
+        //alert(weather);
         return this.#magazijn_model.weatherModel.parseWeatherData(weather);
     }
-
     defaultData() {
         fetch('../resources/defaultData.json')
             .then((response) => {
