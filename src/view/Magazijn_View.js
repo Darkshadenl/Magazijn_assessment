@@ -273,6 +273,15 @@ export default class Magazijn_View {
         document.getElementById('weather_menu').appendChild(document.createTextNode(text));
     }
 
+    hideScreen() {
+        document.getElementById('magazijn').style.display = 'none';
+    }
+
+
+    showScreen() {
+        document.getElementById('magazijn').style.display = 'inline';
+    }
+
 }
 
 
