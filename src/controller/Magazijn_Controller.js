@@ -1,10 +1,12 @@
 import Magazijn_View from "../view/Magazijn_View.js";
 import Magazijn_Model from "../model/Magazijn_Model.js";
+import Weather_Model from "../model/Weather_Model";
 
 export default class Magazijn_Controller {
 
     #magazijn_model;
     #magazijn_view;
+
     #weatherController;
     #main_controller;
 
@@ -15,6 +17,7 @@ export default class Magazijn_Controller {
         this.#magazijn_view = new Magazijn_View(this);
         this.#weatherController = weatherController;
         this.#main_controller = mainController;
+
 
         let gotStorage = this.#magazijn_model.retrieveLocalStorage();
 
@@ -68,10 +71,10 @@ export default class Magazijn_Controller {
     }
 
     setupWeather(city){
-        let weather = this.#weatherController.getWeatherByCity(city);
-        //alert(weather);
-        return this.#magazijn_model.weatherModel.parseWeatherData(weather);
+        let weatherPromise = this.#weatherController.getWeatherByCity(city);
+        return this.#weatherController.weatherModel.parseWeatherData(weatherPromise);
     }
+
     defaultData() {
         fetch('../resources/defaultData.json')
             .then((response) => {
