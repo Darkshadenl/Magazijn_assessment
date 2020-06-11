@@ -22,6 +22,7 @@ export default class WeatherController {
     */
     getWeatherByCity(city) {
         let url = this.#apiUrl + city + ',nl&appid=' + this.#apiKey;
+        console.log(url);
         fetch(url)
             .then((resp) => resp.json()) // Transform the data into json
             .then(function(data) {
