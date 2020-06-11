@@ -105,20 +105,6 @@ export default class Magazijn_View {
         this.#createDropdownMenu();
     }
 
-    #configureWeatherButton() {
-        let weather_button = document.getElementById('weather_button');
-
-        weather_button.addEventListener('click', (ev => {
-            let city = document.getElementById('weather_city');
-            let weather = this.#mag_controller.setupWeather(city);
-            this.#DoSomethingWithWeather(weather);
-        }));
-    }
-
-    #DoSomethingWithWeather() {
-
-    }
-
     #loadPositions(positions) {
         // find current positions, add these.
         let table = document.getElementById('made_choices_table');
@@ -267,7 +253,22 @@ export default class Magazijn_View {
         wizardButton.addEventListener('click', ev => {
             this.#mag_controller.updateLocalStorage();
         });
+    }
 
+    #configureWeatherButton() {
+        let weather_button = document.getElementById('weather_button');
+
+        weather_button.addEventListener('click', (ev => {
+            let city = document.getElementById('weather_city').value;
+            console.log(city);
+            let weather = this.#mag_controller.setupWeather(city);
+            this.#changeWeatherInfo(weather);
+        }));
+    }
+
+    #changeWeatherInfo(weather) {
+        document.getElementById('weather_city').value;
+        document.getElementById('weather_city');
     }
 
 }
