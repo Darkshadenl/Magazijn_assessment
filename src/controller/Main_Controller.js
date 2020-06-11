@@ -1,5 +1,6 @@
 import Magazijn_Controller from "./Magazijn_Controller.js";
 import Weather_Controller from "./Weather_Controller";
+import Wizard_Controller from "./Wizard_Controller";
 
 
 export default class Main_Controller {
@@ -11,19 +12,16 @@ export default class Main_Controller {
     constructor() {
         this.#weatherController = new Weather_Controller();
         this.#magazijnController = new Magazijn_Controller(this.#weatherController, this);
-        //this.#wizardController = new Wizard_Controller(this);
+        this.#wizardController = new Wizard_Controller(this);
     }
 
-    switchToMagazijn(screenName)
-    {
+    switchToMagazijn() {
         this.#wizardController.hideView();
-        this.#magazijnController.showView(screenName);
+        this.#magazijnController.showView();
     }
 
-    switchToWizard(screenName)
-    {
-        //this.#magazijnController.hideView();
+    switchToWizard(screenName) {
+        this.#magazijnController.hideView();
         this.#wizardController.showView(screenName);
     }
-
 }
