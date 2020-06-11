@@ -42,18 +42,20 @@ export default class Wizard_View {
 
     #configureForm(form)
     {
-
         //object.addEventListener("input", myScript);
         let fields = form.getElementsByTagName("UL");
         let generalFields = document.getElementById('item-wizard').getElementsByTagName("UL");
         for (let field of fields) {
             field.style.display = 'none';
+            //field.getElementsByTagName('input').addEventListener(); //function: accesst volgende field (zichtbaar maken) en verwijdert de eventlistener weer.
         }
         for (let field of generalFields) {
             field.style.display = 'none';
         }
 
         fields[0].style.display = 'inline';
+
+
         //TODO: laad een voor een alle input velden in een array. Voeg eventlisteners toe die style display aanzetten bij het volgende input veld.
     }
 
