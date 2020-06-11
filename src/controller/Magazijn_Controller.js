@@ -93,4 +93,12 @@ export default class Magazijn_Controller {
         });
     }
 
+    showView(screenName) {
+        this.#magazijn_view.showScreen(screenName);
+    }
+
+    hideView() {
+        this.#magazijn_view.hideScreen();
+    }
+
 }
