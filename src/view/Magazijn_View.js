@@ -112,12 +112,13 @@ export default class Magazijn_View {
             let city = document.getElementById('weather_city').value;
             console.log(city);
             let weather = this.#mag_controller.setupWeather(city);
-            this.#DoSomethingWithWeather(weather);
+            this.#changeWeatherInfo(weather);
         }));
     }
 
-    #DoSomethingWithWeather(){
-
+    #changeWeatherInfo(weather) {
+        document.getElementById('weather_city').value;
+        document.getElementById('weather_city');
     }
 
     #loadPositions(positions) {

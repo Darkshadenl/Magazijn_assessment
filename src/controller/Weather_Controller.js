@@ -25,7 +25,7 @@ export default class WeatherController {
         fetch(url)
             .then((resp) => resp.json()) // Transform the data into json
             .then(function(data) {
-                console.log('DATA= ' + data);
+                return data;
             })
             .catch(function() {
                 console.log('error in api code url: ' + url);
