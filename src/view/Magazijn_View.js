@@ -252,6 +252,8 @@ export default class Magazijn_View {
 
         wizardButton.addEventListener('click', ev => {
             this.#mag_controller.updateLocalStorage();
+            let screenName = this.#mag_controller.getCurrentScreen.getName;
+            this.#mag_controller.getMainController.switchToWizard(screenName);
         });
     }
 
