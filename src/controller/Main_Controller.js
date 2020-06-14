@@ -2,7 +2,6 @@ import Magazijn_Controller from "./Magazijn_Controller.js";
 import Weather_Controller from "./Weather_Controller";
 import Wizard_Controller from "./Wizard_Controller";
 
-
 export default class Main_Controller {
 
     #magazijnController;

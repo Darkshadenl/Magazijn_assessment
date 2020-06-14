@@ -19,8 +19,8 @@ export default class Item {
         return this.properties;
     }
 
-    addProperty(property, value) {
-
+    addProperty(propertyName, value) {
+        this.properties[propertyName] = value;
     }
 
 }
