@@ -16,6 +16,7 @@ export default class DragDrop {
     #dragStartedCorrectly = false;
 
     #beingDraggedColor = '#6E2D18';
+    wall = '#110704';
     #dragOverGridColor = '#12ff00';
     gridCellInUseColor = '#A52A2A';
     oldPositionAfterDragColor = '#E0FFFF';
