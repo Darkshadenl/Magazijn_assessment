@@ -114,7 +114,6 @@ export default class Magazijn_View {
         // find current positions, add these.
         this.#createGrid();
         let table = document.getElementById('made_choices_table');
-        debugger
         try {
             positions.forEach(p => {
                 let col = p.col;

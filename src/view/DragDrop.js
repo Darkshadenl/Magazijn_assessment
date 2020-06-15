@@ -279,7 +279,7 @@ export default class DragDrop {
 
     #buildPopupScreen(containdiv, data) {
         let photoDiv = document.createElement('div');
-        photoDiv.className = 'photo';
+        photoDiv.className = 'photo col';
         this.#createPhotoUpload(photoDiv);
         let newDetails = document.createElement('div');
         newDetails.className = 'newDetails';
@@ -368,6 +368,9 @@ export default class DragDrop {
         previewContainer.className = 'image-preview';
         previewContainer.id = 'imagePreview';
 
+        let canvas = document.createElement('canvas');
+        canvas.id = 'drawingCanvas';
+
         let previewDefaultText = document.createElement('span');
         previewDefaultText.className = 'image-preview__default-text';
         previewDefaultText.innerText = 'Image preview';
@@ -396,9 +399,9 @@ export default class DragDrop {
                 previewImage.setAttribute('src', '');
             }
         });
-
         previewContainer.appendChild(previewImage);
         previewContainer.appendChild(previewDefaultText);
+        previewContainer.appendChild(canvas);
         photodiv.appendChild(inpFile);
         photodiv.appendChild(previewContainer);
     }
