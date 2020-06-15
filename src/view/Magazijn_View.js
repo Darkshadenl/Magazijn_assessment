@@ -30,30 +30,35 @@ export default class Magazijn_View {
 
             for (let i = 0; i < 15; i++) {
                 let gridcell = document.createElement('td');
-                gridcell.className = 'list droptarget grid-item';
                 gridcell.id = i.toString();
-                gridcell.style.background = this.#dragDrop.oldPositionAfterDragColor;
                 gridcell.style.background.repeat(0);
                 gridcell.setAttribute('draggable', 'false');
 
-                gridcell.addEventListener('click', (e) => {
-                    console.log(e.target);
-                });
+                if (!this.#createWall(i)) {
+                    gridcell.className = 'list droptarget grid-item';
+                    gridcell.style.background = this.#dragDrop.oldPositionAfterDragColor;
+                    gridcell.addEventListener('click', (e) => {
+                        console.log(e.target);
+                    });
 
-                gridcell.addEventListener('dragover', (e) => {
-                    this.#dragDrop.dragOver(e)
-                });
-                gridcell.addEventListener('dragenter', (e) => {
-                    this.#dragDrop.dragEnter(e)
-                });
-                gridcell.addEventListener('dragleave', (e) => {
-                    this.#dragDrop.dragLeave(e)
-                });
-                gridcell.addEventListener('drop', (e) => {
-                    this.#dragDrop.dragDrop(e);
-                });
-
+                    gridcell.addEventListener('dragover', (e) => {
+                        this.#dragDrop.dragOver(e)
+                    });
+                    gridcell.addEventListener('dragenter', (e) => {
+                        this.#dragDrop.dragEnter(e)
+                    });
+                    gridcell.addEventListener('dragleave', (e) => {
+                        this.#dragDrop.dragLeave(e)
+                    });
+                    gridcell.addEventListener('drop', (e) => {
+                        this.#dragDrop.dragDrop(e);
+                    });
+                } else {
+                    gridcell.className = 'grid-item';
+                    gridcell.style.background = this.#dragDrop.wall;
+                }
                 trow.appendChild(gridcell);
+
             }
             drop_targets.appendChild(trow);
         }
@@ -284,6 +289,14 @@ export default class Magazijn_View {
         document.getElementById('magazijn').style.display = 'inline';
     }
 
+    #createWall(i) {
+        let randomPosses = []
+        for (let i = 0; i < 6; i++) {
+            randomPosses.push(Math.floor(Math.random() * 15));
+            console.log(randomPosses);
+        }
+        return randomPosses.includes(i);
+    }
 }
 
 
