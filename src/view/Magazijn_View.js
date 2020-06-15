@@ -30,9 +30,9 @@ export default class Magazijn_View {
             trow.id = i.toString();
             trow.setAttribute('draggable', 'false');
 
-            row.forEach(col => {
+            row.forEach((col, x) => {
                 let gridcell = document.createElement('td');
-                gridcell.id = i.toString();
+                gridcell.id = x.toString();
                 gridcell.style.background.repeat(0);
                 gridcell.setAttribute('draggable', 'false');
 
@@ -78,7 +78,7 @@ export default class Magazijn_View {
     }
 
     changeScreen(e) {
-        this.#mag_controller.updateLocalStorage();  // save positions
+        this.#mag_controller.updateLocalStorage();
         let newProduct = document.getElementById('new_products_button');
         let menuButton = document.getElementById('dropdownMenuButton');
         document.getElementById('new_products_button').style.display = 'block';
@@ -114,7 +114,7 @@ export default class Magazijn_View {
         // find current positions, add these.
         this.#createGrid();
         let table = document.getElementById('made_choices_table');
-
+        debugger
         try {
             positions.forEach(p => {
                 let col = p.col;

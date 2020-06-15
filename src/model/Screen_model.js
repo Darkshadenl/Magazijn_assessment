@@ -9,6 +9,7 @@ export default class Screen_model {
 
     constructor(name) {
         this.#name = name;
+        this.retrievePositionsFromLocalStorage()
     }
 
     get getName() {

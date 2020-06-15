@@ -12,7 +12,6 @@ export default class Magazijn_Controller {
 
 
     constructor(weatherController, mainController) {
-        this.defaultData();
         this.#magazijn_model = new Magazijn_Model();
         this.#magazijn_view = new Magazijn_View(this);
         this.#weatherController = weatherController;
@@ -21,11 +20,12 @@ export default class Magazijn_Controller {
 
         let gotStorage = this.#magazijn_model.retrieveLocalStorage();
 
-        // if (gotStorage) {
-        //     this.#magazijn_model.retrievePosses();
-        // } else {
-        //     this.#actualDefaultData();
-        // }
+        if (gotStorage) {
+            this.#defaultData();
+            this.#magazijn_model.retrievePosses();
+        } else {
+            // this.#actualDefaultData();
+        }
     }
 
 
@@ -43,7 +43,6 @@ export default class Magazijn_Controller {
 
     updateModel(position, del, menu) {
         return this.#magazijn_model.getCurrentScreen.updatePositions(position, del);
-        ;
     }
 
     isPosTaken(posC, posR) {
@@ -75,7 +74,7 @@ export default class Magazijn_Controller {
         return this.#weatherController.weatherModel.parseWeatherData(weatherPromise);
     }
 
-    defaultData() {
+    #defaultData() {
         fetch('../resources/defaultData.json')
             .then((response) => {
                 return response.json();
