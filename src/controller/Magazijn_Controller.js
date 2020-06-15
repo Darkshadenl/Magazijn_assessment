@@ -82,6 +82,13 @@ export default class Magazijn_Controller {
             }).then((data) => {
             localStorage.setItem("items", JSON.stringify(data));
         });
+
+        fetch('../resources/gridstyle.json')
+            .then((response) => {
+                return response.json();
+            }).then((data) => {
+            localStorage.setItem("gridstyles", JSON.stringify(data));
+        });
     }
 
     #actualDefaultData() {
@@ -90,6 +97,13 @@ export default class Magazijn_Controller {
                 return response.json();
             }).then((data) => {
             localStorage.setItem("items", JSON.stringify(data));
+        });
+
+        fetch('../resources/gridstyle.json')
+            .then((response) => {
+                return response.json();
+            }).then((data) => {
+            localStorage.setItem("gridstyles", JSON.stringify(data));
         });
     }
 
