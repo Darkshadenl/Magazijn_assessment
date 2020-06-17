@@ -5,9 +5,11 @@ export default class Screen_model {
     #selectedItem;
     #name;
     #positions = [];
+    #gridstyles = JSON.parse(localStorage.getItem('gridstyles'));
 
     constructor(name) {
         this.#name = name;
+        this.retrievePositionsFromLocalStorage()
     }
 
     get getName() {
@@ -281,5 +283,21 @@ export default class Screen_model {
         let new_items = JSON.stringify(items);
         localStorage.setItem('items', new_items);
     }
+
+    get getGridStyle(){
+        switch (this.#name) {
+            case 'Kleding':
+                let { Kleding } = this.#gridstyles;
+                return Kleding;
+            case 'Tierlantijn':
+                let { Tierlantijn } = this.#gridstyles;
+                return Tierlantijn;
+            case 'Decoratie':
+                let { Decoratie } = this.#gridstyles;
+                return Decoratie;
+        }
+
+    }
+
 }
 
