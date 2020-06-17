@@ -35,4 +35,15 @@ export default class Wizard_Controller {
                 return this.#wizardModel.newDecoratieItem();
         }
     }
+
+    getCurrentItem(screenName) {
+        switch (name) {
+            case "Kleding":
+                return this.#wizardModel.kledingItem;
+            case "Tierlantijn":
+                return this.#wizardModel.tierlantijnItem;
+            case "Decoratie":
+                return this.#wizardModel.decoratieItem;
+        }
+    }
 }

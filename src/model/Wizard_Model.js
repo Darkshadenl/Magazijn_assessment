@@ -22,4 +22,16 @@ export default class Wizard_Model{
         this.#decoratieitem = new Decoratie_Item();
         return this.#decoratieitem;
     }
+
+    get kledingItem() {
+        return this.#kledingitem;
+    }
+
+    get tierlantijnItem() {
+        return this.#tierlantijnitem;
+    }
+
+    get decoratieItem() {
+        return this.#decoratieitem;
+    }
 }

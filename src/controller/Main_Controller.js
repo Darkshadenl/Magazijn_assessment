@@ -12,15 +12,23 @@ export default class Main_Controller {
         this.#weatherController = new Weather_Controller();
         this.#magazijnController = new Magazijn_Controller(this.#weatherController, this);
         this.#wizardController = new Wizard_Controller(this);
+        this.switchToMagazijn();
+
     }
 
     switchToMagazijn() {
         this.#wizardController.hideView();
         this.#magazijnController.showView();
+        this.test();
     }
 
     switchToWizard(screenName) {
         this.#magazijnController.hideView();
         this.#wizardController.showView(screenName);
+    }
+
+    test() {
+        let retrievedItems = JSON.parse(localStorage.getItem("items"));
+        console.log(retrievedItems);
     }
 }
