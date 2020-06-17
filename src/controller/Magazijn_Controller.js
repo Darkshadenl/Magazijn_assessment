@@ -71,8 +71,9 @@ export default class Magazijn_Controller {
     }
 
     setupWeather(city){
-        let weatherPromise = this.#weatherController.getWeatherByCity(city);
-        return this.#weatherController.weatherModel.parseWeatherData(weatherPromise);
+        this.#weatherController.getWeatherByCityBetter(city);
+
+        //return this.#weatherController.weatherModel.parseWeatherData(weatherPromise);
     }
 
     defaultData() {
@@ -99,6 +100,10 @@ export default class Magazijn_Controller {
 
     hideView() {
         this.#magazijn_view.hideScreen();
+    }
+
+    getWeather() {
+        return this.#weatherController.weatherModel.weather;
     }
 
 }

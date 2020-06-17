@@ -9,7 +9,7 @@ export default class Main_Controller {
     #weatherController;
 
     constructor() {
-        this.#weatherController = new Weather_Controller();
+        this.#weatherController = new Weather_Controller(this);
         this.#magazijnController = new Magazijn_Controller(this.#weatherController, this);
         this.#wizardController = new Wizard_Controller(this);
     }
@@ -23,4 +23,5 @@ export default class Main_Controller {
         this.#magazijnController.hideView();
         this.#wizardController.showView(screenName);
     }
+
 }
