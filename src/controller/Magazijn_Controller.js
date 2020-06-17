@@ -12,7 +12,7 @@ export default class Magazijn_Controller {
 
 
     constructor(weatherController, mainController) {
-        this.defaultData();
+        this.#actualDefaultData();
         this.#magazijn_model = new Magazijn_Model();
         this.#magazijn_view = new Magazijn_View(this);
         this.#weatherController = weatherController;
@@ -82,6 +82,7 @@ export default class Magazijn_Controller {
             }).then((data) => {
             localStorage.setItem("items", JSON.stringify(data));
         });
+        console.log("standaard data set");
     }
 
     #actualDefaultData() {

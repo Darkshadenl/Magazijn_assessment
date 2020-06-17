@@ -6,8 +6,8 @@ export default class Item {
 
     constructor() {
         this.properties = {
-        naam: undefined,
-        categorie: undefined,
+        Naam: undefined,
+        type: undefined,
         beschrijving: undefined,
         inkoopprijs: undefined,
         verkoopprijs: undefined,
