@@ -267,10 +267,7 @@ export default class Magazijn_View {
         }));
     }
 
-
-
     changeWeatherInfo(weather) {
-        console.log(weather);
         document.getElementById('weather_city').value = weather.city;
         let text = "Weer info " + weather.city + ": " + weather.type + ", " + weather.temp + "°C";
         //clear earlier weather info
@@ -278,14 +275,12 @@ export default class Magazijn_View {
         while(weatherMenu.firstChild) {
             weatherMenu.removeChild(weatherMenu.lastChild)
         }
-
         document.getElementById('weather_menu').appendChild(document.createTextNode(text));
     }
 
     hideScreen() {
         document.getElementById('magazijn').style.display = 'none';
     }
-
 
     showScreen() {
         document.getElementById('magazijn').style.display = 'inline';

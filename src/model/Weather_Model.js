@@ -4,7 +4,6 @@ export default class Weather_Model {
 
 
     parseWeatherData(weatherData) {
-        console.log(weatherData);
         let temperature = weatherData.main.temp - 273.15;
         temperature = temperature.toFixed(2);
         let cityName = weatherData.name;
