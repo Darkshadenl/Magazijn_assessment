@@ -2,6 +2,7 @@ export default class Screen_model {
 
     #items_details;
     #items;
+    #images;
     #selectedItem;
     #name;
     #positions = [];
@@ -44,6 +45,7 @@ export default class Screen_model {
         }
         return data;
     }
+
 
     #findValueOfPosition(row, col) {
         let val = '';
@@ -254,8 +256,8 @@ export default class Screen_model {
     }
 
     saveComments(currentMenu, productName, comment){
+        console.log("ik sla comment op");
         let items = JSON.parse(localStorage.getItem('items'));
-
         // find product in local storage, and check for comments.
         // also save
         for (let category in items) {
@@ -281,5 +283,30 @@ export default class Screen_model {
         let new_items = JSON.stringify(items);
         localStorage.setItem('items', new_items);
     }
+
+    saveImage(currentMenu, productName, image){
+        image = JSON.stringify(image);
+        let items = JSON.parse(localStorage.getItem('items'));
+        // find product in local storage, save image.
+        // also save
+        for (let category in items) {
+            if (category == this.#name) {
+                let subcategories = items[category];
+                for (let subcategory in subcategories) {
+                    if (subcategory == currentMenu) {
+                        let products = subcategories[subcategory];
+                        for (let i = 0; i < products.length; i++) {
+                            if (products[i].Naam == productName) {
+                                    products[i].image = image;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        let new_items = JSON.stringify(items);
+        localStorage.setItem('items', new_items);
+    }
+
 }
 

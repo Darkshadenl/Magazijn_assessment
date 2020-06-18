@@ -14,6 +14,11 @@ export default class DragDrop {
     #backupColor;
     #displayingPopup = false;
     #dragStartedCorrectly = false;
+    #mouse_x;
+    #mouse_y;
+    #mouse_down = 0;
+    #painting;
+
 
     #beingDraggedColor = '#6E2D18';
     #dragOverGridColor = '#12ff00';
@@ -23,7 +28,21 @@ export default class DragDrop {
 
     constructor(controller) {
         this.#controller = controller;
+        this.#mouse_x = 0;
+        this.#mouse_y = 0;
+        this.#mouse_down = 0;
+        this.#painting = false;
     }
+
+    onMouseDown() {
+        this.#painting = true;
+    }
+
+    onMouseUp() {
+        this.#painting = false;
+    }
+
+
 
     dragStart(e) {
         console.log('run dragStart');
@@ -262,6 +281,7 @@ export default class DragDrop {
         let containdiv = document.querySelector('.popup');
         let data;
 
+
         if (value === undefined) {
             data = this.#controller.getCurrentScreen.getDataOfPosition(undefined, row, col);
         } else {
@@ -275,32 +295,103 @@ export default class DragDrop {
 
         }
     }
-    #handleImageInput() {
-        const preview = document.querySelector('img');
-        const file = document.querySelector('input[type=file]').files[0];
-        const reader = new FileReader();
-
-        reader.addEventListener("load", function () {
-            // convert image file to base64 string
-            preview.src = reader.result;
-        }, false);
-
-        if (file) {
-            reader.readAsDataURL(file);
-        }
+    #handleImageInput(data, ev) {
+        let thisObj = this;
+            if(ev.target.files) {
+                let file = ev.target.files[0];
+                let reader  = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onloadend = function (e) {
+                    let image = new Image();
+                    image.src = e.target.result;
+                    image.onload = function(ev) {
+                        let canvas = document.getElementById('canvas');
+                        canvas.width = 450;
+                        canvas.height = 200;
+                        let ctx = canvas.getContext('2d');
+                        ctx.drawImage(image,0,0);
+                        canvas.addEventListener('mousemove', (ev) => thisObj.draw(ev));
+                        canvas.addEventListener('mouseup', (ev) => thisObj.onMouseUp());
+                        canvas.addEventListener('mousedown', (ev) => thisObj.onMouseDown());
+                    }
+                    let result = reader.result;
+                    let currentMenu = document.querySelector('.active').innerHTML;
+                    let itemName = data.Naam;
+                    thisObj.#controller.getCurrentScreen.saveImage(currentMenu, itemName, result);
+                }
+            }
     }
+
+    getPosition(ev) {
+        const rect = document.getElementById('canvas').getBoundingClientRect();
+        this.#mouse_x = ev.clientX - rect.left;
+        this.#mouse_y = ev.clientY - rect.top;
+    }
+
+    draw(ev) {
+        if (!this.#painting) {
+            this.getPosition(ev);
+            return;
+        }
+        let ctx = document.getElementById('canvas').getContext('2d');
+        ctx.beginPath();
+
+        ctx.lineWidth = 5;
+
+
+        ctx.lineCap = 'round';
+
+        ctx.strokeStyle = 'green';
+
+
+        ctx.moveTo(this.#mouse_x, this.#mouse_y);
+
+
+        this.getPosition(ev);
+
+
+        ctx.lineTo(this.#mouse_x, this.#mouse_y);
+
+
+        ctx.stroke();
+
+}
+
+
     #buildPopupScreen(containdiv, data) {
         let photoDiv = document.createElement('div');
         photoDiv.className = 'container mt-2 ml-5';
         let imageUploader = document.createElement('input');
-        imageUploader.type = 'file';
-        imageUploader.addEventListener('change', () => this.#handleImageInput(), true);
+        let canvas = document.createElement('canvas');
+        canvas.style = "border:1px solid #d3d3d3";
+        canvas.width = 250;
+        canvas.height = 150;
+        canvas.id = 'canvas';
+        //canvas.addEventListener('mousemove', function(e) { getMousePos(canvas, e); }, false);
         let imagePreview = document.createElement('img');
-        imagePreview.src = ""; //TODO: inladen oude foto
+        imageUploader.type = 'file';
+        imageUploader.addEventListener('change', (ev) => this.#handleImageInput(data, ev), true);
+        if(data.image) {
+            let thisObj = this;
+            imagePreview.src = data.image;
+            imagePreview.onload = function () {
+                canvas.width = 450;
+                canvas.height = 200;
+                let ctx = canvas.getContext('2d');
+                ctx.drawImage(imagePreview,0,0);
+                canvas.addEventListener('mousemove', (ev) => thisObj.draw(ev));
+                canvas.addEventListener('mouseup', (ev) => thisObj.onMouseUp());
+                canvas.addEventListener('mousedown', (ev) => thisObj.onMouseDown());
+            };
+        }
+        else {
+            imagePreview.src = "";
+        }
+        //imagePreview.height = 175;
         imagePreview.alt = "Image preview...";
-        imagePreview.height = 175;
+
+        photoDiv.appendChild(canvas);
         photoDiv.appendChild(imageUploader);
-        photoDiv.appendChild(imagePreview);
         let newDetails = document.createElement('div');
         newDetails.className = 'newDetails';
         let details = document.createElement('div');
@@ -333,7 +424,7 @@ export default class DragDrop {
         });
 
         for (let label in data) {
-            if (label != 'reacties') {
+            if (label != 'reacties' && label != 'image') {
                 let div = document.createElement('div');
                 div.className = 'form-group';
 
@@ -351,7 +442,6 @@ export default class DragDrop {
                 div.appendChild(input);
                 form.appendChild(div);
             } else if (label == 'reacties') {
-
                 let [...reactie] = data[label];
 
                 let commentSection = document.querySelector('.comments');
@@ -375,6 +465,9 @@ export default class DragDrop {
                     });
                 });
 
+            }
+            else if(label == 'image') {
+                imagePreview.src = JSON.parse(data.image);
             }
         }
     }
@@ -434,7 +527,6 @@ export default class DragDrop {
         if (commentsSection !== null) {
             for (let i = 0; i < commentsSection.children.length; i++) {
                 let neededElements = commentsSection.children[i].children;
-                console.log(neededElements);
                 for (let j = 0; j < neededElements.length; j++) {
                     if (neededElements[0].disabled === false) {
                         if (neededElements[0].value !== "") {
@@ -446,7 +538,7 @@ export default class DragDrop {
         }
         let currentMenu = document.querySelector('.active').innerHTML;
         let itemName = data.Naam;
-        console.log(comment);
+
         if (comment != null && comment != undefined) {
             this.#controller.saveComments(currentMenu, itemName, comment);
         }
