@@ -16,7 +16,6 @@ export default class DragDrop {
     #dragStartedCorrectly = false;
 
     #beingDraggedColor = '#6E2D18';
-    wall = '#110704';
     #dragOverGridColor = '#12ff00';
     gridCellInUseColor = '#A52A2A';
     oldPositionAfterDragColor = '#E0FFFF';
@@ -279,8 +278,7 @@ export default class DragDrop {
 
     #buildPopupScreen(containdiv, data) {
         let photoDiv = document.createElement('div');
-        photoDiv.className = 'photo col';
-        this.#createPhotoUpload(photoDiv);
+        photoDiv.className = 'photo';
         let newDetails = document.createElement('div');
         newDetails.className = 'newDetails';
         let details = document.createElement('div');
@@ -311,6 +309,7 @@ export default class DragDrop {
         close_button.addEventListener('click', e => {
             this.#exitButtonFunc(e, containdiv, data);
         });
+        console.log(data);
         for (let label in data) {
             if (label != 'reacties') {
                 let div = document.createElement('div');
@@ -350,60 +349,12 @@ export default class DragDrop {
                     commentSection.appendChild(commentEntryDiv);
 
                     del.addEventListener('click', d => {
-                        this.#clickDelComment(d);
+                        this.#clickDel(d);
                     });
                 });
+
             }
         }
-    }
-
-    #createPhotoUpload(photodiv) {
-        let inpFile = document.createElement('input');
-        inpFile.setAttribute('type', 'file');
-        inpFile.name = 'inpFile';
-        inpFile.id = 'inpFile';
-        inpFile.className = 'picupload';
-
-        let previewContainer = document.createElement('div');
-        previewContainer.className = 'image-preview';
-        previewContainer.id = 'imagePreview';
-
-        let canvas = document.createElement('canvas');
-        canvas.id = 'drawingCanvas';
-
-        let previewDefaultText = document.createElement('span');
-        previewDefaultText.className = 'image-preview__default-text';
-        previewDefaultText.innerText = 'Image preview';
-
-        let previewImage = document.createElement('img');
-        previewImage.alt = 'Image preview';
-        previewImage.className = 'image-preview__image';
-
-        inpFile.addEventListener('change', function() {
-            const file = this.files[0];
-
-            if (file) {
-                const reader = new FileReader();
-
-                previewDefaultText.style.display = 'none';
-                previewImage.style.display = 'block';
-
-                reader.addEventListener('load', function () {
-                    previewImage.setAttribute('src', this.result);
-                });
-
-                reader.readAsDataURL(file);
-            } else {
-                previewDefaultText.style.display = null;
-                previewImage.style.display = null;
-                previewImage.setAttribute('src', '');
-            }
-        });
-        previewContainer.appendChild(previewImage);
-        previewContainer.appendChild(previewDefaultText);
-        previewContainer.appendChild(canvas);
-        photodiv.appendChild(inpFile);
-        photodiv.appendChild(previewContainer);
     }
 
     #newCommentFunc(e) {
@@ -421,11 +372,11 @@ export default class DragDrop {
         comments.appendChild(div);
 
         deletebtn.addEventListener('click', d => {
-            this.#clickDelComment(d);
+            this.#clickDel(d);
         });
     }
 
-    #clickDelComment(d) {
+    #clickDel(d) {
         this.#deleteComment(d);
         let parent = d.target.parentNode;
         while (parent.firstChild) {
@@ -446,7 +397,9 @@ export default class DragDrop {
         this.#displayingPopup = false;
         containdiv.style.display = 'none';
         let popup = document.querySelector('.popup');
+
         this.#saveNewComments(data);
+
         // close popup
         while (popup.firstChild) {
             popup.removeChild(popup.lastChild);

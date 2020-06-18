@@ -9,7 +9,6 @@ export default class Screen_model {
 
     constructor(name) {
         this.#name = name;
-        this.retrievePositionsFromLocalStorage()
     }
 
     get getName() {
@@ -284,6 +283,7 @@ export default class Screen_model {
         localStorage.setItem('items', new_items);
     }
 
+
     get getGridStyle() {
         if (this.#gridstyles == null) {
             this.#gridstyles = JSON.parse(localStorage.getItem('gridstyles'));
@@ -301,6 +301,5 @@ export default class Screen_model {
                 return Decoratie;
         }
     }
-
 }
 
