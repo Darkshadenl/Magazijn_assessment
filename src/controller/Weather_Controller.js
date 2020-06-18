@@ -4,12 +4,10 @@ export default class WeatherController {
     #apiKey = '40f6ccceae954782446b3d4bb031bb70';
     #apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=';
     #weatherModel;
-    #mainController;
 
-    constructor(mainController)
+    constructor()
     {
         this.#weatherModel = new Weather_Model();
-        this.#mainController = mainController;
     }
 
     get weatherModel() {
@@ -20,33 +18,17 @@ export default class WeatherController {
         return new Promise((resolve, reject) => {
             let url = this.#apiUrl + city + ',nl&appid=' + this.#apiKey;
             fetch(url)
-                .then(function(response) {
-                    return response.json();
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.cod && data.cod == 404) {
+                        reject(data);
+                    }
+                    resolve(data);
                 })
-                .then(function(myJSON) {
-
-                }
                 .catch((err) => {
                     reject(err);
-                }))
-            });
-        }
-
-
-    getWeatherByCityBetter(city) {
-        let url = this.#apiUrl + city + ',nl&appid=' + this.#apiKey;
-
-        return fetch(url)
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                if (data.cod != '200') {
-                    return Promise.reject(data.cod);
-                }
-
-                return Promise.resolve(data);
-            });
+                });
+        })
     }
     // getWeatherByCity(city) {
     //

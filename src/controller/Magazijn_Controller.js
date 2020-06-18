@@ -1,5 +1,6 @@
 import Magazijn_View from "../view/Magazijn_View.js";
 import Magazijn_Model from "../model/Magazijn_Model.js";
+import Weather_Model from "../model/Weather_Model";
 
 export default class Magazijn_Controller {
 
@@ -10,22 +11,19 @@ export default class Magazijn_Controller {
     #main_controller;
 
     constructor(weatherController, mainController) {
-        this.defaultData();
+
         this.#magazijn_model = new Magazijn_Model();
         this.#magazijn_view = new Magazijn_View(this);
         this.#weatherController = weatherController;
         this.#main_controller = mainController;
-
 
         let gotStorage = this.#magazijn_model.retrieveLocalStorage();
 
         if (gotStorage) {
             this.#magazijn_model.retrievePosses();
         } else {
-
+            // this.#actualDefaultData();
         }
-
-        this.setupWeather();
     }
 
 
@@ -69,13 +67,9 @@ export default class Magazijn_Controller {
         return this.#magazijn_model.getCurrentScreen.isMyMenu(value, active);
     }
 
-    defaultData() {
-        fetch('../resources/defaultData.json')
-            .then((response) => {
-                return response.json();
-            }).then((data) => {
-            localStorage.setItem("items", JSON.stringify(data));
-        });
+    setupWeather(city){
+        let weatherPromise = this.#weatherController.getWeatherByCity(city);
+        return this.#weatherController.weatherModel.parseWeatherData(weatherPromise);
     }
 
     showView(screenName) {
@@ -84,21 +78,6 @@ export default class Magazijn_Controller {
 
     hideView() {
         this.#magazijn_view.hideScreen();
-    }
-
-    getWeather() {
-        return this.#weatherController.weatherModel.weather;
-    }
-
-    async setupWeather(city) {
-
-        try {
-            let weather = await this.#weatherController.getWeatherByCityBetter(city);
-            this.#weatherController.weatherModel.setWeather(weather);
-        }
-        catch(err){
-            console.log(`Unable to find weather: status = ${err}`);
-        }
     }
 
 }

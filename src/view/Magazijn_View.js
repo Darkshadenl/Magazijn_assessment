@@ -22,41 +22,47 @@ export default class Magazijn_View {
             drop_targets.innerHTML = '';
         }
 
-        for (let i = 0; i < 15; i++) {
+        let gridstyle = this.#mag_controller.getCurrentScreen.getGridStyle;
+
+        gridstyle.forEach((row, i) => {
             let trow = document.createElement('tr');
             trow.className = 'grid-container made_choices';
             trow.id = i.toString();
             trow.setAttribute('draggable', 'false');
 
-            for (let i = 0; i < 15; i++) {
+            row.forEach((col, x) => {
                 let gridcell = document.createElement('td');
-                gridcell.className = 'list droptarget grid-item';
-                gridcell.id = i.toString();
-                gridcell.style.background = this.#dragDrop.oldPositionAfterDragColor;
+                gridcell.id = x.toString();
                 gridcell.style.background.repeat(0);
                 gridcell.setAttribute('draggable', 'false');
 
-                gridcell.addEventListener('click', (e) => {
-                    console.log(e.target);
-                });
+                if (col) {
+                    gridcell.className = 'list droptarget grid-item';
+                    gridcell.style.background = this.#dragDrop.oldPositionAfterDragColor;
+                    gridcell.addEventListener('click', (e) => {
+                        console.log(e.target);
+                    });
 
-                gridcell.addEventListener('dragover', (e) => {
-                    this.#dragDrop.dragOver(e)
-                });
-                gridcell.addEventListener('dragenter', (e) => {
-                    this.#dragDrop.dragEnter(e)
-                });
-                gridcell.addEventListener('dragleave', (e) => {
-                    this.#dragDrop.dragLeave(e)
-                });
-                gridcell.addEventListener('drop', (e) => {
-                    this.#dragDrop.dragDrop(e);
-                });
-
+                    gridcell.addEventListener('dragover', (e) => {
+                        this.#dragDrop.dragOver(e)
+                    });
+                    gridcell.addEventListener('dragenter', (e) => {
+                        this.#dragDrop.dragEnter(e)
+                    });
+                    gridcell.addEventListener('dragleave', (e) => {
+                        this.#dragDrop.dragLeave(e)
+                    });
+                    gridcell.addEventListener('drop', (e) => {
+                        this.#dragDrop.dragDrop(e);
+                    });
+                } else {
+                    gridcell.className = 'list droptarget grid-item';
+                    gridcell.style.background = this.#dragDrop.wall;
+                }
                 trow.appendChild(gridcell);
-            }
+            });
             drop_targets.appendChild(trow);
-        }
+        });
     }
 
     #prepareMainMenu() {
@@ -72,12 +78,11 @@ export default class Magazijn_View {
     }
 
     changeScreen(e) {
-        this.#mag_controller.updateLocalStorage();  // save positions
+        this.#mag_controller.updateLocalStorage();
         let newProduct = document.getElementById('new_products_button');
         let menuButton = document.getElementById('dropdownMenuButton');
         document.getElementById('new_products_button').style.display = 'block';
 
-        this.#createGrid();
         switch (e.target.innerText) {
             case "Regio 1: Kleding":
                 this.#loadPositions(this.#mag_controller.setCurrentScreen(0));
@@ -107,8 +112,8 @@ export default class Magazijn_View {
 
     #loadPositions(positions) {
         // find current positions, add these.
+        this.#createGrid();
         let table = document.getElementById('made_choices_table');
-
         try {
             positions.forEach(p => {
                 let col = p.col;
@@ -262,19 +267,16 @@ export default class Magazijn_View {
 
         weather_button.addEventListener('click', (ev => {
             let city = document.getElementById('weather_city').value;
-            city = city.replace(/\s/g,'%20');
-            this.#mag_controller.setupWeather(city).then(r => this.changeWeatherInfo(this.#mag_controller.getWeather()));
+            city = city.replace(/\s/g, '%20');
+            let weather = this.#mag_controller.setupWeather(city);
+            this.#changeWeatherInfo(weather);
         }));
     }
 
-    changeWeatherInfo(weather) {
-        document.getElementById('weather_city').value = weather.city;
-        let text = "Weer info " + weather.city + ": " + weather.type + ", " + weather.temp + "°C";
-        //clear earlier weather info
-        let weatherMenu =  document.getElementById('weather_menu');
-        while(weatherMenu.firstChild) {
-            weatherMenu.removeChild(weatherMenu.lastChild)
-        }
+    #changeWeatherInfo(weather) {
+        //console.log(weather);
+        document.getElementById('weather_city').value = weather.name;
+        let text = "Weer in: " + weather.name + ": " + (weather.temp - 273) + "°C";
         document.getElementById('weather_menu').appendChild(document.createTextNode(text));
     }
 
@@ -282,10 +284,18 @@ export default class Magazijn_View {
         document.getElementById('magazijn').style.display = 'none';
     }
 
+
     showScreen() {
         document.getElementById('magazijn').style.display = 'inline';
     }
 
+    #createWall(i) {
+        let randomPosses = [];
+        for (let i = 0; i < 6; i++) {
+            randomPosses.push(Math.floor(Math.random() * 15));
+        }
+        return randomPosses.includes(i);
+    }
 }
 
 
