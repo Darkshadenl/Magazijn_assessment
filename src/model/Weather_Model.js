@@ -2,24 +2,25 @@ export default class Weather_Model {
 
     #weather;
 
-    #parseWeatherData(weatherJSON) {
-        let temperature = weatherJSON.main.temp - 273.15;
+
+    parseWeatherData(weatherData) {
+        console.log(weatherData);
+        let temperature = weatherData.main.temp - 273.15;
         temperature = temperature.toFixed(2);
-        let weather = {city: weatherJSON.name, type: weatherJSON.weather[0].main, temp: temperature};
+        let cityName = weatherData.name;
+        let weather = {city: cityName, type: weatherData.weather[0].main, temp: temperature};
         return weather;
         //console.log(weatherData.name);
         //console.log(weatherData.weather[0].main);
         //console.log(weatherData.main.temp - 273.15);
     }
 
-    setWeather(weatherJSON) {
-        let weather = this.#parseWeatherData(weatherJSON);
-        this.#weather = weather;
-        console.log(weather);
-        console.log("is set");
+    setWeather(weatherData) {
+        this.#weather = this.parseWeatherData(weatherData);
     }
 
     get weather() {
+
         return this.#weather;
     }
 };

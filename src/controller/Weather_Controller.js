@@ -34,15 +34,18 @@ export default class WeatherController {
 
 
     getWeatherByCityBetter(city) {
-        let that = this;
         let url = this.#apiUrl + city + ',nl&appid=' + this.#apiKey;
-        fetch(url)
+
+        return fetch(url)
             .then(function (response) {
                 return response.json();
             })
-            .then(function (myJson) {
-                that.#weatherModel.setWeather(myJson);
-                return myJson;
+            .then(function (data) {
+                if (data.cod != '200') {
+                    return Promise.reject(data.cod);
+                }
+
+                return Promise.resolve(data);
             });
     }
     // getWeatherByCity(city) {
