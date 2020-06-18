@@ -102,7 +102,7 @@ export default class Magazijn_View {
                 choice_menu.removeChild(choice_menu.lastChild);
             }
         }
-        this.#createDropdownMenu();
+        this.createDropdownMenu();
     }
 
     #loadPositions(positions) {
@@ -178,7 +178,7 @@ export default class Magazijn_View {
         }
     }
 
-    #createDropdownMenu() {
+    createDropdownMenu() {
         let items = this.#mag_controller.getCurrentScreen.getItems;
         let dropDownButton = document.getElementById('dropdownMenuButton');
         let dropDown = document.getElementById('dropdown');
@@ -190,7 +190,7 @@ export default class Magazijn_View {
                 dropDown.removeChild(dropDown.lastChild);
             }
         }
-
+        debugger
         let foundKey = false;
         if (items != null) {
             for (let [key] of Object.entries(items)) {

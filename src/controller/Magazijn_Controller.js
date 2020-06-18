@@ -12,7 +12,7 @@ export default class Magazijn_Controller {
 
 
     constructor(weatherController, mainController) {
-        this.#actualDefaultData();
+        this.defaultData();
         this.#magazijn_model = new Magazijn_Model();
         this.#magazijn_view = new Magazijn_View(this);
         this.#weatherController = weatherController;
@@ -43,7 +43,6 @@ export default class Magazijn_Controller {
 
     updateModel(position, del, menu) {
         return this.#magazijn_model.getCurrentScreen.updatePositions(position, del);
-        ;
     }
 
     isPosTaken(posC, posR) {
@@ -95,6 +94,8 @@ export default class Magazijn_Controller {
     }
 
     showView(screenName) {
+        this.#magazijn_model.retrieveLocalStorage();
+        this.#magazijn_view.createDropdownMenu();
         this.#magazijn_view.showScreen(screenName);
     }
 
