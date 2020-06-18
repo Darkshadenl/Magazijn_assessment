@@ -134,7 +134,7 @@ export default class Wizard_View {
             this.#createFormField(prop, currentItem)
             this.#wizardController.model.addForm();
         }
-        //this.#showNextField();
+        this.#showNextField();
         this.#configureAddPropertyButton(currentItem);
         this.#configureSaveButton(currentItem);
 
