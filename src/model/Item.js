@@ -11,6 +11,7 @@ export default class Item {
         beschrijving: undefined,
         inkoopprijs: undefined,
         verkoopprijs: undefined,
+            verkoopprijsInclBTW: undefined,
         minimaleSupply: undefined,
         huidigeSupply: undefined,
         }
