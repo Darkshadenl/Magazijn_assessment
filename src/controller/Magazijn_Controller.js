@@ -1,6 +1,6 @@
 import Magazijn_View from "../view/Magazijn_View.js";
 import Magazijn_Model from "../model/Magazijn_Model.js";
-import Weather_Model from "../model/Weather_Model";
+import 'regenerator-runtime/runtime';
 
 export default class Magazijn_Controller {
 
@@ -21,11 +21,6 @@ export default class Magazijn_Controller {
 
         let gotStorage = this.#magazijn_model.retrieveLocalStorage();
 
-        // if (gotStorage) {
-        //     this.#magazijn_model.retrievePosses();
-        // } else {
-        //     this.#actualDefaultData();
-        // }
     }
 
 
@@ -84,13 +79,19 @@ export default class Magazijn_Controller {
         console.log("standaard data set");
     }
 
-    #actualDefaultData() {
-        fetch('../resources/cleanDefaults.json')
-            .then((response) => {
-                return response.json();
-            }).then((data) => {
-            localStorage.setItem("items", JSON.stringify(data));
-        });
+    getWeather() {
+        return this.#weatherController.weatherModel.weather;
+    }
+
+    async setupWeather(city) {
+
+        try {
+            let weather = await this.#weatherController.getWeatherByCity(city);
+            this.#weatherController.weatherModel.setWeather(weather);
+        }
+        catch(err){
+            console.log(`Unable to find weather: status = ${err}`);
+        }
     }
 
     showView(screenName) {
