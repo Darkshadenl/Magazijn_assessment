@@ -1,6 +1,5 @@
 import Magazijn_View from "../view/Magazijn_View.js";
 import Magazijn_Model from "../model/Magazijn_Model.js";
-import regeneratorRuntime from "regenerator-runtime";
 
 export default class Magazijn_Controller {
 
