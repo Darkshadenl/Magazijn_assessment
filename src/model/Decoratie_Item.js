@@ -19,7 +19,6 @@ export default class Decoratie_Item extends Item{
             else {
                 retrievedItems["Decoratie"][this.properties.type] = [this.properties];
             }
-            console.log(retrievedItems["Decoratie"]);
             localStorage.setItem("items", JSON.stringify(retrievedItems));
         }
         else {

@@ -27,7 +27,6 @@ export default class Wizard_View {
         this.#configureHeader(wizard);
         for (let prop in props) {
             this.#createFormField(prop, data)
-            this.#wizardController.model.addForm();
         }
         this.#configureAddPropertyButton(data);
         this.#configureSaveButton(data);
@@ -53,12 +52,13 @@ export default class Wizard_View {
             input.setAttribute('aria-describedby', 'inputGroup-sizing-default');
             input.className = 'form-control';
 
+            //if the item already has a value (after add property) set that value
             if(currentItem.properties[prop] != "" && currentItem.properties[prop] != undefined)
             {
                 input.value = currentItem.properties[prop];
             }
             input.id = `${prop}`;
-
+            //Add eventlistener on input that shows the next field
             input.addEventListener('input', ev => {
                 this.#showNextField();
             }, {once: true});
@@ -68,33 +68,25 @@ export default class Wizard_View {
             divInput.appendChild(divOtherInput);
             divCol.appendChild(divInput);
             divRow.appendChild(divInput);
-            if(this.#inputFields.push(divRow) <= 1 || (currentItem.properties[prop] != "" && currentItem.properties[prop] != undefined))
-            {
+            //Show the field if it's the first one, or if it has a value set
+            if(this.#inputFields.push(divRow) <= 1 || (currentItem.properties[prop] != "" && currentItem.properties[prop] != undefined)) {
                 divRow.style.display = 'inline';
             }
             else {
                 divRow.style.display = 'none';
             }
 
-
             wizard.appendChild(divRow);
         }
 
     #showNextField() {
-        console.log(this.#inputFields);
-        if(this.#wizardController.model.nextForm()) {
-            this.#inputFields[this.#wizardController.model.currentForm - 1].style.display = 'inline';
+        if(this.#wizardController.model.formProgress < this.#inputFields.length) {
+            this.#inputFields[this.#wizardController.model.formProgress].style.display = 'inline';
+            this.#wizardController.model.nextForm();
         }
         else {
             document.getElementById('wizard_save_button').style.display = 'block';
         }
-    }
-
-
-
-    #hideField(field)
-    {
-
     }
 
 
@@ -107,16 +99,13 @@ export default class Wizard_View {
     #configureBackButton() {
         let backButton = document.getElementById('wizard_back_button');
         backButton.style.display = 'block';
-
         backButton.addEventListener('click', ev => {
-            let wizard = document.getElementById('wizard');
-            while (wizard.firstChild) {
-                wizard.removeChild(wizard.lastChild);
-            }
+            this.#exitView();
             this.#wizardController.getMainController.switchToMagazijn();
         });
     }
 
+    //Refreshes the view without changing the data
     #refreshView(currentItem) {
         this.#saveLocal(currentItem);
         //remove old fields
@@ -129,6 +118,7 @@ export default class Wizard_View {
         //add new fields
         this.#wizardController.model.resetFormCount();
         this.#inputFields = [];
+        console.log(this.#inputFields);
         let props = currentItem.getProperties;
         for (let prop in props) {
             this.#createFormField(prop, currentItem)
@@ -157,12 +147,12 @@ export default class Wizard_View {
         wizard.appendChild(headerDivRow);
     }
 
+    //saves the current item and it's properties to this class
     #saveLocal(currentItem) {
         let props = currentItem.getProperties;
         for (let prop in props) {
             if(document.getElementById(prop)) {
                 currentItem.properties[prop] = document.getElementById(prop).value;
-                console.log(currentItem.properties[prop]);
             }
         }
     }
@@ -183,11 +173,19 @@ export default class Wizard_View {
         saveButton.addEventListener('click', ev => {
             this.#saveLocal(currentItem);
             currentItem.saveToStorage();
-            let wizard = document.getElementById('wizard');
-            while (wizard.firstChild) {
-                wizard.removeChild(wizard.lastChild);
-            }
-            this.#wizardController.getMainController.switchToMagazijn();
+            this.#exitView(currentItem);
         });
+    }
+
+    //resets all the variables, deletes all the elements and switches to different view
+    #exitView(currentItem) {
+        this.#wizardController.model.resetFormProgress();
+        currentItem = undefined;
+        this.#inputFields = [];
+        let wizard = document.getElementById('wizard');
+        while (wizard.firstChild) {
+            wizard.removeChild(wizard.lastChild);
+        }
+        this.#wizardController.getMainController.switchToMagazijn();
     }
 }

@@ -19,7 +19,7 @@ export default class Main_Controller {
     switchToMagazijn() {
         this.#wizardController.hideView();
         this.#magazijnController.showView();
-        this.test();
+        //test();
     }
 
     switchToWizard(screenName) {
@@ -27,6 +27,7 @@ export default class Main_Controller {
         this.#wizardController.showView(screenName);
     }
 
+    //shows the items in localstorage
     test() {
         let retrievedItems = JSON.parse(localStorage.getItem("items"));
         console.log(retrievedItems);

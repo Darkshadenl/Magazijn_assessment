@@ -8,12 +8,11 @@ export default class Wizard_Model{
     #tierlantijnitem;
     #decoratieitem;
 
-    #formTotal; //Total number of input fields
-    #currentForm; //Current input field number
+
+    #formProgress; //Current input field number
 
     constructor() {
-        this.#formTotal = 0;
-        this.#currentForm = 1;
+        this.#formProgress = 1;
     }
 
     newKledingItem(){
@@ -43,35 +42,15 @@ export default class Wizard_Model{
         return this.#decoratieitem;
     }
 
-    get formCount() {
-        return this.#formTotal;
-    }
-
-    get currentForm() {
-        return this.#currentForm;
-    }
-
-    addForm() {
-        this.#formTotal += 1;
+    get formProgress() {
+        return this.#formProgress;
     }
 
     nextForm() {
-        if(this.#currentForm < this.#formTotal) {
-            console.log(this.#currentForm);
-            console.log(this.#formTotal);
-            this.#currentForm += 1;
-            return true;
-        }
-        else {
-            return false;
-        }
+        this.#formProgress++;
     }
 
-    resetFormCount() {
-        this.#formTotal = 0;
-    }
-
-    resetForm() {
-        this.#currentForm = 1;
+    resetFormProgress() {
+        this.#formProgress = 1;
     }
 }

@@ -18,7 +18,6 @@ export default class Kleding_Item extends Item{
             else {
                 retrievedItems["Kleding"][this.properties.type] = [this.properties];
             }
-            console.log(retrievedItems["Kleding"]);
             localStorage.setItem("items", JSON.stringify(retrievedItems));
         }
         else {
