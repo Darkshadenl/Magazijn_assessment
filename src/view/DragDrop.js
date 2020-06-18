@@ -291,13 +291,14 @@ export default class DragDrop {
     }
     #buildPopupScreen(containdiv, data) {
         let photoDiv = document.createElement('div');
-        photoDiv.className = 'photo';
+        photoDiv.className = 'container mt-2 ml-5';
         let imageUploader = document.createElement('input');
         imageUploader.type = 'file';
         imageUploader.addEventListener('change', () => this.#handleImageInput(), true);
         let imagePreview = document.createElement('img');
         imagePreview.src = ""; //TODO: inladen oude foto
         imagePreview.alt = "Image preview...";
+        imagePreview.height = 175;
         photoDiv.appendChild(imageUploader);
         photoDiv.appendChild(imagePreview);
         let newDetails = document.createElement('div');
