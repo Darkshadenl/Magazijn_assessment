@@ -1,6 +1,7 @@
 import Magazijn_View from "../view/Magazijn_View.js";
 import Magazijn_Model from "../model/Magazijn_Model.js";
 import Weather_Model from "../model/Weather_Model";
+import 'regenerator-runtime/runtime';
 
 export default class Magazijn_Controller {
 
@@ -11,18 +12,16 @@ export default class Magazijn_Controller {
     #main_controller;
 
     constructor(weatherController, mainController) {
-
         this.#magazijn_model = new Magazijn_Model();
         this.#magazijn_view = new Magazijn_View(this);
         this.#weatherController = weatherController;
         this.#main_controller = mainController;
+        this.setupWeather();
 
         let gotStorage = this.#magazijn_model.retrieveLocalStorage();
 
         if (gotStorage) {
             this.#magazijn_model.retrievePosses();
-        } else {
-            // this.#actualDefaultData();
         }
     }
 
@@ -67,9 +66,18 @@ export default class Magazijn_Controller {
         return this.#magazijn_model.getCurrentScreen.isMyMenu(value, active);
     }
 
-    setupWeather(city){
-        let weatherPromise = this.#weatherController.getWeatherByCity(city);
-        return this.#weatherController.weatherModel.parseWeatherData(weatherPromise);
+    getWeather() {
+        return this.#weatherController.weatherModel.weather;
+    }
+
+    async setupWeather(city) {
+        try {
+            let weather = await this.#weatherController.getWeatherByCity(city);
+            this.#weatherController.weatherModel.setWeather(weather);
+        }
+        catch(err){
+            console.log(`Unable to find weather: status = ${err}`);
+        }
     }
 
     showView(screenName) {

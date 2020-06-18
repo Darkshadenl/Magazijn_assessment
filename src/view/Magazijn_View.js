@@ -267,16 +267,19 @@ export default class Magazijn_View {
 
         weather_button.addEventListener('click', (ev => {
             let city = document.getElementById('weather_city').value;
-            city = city.replace(/\s/g, '%20');
-            let weather = this.#mag_controller.setupWeather(city);
-            this.#changeWeatherInfo(weather);
+            city = city.replace(/\s/g,'%20');
+            this.#mag_controller.setupWeather(city).then(r => this.changeWeatherInfo(this.#mag_controller.getWeather()));
         }));
     }
 
-    #changeWeatherInfo(weather) {
-        //console.log(weather);
-        document.getElementById('weather_city').value = weather.name;
-        let text = "Weer in: " + weather.name + ": " + (weather.temp - 273) + "°C";
+    changeWeatherInfo(weather) {
+        document.getElementById('weather_city').value = weather.city;
+        let text = "Weer info " + weather.city + ": " + weather.type + ", " + weather.temp + "°C";
+        //clear earlier weather info
+        let weatherMenu =  document.getElementById('weather_menu');
+        while(weatherMenu.firstChild) {
+            weatherMenu.removeChild(weatherMenu.lastChild)
+        }
         document.getElementById('weather_menu').appendChild(document.createTextNode(text));
     }
 
