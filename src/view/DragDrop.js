@@ -275,10 +275,31 @@ export default class DragDrop {
 
         }
     }
+    #handleImageInput() {
+        const preview = document.querySelector('img');
+        const file = document.querySelector('input[type=file]').files[0];
+        const reader = new FileReader();
 
+        reader.addEventListener("load", function () {
+            // convert image file to base64 string
+            preview.src = reader.result;
+        }, false);
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
     #buildPopupScreen(containdiv, data) {
         let photoDiv = document.createElement('div');
         photoDiv.className = 'photo';
+        let imageUploader = document.createElement('input');
+        imageUploader.type = 'file';
+        imageUploader.addEventListener('change', () => this.#handleImageInput(), true);
+        let imagePreview = document.createElement('img');
+        imagePreview.src = ""; //TODO: inladen oude foto
+        imagePreview.alt = "Image preview...";
+        photoDiv.appendChild(imageUploader);
+        photoDiv.appendChild(imagePreview);
         let newDetails = document.createElement('div');
         newDetails.className = 'newDetails';
         let details = document.createElement('div');
@@ -309,7 +330,7 @@ export default class DragDrop {
         close_button.addEventListener('click', e => {
             this.#exitButtonFunc(e, containdiv, data);
         });
-        console.log(data);
+
         for (let label in data) {
             if (label != 'reacties') {
                 let div = document.createElement('div');
