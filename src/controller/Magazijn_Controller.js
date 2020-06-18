@@ -10,13 +10,12 @@ export default class Magazijn_Controller {
     #weatherController;
     #main_controller;
 
-
     constructor(weatherController, mainController) {
+        this.#fetchGridstyles();
         this.#magazijn_model = new Magazijn_Model();
         this.#magazijn_view = new Magazijn_View(this);
         this.#weatherController = weatherController;
         this.#main_controller = mainController;
-
 
         let gotStorage = this.#magazijn_model.retrieveLocalStorage();
 
@@ -81,13 +80,6 @@ export default class Magazijn_Controller {
             }).then((data) => {
             localStorage.setItem("items", JSON.stringify(data));
         });
-
-        fetch('../resources/gridstyle.json')
-            .then((response) => {
-                return response.json();
-            }).then((data) => {
-            localStorage.setItem("gridstyles", JSON.stringify(data));
-        });
     }
 
     #actualDefaultData() {
@@ -97,7 +89,9 @@ export default class Magazijn_Controller {
             }).then((data) => {
             localStorage.setItem("items", JSON.stringify(data));
         });
+    }
 
+    #fetchGridstyles(){
         fetch('../resources/gridstyle.json')
             .then((response) => {
                 return response.json();
