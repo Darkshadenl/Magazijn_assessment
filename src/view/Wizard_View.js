@@ -135,14 +135,11 @@ export default class Wizard_View {
 
     #saveLocal(currentItem) {
         let props = currentItem.getProperties;
-
-        console.log(document.getElementById('kleur').value);
         for (let prop in props) {
             if(document.getElementById(prop)) {
                 currentItem.properties[prop] = document.getElementById(prop).value;
             }
         }
-        console.log(currentItem);
     }
 
     #configureAddPropertyButton(currentItem) {
@@ -162,7 +159,11 @@ export default class Wizard_View {
         saveButton.addEventListener('click', ev => {
             this.#saveLocal(currentItem);
             currentItem.saveToStorage();
-            console.log('opgeslagen');
+            console.log(currentItem);
+            let wizard = document.getElementById('wizard');
+            while (wizard.firstChild) {
+                wizard.removeChild(wizard.lastChild);
+            }
             this.#wizardController.getMainController.switchToMagazijn();
         });
     }

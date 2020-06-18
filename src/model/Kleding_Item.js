@@ -10,20 +10,19 @@ export default class Kleding_Item extends Item{
 
     saveToStorage() {
         let retrievedItems = JSON.parse(localStorage.getItem("items"));
-        if(retrievedItems["Kledign"]) {
-            let newId;
+        if(retrievedItems["Kleding"]) {
             if(retrievedItems["Kleding"][this.properties.type]) {
-                newId = retrievedItems["Kleding"][this.properties.type].length;
+                let newId = retrievedItems["Kleding"][this.properties.type].length;
+                retrievedItems["Kleding"][this.properties.type][newId] = this.properties;
             }
             else {
-                newId = 0;
+                retrievedItems["Kleding"][this.properties.type] = [{0: this.properties}];
             }
-            retrievedItems["Kleding"][this.properties.type][newId] = this.properties;
+            console.log(retrievedItems["Kleding"]);
+            localStorage.setItem("items", JSON.stringify(retrievedItems));
         }
-        else
-        {
+        else {
             console.log("Error: Unable to retrieve items from local storage.");
         }
     }
-    
 }

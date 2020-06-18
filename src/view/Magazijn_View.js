@@ -165,9 +165,15 @@ export default class Magazijn_View {
             items.forEach(e => {
                 let button = this.#dragDrop.getDraggableButton();
                 button.className = 'btn btn-secondary dragButton';
-                let buttonText = document.createTextNode(e.Naam.toString());
-                button.appendChild(buttonText);
-                choice_menu.appendChild(button);
+                try{
+                    let buttonText = document.createTextNode(e.Naam.toString());
+                    button.appendChild(buttonText);
+                    choice_menu.appendChild(button);
+                }
+                catch {
+                    console.log(e);
+                }
+
             });
         }
     }
