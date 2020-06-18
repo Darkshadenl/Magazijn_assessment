@@ -13,6 +13,11 @@ export default class Decoratie_Item extends Item{
         let retrievedItems = JSON.parse(localStorage.getItem("items"));
         if(retrievedItems["Decoratie"]) {
             if(retrievedItems["Decoratie"][this.properties.type]) {
+                if(retrievedItems["Decoratie"][this.properties.type].Naam == this.properties.Naam)
+                {
+                    console.log("Already exists, do nothing");
+                    return;
+                }
                 let newId = retrievedItems["Decoratie"][this.properties.type].length;
                 retrievedItems["Decoratie"][this.properties.type][newId] = this.properties;
             }

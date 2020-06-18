@@ -12,6 +12,11 @@ export default class Kleding_Item extends Item{
         let retrievedItems = JSON.parse(localStorage.getItem("items"));
         if(retrievedItems["Kleding"]) {
             if(retrievedItems["Kleding"][this.properties.type]) {
+                if(retrievedItems["Kleding"][this.properties.type].Naam == this.properties.Naam)
+                {
+                    console.log("Already exists, do nothing");
+                    return;
+                }
                 let newId = retrievedItems["Kleding"][this.properties.type].length;
                 retrievedItems["Kleding"][this.properties.type][newId] = this.properties;
             }

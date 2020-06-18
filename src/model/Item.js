@@ -30,10 +30,4 @@ export default class Item {
         if(this.properties[propertyName]) { return; }
         this.properties[propertyName] = value;
     }
-
-    saveToStorage() {
-        console.log("saving");
-    }
-
-
 }

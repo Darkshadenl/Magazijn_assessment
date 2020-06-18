@@ -11,6 +11,11 @@ export default class Tierlantijn_Item extends Item {
         let retrievedItems = JSON.parse(localStorage.getItem("items"));
         if(retrievedItems["Tierlantijn"]) {
             if(retrievedItems["Tierlantijn"][this.properties.type]) {
+                if(retrievedItems["Tierlantijn"][this.properties.type].Naam == this.properties.Naam)
+                {
+                    console.log("Already exists, do nothing");
+                    return;
+                }
                 let newId = retrievedItems["Tierlantijn"][this.properties.type].length;
                 retrievedItems["Tierlantijn"][this.properties.type][newId] = this.properties;
             }

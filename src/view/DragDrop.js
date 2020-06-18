@@ -29,7 +29,6 @@ export default class DragDrop {
     }
 
     dragStart(e) {
-        console.log('run dragStart');
         this.#dragStartedCorrectly = true;
         e.target.backgroundColor = 'black';
         this.#original_element = e.target;
@@ -41,7 +40,6 @@ export default class DragDrop {
             this.#textToBeTransfered = e.target.innerText;
         } else if (e.target.parentNode.className === 'grid-container made_choices') {
             if (!this.#controller.isPosTaken(e.target.id, e.target.parentNode.id)) {
-                console.log('Pos is not taken');
                 this.#original_pos.pop();
                 this.#original_pos.push(e.target.parentNode.id, e.target.id);
                 this.#backupColor = e.target.style.backgroundColor;
@@ -60,7 +58,6 @@ export default class DragDrop {
             if (this.#dragStartedCorrectly) {
                 if (e.target.parentNode.className === 'grid-container made_choices') {
                     if (this.#controller.isPosTaken(this.#pos_mouseC, this.#pos_mouseR)) {
-                        console.log('Position is taken. Do nothing.');
                         this.#succesful_drop = false;
                         this.#dragDropSuccess = true;
                     } else {
@@ -122,12 +119,10 @@ export default class DragDrop {
                     e.target.style.backgroundColor = '';
                     this.#succesful_drop = true;
                     this.#dragDropSuccess = true;
-                    console.log(this.#succesful_drop);
+
                 } else {
-                    console.log('dragDrop laatste else statement.');
                     this.#succesful_drop = false;
                     this.#dragDropSuccess = true;
-                    console.log(this.#succesful_drop);
                 }
             }
         }
@@ -136,7 +131,6 @@ export default class DragDrop {
     dragEnd(e) {
         let orig_c = document.getElementById(this.#original_container.id);
         this.#dragStartedCorrectly = false;
-        console.log(this.#original_container.parentNode.id);
 
         if (!this.#succesful_drop) {
             if (this.#original_container.parentNode.id === 'made_choices_table') {
@@ -149,12 +143,12 @@ export default class DragDrop {
             }
         } else {
             if (this.#original_container.id === 'choice_menu') {
-                // console.log('Succesful drop in grid. Removing button from choiceMenu.')
+
             } else {
                 e.target.style.backgroundColor = this.oldPositionAfterDragColor;
-                // console.log(`Succesful drop in grid.`);
+
             }
-            // e.target.style.opacity = "";
+
         }
         this.#succesful_drop = false;   // reset van de boolean
         this.#dragStartedCorrectly = false;
@@ -168,16 +162,16 @@ export default class DragDrop {
         if (this.#original_pos[0] === undefined && this.#original_pos[1] === undefined) {
             old_row = -1;
             old_col = -1;
-            // console.log('No Original Positions. Setting old values to -1.')
+
         } else {
             old_row = this.#original_pos[0];
             old_col = this.#original_pos[1];
-            // console.log('Old Positions found. Setting up old position values for later use.');
+
             this.#original_pos.pop();
             this.#original_pos.pop();
         }
 
-        // console.log(`Sending update to model with del: ${del} Value: ${val}  Row: ${row}  Col:${col}   Old-row: ${old_row}  Old-col: ${old_col}`);
+
         let deleted_pos_value = this.#controller.updateModel({
             value: val,
             row: row,
@@ -196,7 +190,7 @@ export default class DragDrop {
         e.preventDefault();
 
         if (this.#dragStartedCorrectly) {
-            // console.log('Run dragEnter');
+
             this.#pos_mouseC = e.target.id;
             this.#pos_mouseR = e.target.parentNode.id;
             this.#pos_mouse = this.#pos_mouseC + this.#pos_mouseR;
@@ -212,12 +206,7 @@ export default class DragDrop {
                 }
             }
         }
-        // else {
-        //
-        //     // e.onmousedown(e =>
-        //     //     e.onmouseup;
-        //     // })
-        // }
+
     }
 
     dragLeave(e) {
@@ -225,10 +214,7 @@ export default class DragDrop {
             e.target.style.backgroundColor = '';
         } else if (e.target.parentNode.className === 'grid-container made_choices') {
             if (e.target.draggable !== true) {
-                // if (this.#pos_mouse !== this.#originalPosCR) {
-                // console.log('Not Original pos');
                 e.target.style.backgroundColor = this.oldPositionAfterDragColor;
-                // }
             }
         }
     }
@@ -255,8 +241,6 @@ export default class DragDrop {
         button.addEventListener('drop', (e) => {
             this.dragDrop(e);
         });
-
-        // button.id = 'dragButton';
 
         return button;
     }
@@ -507,7 +491,6 @@ export default class DragDrop {
         if (commentsSection !== null) {
             for (let i = 0; i < commentsSection.children.length; i++) {
                 let neededElements = commentsSection.children[i].children;
-                console.log(neededElements);
                 for (let j = 0; j < neededElements.length; j++) {
                     if (neededElements[0].disabled === false) {
                         if (neededElements[0].value !== "") {
@@ -519,7 +502,6 @@ export default class DragDrop {
         }
         let currentMenu = document.querySelector('.active').innerHTML;
         let itemName = data.Naam;
-        console.log(comment);
         if (comment != null && comment != undefined) {
             this.#controller.saveComments(currentMenu, itemName, comment);
         }

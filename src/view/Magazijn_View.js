@@ -37,7 +37,6 @@ export default class Magazijn_View {
                 gridcell.setAttribute('draggable', 'false');
 
                 gridcell.addEventListener('click', (e) => {
-                    console.log(e.target);
                 });
 
                 gridcell.addEventListener('dragover', (e) => {
@@ -171,7 +170,7 @@ export default class Magazijn_View {
                     choice_menu.appendChild(button);
                 }
                 catch {
-                    console.log(e);
+                    console.log("Error: invalid item");
                 }
 
             });
