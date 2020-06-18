@@ -11,7 +11,7 @@ export default class Magazijn_Controller {
     #main_controller;
 
     constructor(weatherController, mainController) {
-        this.#fetchGridstyles();
+
         this.#magazijn_model = new Magazijn_Model();
         this.#magazijn_view = new Magazijn_View(this);
         this.#weatherController = weatherController;
@@ -20,7 +20,6 @@ export default class Magazijn_Controller {
         let gotStorage = this.#magazijn_model.retrieveLocalStorage();
 
         if (gotStorage) {
-            this.#defaultData();
             this.#magazijn_model.retrievePosses();
         } else {
             // this.#actualDefaultData();
@@ -71,33 +70,6 @@ export default class Magazijn_Controller {
     setupWeather(city){
         let weatherPromise = this.#weatherController.getWeatherByCity(city);
         return this.#weatherController.weatherModel.parseWeatherData(weatherPromise);
-    }
-
-    #defaultData() {
-        fetch('../resources/defaultData.json')
-            .then((response) => {
-                return response.json();
-            }).then((data) => {
-            localStorage.setItem("items", JSON.stringify(data));
-        });
-    }
-
-    #actualDefaultData() {
-        fetch('../resources/cleanDefaults.json')
-            .then((response) => {
-                return response.json();
-            }).then((data) => {
-            localStorage.setItem("items", JSON.stringify(data));
-        });
-    }
-
-    #fetchGridstyles(){
-        fetch('../resources/gridstyle.json')
-            .then((response) => {
-                return response.json();
-            }).then((data) => {
-            localStorage.setItem("gridstyles", JSON.stringify(data));
-        });
     }
 
     showView(screenName) {
