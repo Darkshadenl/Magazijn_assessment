@@ -24,16 +24,11 @@ export default class Wizard_View {
         let data = this.#wizardController.newItemModel(form);
         let wizard = document.getElementById('wizard');
         let props = data.getProperties;
-
         this.#configureHeader(wizard);
-        let i = 0;
-        console.log(this.#wizardController.model.formCount);
         for (let prop in props) {
-            console.log(i++);
             this.#createFormField(prop, data)
             this.#wizardController.model.addForm();
         }
-        console.log(this.#wizardController.model.formCount);
         this.#configureAddPropertyButton(data);
         this.#configureSaveButton(data);
     }
@@ -58,10 +53,9 @@ export default class Wizard_View {
             input.setAttribute('aria-describedby', 'inputGroup-sizing-default');
             input.className = 'form-control';
 
-            if(currentItem[prop] != undefined)
+            if(currentItem.properties[prop] != "" && currentItem.properties[prop] != undefined)
             {
-                input.value = currentItem[prop];
-                console.log(currentItem[prop]);
+                input.value = currentItem.properties[prop];
             }
             input.id = `${prop}`;
 
@@ -74,18 +68,21 @@ export default class Wizard_View {
             divInput.appendChild(divOtherInput);
             divCol.appendChild(divInput);
             divRow.appendChild(divInput);
-            if(this.#inputFields.push(divRow) > 1) {
+            if(this.#inputFields.push(divRow) <= 1 || (currentItem.properties[prop] != "" && currentItem.properties[prop] != undefined))
+            {
+                divRow.style.display = 'inline';
+            }
+            else {
                 divRow.style.display = 'none';
             }
+
+
             wizard.appendChild(divRow);
         }
 
     #showNextField() {
         console.log(this.#inputFields);
         if(this.#wizardController.model.nextForm()) {
-            //console.log(this.#inputFields);
-            //console.log(this.#wizardController.model.currentForm);
-            //console.log(this.#inputFields[this.#wizardController.model.currentForm]);
             this.#inputFields[this.#wizardController.model.currentForm - 1].style.display = 'inline';
         }
         else {
@@ -131,13 +128,16 @@ export default class Wizard_View {
         this.#configureHeader(wizard);
         //add new fields
         this.#wizardController.model.resetFormCount();
+        this.#inputFields = [];
         let props = currentItem.getProperties;
         for (let prop in props) {
             this.#createFormField(prop, currentItem)
             this.#wizardController.model.addForm();
         }
+        //this.#showNextField();
         this.#configureAddPropertyButton(currentItem);
         this.#configureSaveButton(currentItem);
+
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
     }
@@ -162,6 +162,7 @@ export default class Wizard_View {
         for (let prop in props) {
             if(document.getElementById(prop)) {
                 currentItem.properties[prop] = document.getElementById(prop).value;
+                console.log(currentItem.properties[prop]);
             }
         }
     }
