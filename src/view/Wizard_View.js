@@ -3,12 +3,12 @@ export default class Wizard_View {
 
     #wizardController;
     #currentScreen;
+    #inputFields;
 
 
     constructor(wizardController) {
         this.#wizardController = wizardController;
         this.#configureBackButton();
-
     }
 
     setScreen(screenName) {
@@ -19,15 +19,21 @@ export default class Wizard_View {
     }
 
     #setupForm(form) {
+        console.log("setupform");
+        this.#inputFields = [];
         let data = this.#wizardController.newItemModel(form);
         let wizard = document.getElementById('wizard');
         let props = data.getProperties;
 
         this.#configureHeader(wizard);
-
+        let i = 0;
+        console.log(this.#wizardController.model.formCount);
         for (let prop in props) {
+            console.log(i++);
             this.#createFormField(prop, data)
+            this.#wizardController.model.addForm();
         }
+        console.log(this.#wizardController.model.formCount);
         this.#configureAddPropertyButton(data);
         this.#configureSaveButton(data);
     }
@@ -59,16 +65,33 @@ export default class Wizard_View {
             }
             input.id = `${prop}`;
 
+            input.addEventListener('input', ev => {
+                this.#showNextField();
+            }, {once: true});
+
             sGroupText.appendChild(input);
             divOtherInput.appendChild(sGroupText);
             divInput.appendChild(divOtherInput);
             divCol.appendChild(divInput);
             divRow.appendChild(divInput);
-
+            if(this.#inputFields.push(divRow) > 1) {
+                divRow.style.display = 'none';
+            }
             wizard.appendChild(divRow);
         }
 
-
+    #showNextField() {
+        console.log(this.#inputFields);
+        if(this.#wizardController.model.nextForm()) {
+            //console.log(this.#inputFields);
+            //console.log(this.#wizardController.model.currentForm);
+            //console.log(this.#inputFields[this.#wizardController.model.currentForm]);
+            this.#inputFields[this.#wizardController.model.currentForm - 1].style.display = 'inline';
+        }
+        else {
+            document.getElementById('wizard_save_button').style.display = 'block';
+        }
+    }
 
 
 
@@ -82,12 +105,11 @@ export default class Wizard_View {
         document.getElementById('wizard').style.display = 'none';
         let buttons = document.getElementById('wizard_buttons');
         buttons.style.display = 'none';
-
     }
 
     #configureBackButton() {
         let backButton = document.getElementById('wizard_back_button');
-
+        backButton.style.display = 'block';
 
         backButton.addEventListener('click', ev => {
             let wizard = document.getElementById('wizard');
@@ -108,9 +130,11 @@ export default class Wizard_View {
         //add header
         this.#configureHeader(wizard);
         //add new fields
+        this.#wizardController.model.resetFormCount();
         let props = currentItem.getProperties;
         for (let prop in props) {
             this.#createFormField(prop, currentItem)
+            this.#wizardController.model.addForm();
         }
         this.#configureAddPropertyButton(currentItem);
         this.#configureSaveButton(currentItem);
@@ -146,8 +170,6 @@ export default class Wizard_View {
         let newPropertyButton = document.getElementById('wizard_add_property_button');
         newPropertyButton.addEventListener('click', ev => {
             let newPropertyName = document.getElementById('new_property').value;
-
-            console.log(currentItem);
             currentItem.addProperty(newPropertyName, undefined);
             this.#refreshView(currentItem);
         }, { once: true });
@@ -156,10 +178,10 @@ export default class Wizard_View {
 
     #configureSaveButton(currentItem) {
         let saveButton = document.getElementById('wizard_save_button');
+        saveButton.style.display = 'none';
         saveButton.addEventListener('click', ev => {
             this.#saveLocal(currentItem);
             currentItem.saveToStorage();
-            console.log(currentItem);
             let wizard = document.getElementById('wizard');
             while (wizard.firstChild) {
                 wizard.removeChild(wizard.lastChild);

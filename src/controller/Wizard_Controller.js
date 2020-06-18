@@ -36,14 +36,7 @@ export default class Wizard_Controller {
         }
     }
 
-    getCurrentItem(screenName) {
-        switch (name) {
-            case "Kleding":
-                return this.#wizardModel.kledingItem;
-            case "Tierlantijn":
-                return this.#wizardModel.tierlantijnItem;
-            case "Decoratie":
-                return this.#wizardModel.decoratieItem;
-        }
+    get model() {
+        return this.#wizardModel;
     }
 }

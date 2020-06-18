@@ -8,8 +8,13 @@ export default class Wizard_Model{
     #tierlantijnitem;
     #decoratieitem;
 
-    #formCount
-    #currentForm
+    #formCount; //Total number of input fields
+    #currentForm; //Current input field number
+
+    constructor() {
+        this.#formCount = 0;
+        this.#currentForm = 1;
+    }
 
     newKledingItem(){
         this.#kledingitem = new Kleding_Item();
@@ -44,5 +49,29 @@ export default class Wizard_Model{
 
     get currentForm() {
         return this.#currentForm;
+    }
+
+    addForm() {
+        this.#formCount += 1;
+    }
+
+    nextForm() {
+        if(this.#currentForm < this.#formCount) {
+            console.log(this.#currentForm);
+            console.log(this.#formCount);
+            this.#currentForm += 1;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    resetFormCount() {
+        this.#formCount = 1;
+    }
+
+    resetForm() {
+        this.#currentForm = 0;
     }
 }

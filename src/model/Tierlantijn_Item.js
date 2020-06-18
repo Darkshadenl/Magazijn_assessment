@@ -15,7 +15,7 @@ export default class Tierlantijn_Item extends Item {
                 retrievedItems["Tierlantijn"][this.properties.type][newId] = this.properties;
             }
             else {
-                retrievedItems["Tierlantijn"][this.properties.type] = [{0: this.properties}];
+                retrievedItems["Tierlantijn"][this.properties.type] = [this.properties];
             }
             console.log(retrievedItems["Tierlantijn"]);
             localStorage.setItem("items", JSON.stringify(retrievedItems));
