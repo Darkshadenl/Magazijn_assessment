@@ -5,9 +5,11 @@ export default class Screen_model {
     #selectedItem;
     #name;
     #positions = [];
+    #gridstyles;
 
     constructor(name) {
         this.#name = name;
+        this.retrievePositionsFromLocalStorage()
     }
 
     get getName() {
@@ -219,7 +221,7 @@ export default class Screen_model {
         }
     }
 
-    deleteComment(comment, itemName, soort){
+    deleteComment(comment, itemName, soort) {
         let items = JSON.parse(localStorage.getItem('items'));
         let products;
 
@@ -253,7 +255,7 @@ export default class Screen_model {
         }
     }
 
-    saveComments(currentMenu, productName, comment){
+    saveComments(currentMenu, productName, comment) {
         let items = JSON.parse(localStorage.getItem('items'));
 
         // find product in local storage, and check for comments.
@@ -305,5 +307,25 @@ export default class Screen_model {
         let new_items = JSON.stringify(items);
         localStorage.setItem('items', new_items);
     }
+
+    get getGridStyle() {
+        if (this.#gridstyles == null) {
+            this.#gridstyles = JSON.parse(localStorage.getItem('gridstyles'));
+        }
+
+        switch (this.#name) {
+            case 'Kleding':
+                let {Kleding} = this.#gridstyles;
+                return Kleding;
+            case 'Tierlantijn':
+                let {Tierlantijn} = this.#gridstyles;
+                return Tierlantijn;
+            case 'Decoratie':
+                let {Decoratie} = this.#gridstyles;
+                return Decoratie;
+        }
+    }
+
+
 }
 
