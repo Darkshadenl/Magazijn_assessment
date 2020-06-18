@@ -19,7 +19,6 @@ export default class Wizard_View {
     }
 
     #setupForm(form) {
-        console.log("setupform");
         this.#inputFields = [];
         let data = this.#wizardController.newItemModel(form);
         let wizard = document.getElementById('wizard');
@@ -116,13 +115,11 @@ export default class Wizard_View {
         //add header
         this.#configureHeader(wizard);
         //add new fields
-        this.#wizardController.model.resetFormCount();
         this.#inputFields = [];
         console.log(this.#inputFields);
         let props = currentItem.getProperties;
         for (let prop in props) {
-            this.#createFormField(prop, currentItem)
-            this.#wizardController.model.addForm();
+            this.#createFormField(prop, currentItem);
         }
         this.#showNextField();
         this.#configureAddPropertyButton(currentItem);
