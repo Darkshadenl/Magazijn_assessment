@@ -116,7 +116,6 @@ export default class Wizard_View {
         this.#configureHeader(wizard);
         //add new fields
         this.#inputFields = [];
-        console.log(this.#inputFields);
         let props = currentItem.getProperties;
         for (let prop in props) {
             this.#createFormField(prop, currentItem);
