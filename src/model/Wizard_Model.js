@@ -8,6 +8,9 @@ export default class Wizard_Model{
     #tierlantijnitem;
     #decoratieitem;
 
+    #formCount
+    #currentForm
+
     newKledingItem(){
         this.#kledingitem = new Kleding_Item();
         return this.#kledingitem;
@@ -33,5 +36,13 @@ export default class Wizard_Model{
 
     get decoratieItem() {
         return this.#decoratieitem;
+    }
+
+    get formCount() {
+        return this.#formCount;
+    }
+
+    get currentForm() {
+        return this.#currentForm;
     }
 }

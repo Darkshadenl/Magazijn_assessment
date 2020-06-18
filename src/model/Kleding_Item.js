@@ -10,31 +10,20 @@ export default class Kleding_Item extends Item{
 
     saveToStorage() {
         let retrievedItems = JSON.parse(localStorage.getItem("items"));
-        if(retrievedItems["Kleding"]) //in principe niet nodig
-        {
+        if(retrievedItems["Kledign"]) {
+            let newId;
             if(retrievedItems["Kleding"][this.properties.type]) {
-                let newId = retrievedItems["Kleding"][this.properties.type].length;
-                //0: {Naam: "Coole broek", type: "Broeken",
-                //{Naam: "Coole broek", type: "Broeken", beschrijving: "Een coole broek van een mooie stof", inkoopprijs: 10, minimale voorraad: 5, …}
-                console.log(this.properties);
-                retrievedItems["Kleding"][this.properties.type][newId] = this.properties;
-                console.log(retrievedItems["Kleding"][this.properties.type][newId]);
+                newId = retrievedItems["Kleding"][this.properties.type].length;
             }
             else {
-                console.log(this.properties.type);
+                newId = 0;
             }
+            retrievedItems["Kleding"][this.properties.type][newId] = this.properties;
         }
         else
         {
-            console.log("heel raar dit");
+            console.log("Error: Unable to retrieve items from local storage.");
         }
-
-
-
-        retrievedItems = JSON.stringify(retrievedItems);
-        localStorage.setItem("items", retrievedItems);
-        let itemtest = JSON.parse(localStorage.getItem("items"));
-
-        console.log(itemtest["Kleding"]);
     }
+    
 }

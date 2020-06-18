@@ -11,9 +11,21 @@ export default class Decoratie_Item extends Item{
 
     saveToStorage() {
         let retrievedItems = JSON.parse(localStorage.getItem("items"));
-        retrievedItems["Decoratie"][this.properties.categorie][this.properties.naam] = this;
-        retrievedItems = JSON.stringify(retrievedItems);
-        localStorage.setItem("items", retrievedItems);
+        if(retrievedItems["Decoratie"])
+        {
+            let newId;
+            if(retrievedItems["Decoratie"][this.properties.type]) {
+                newId = retrievedItems["Decoratie"][this.properties.type].length;
+            }
+            else {
+                newId = 0;
+            }
+            retrievedItems["Decoratie"][this.properties.type][newId] = this.properties;
+        }
+        else
+        {
+            console.log("Error: Unable to retrieve items from local storage.");
+        }
     }
 
 }
